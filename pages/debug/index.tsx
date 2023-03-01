@@ -11,8 +11,9 @@ import { useFBX,useGLTF } from '@react-three/drei';
 import * as THREE from "three";
 import { Camera } from 'three';
 import * as Gui from "lil-gui";
-// import { Build } from '@/components/building';
-// import { Safe } from '@/components/safe';
+import { Build } from '@/components/building';
+import { Safe } from '@/components/safe';
+import { Syn } from '@/components/syn';
 export default function Home() {
   useEffect(()=>{
   },[])
@@ -34,7 +35,9 @@ export default function Home() {
         <directionalLight intensity={0.3}/>
           {/* <Box/> */}
           <Island/>
-
+          <Build position={{x:14,y:25.8,z:8}} rotation={{x:8,y:260,z:-2}}/>
+          <Safe position={{x:-13,y:18.8,z:5}} rotation={{x:10,y:31,z:3}}/>
+          <Syn position={{x:25,y:16.4,z:14}} rotation={{x:16,y:43,z:-11}}/>
         {/* <OrbitControls enableRotate={true} enableZoom={true} enabled={true}
          minDistance={40}
          maxDistance={80}/> */}
@@ -55,8 +58,8 @@ const Island = () =>{
   const pos4 = useRef<any>()
   const pos5 = useRef<any>()
   let pos ={camx:5,camy:20,camz:80}
-  let objpos ={x:-13,y:18,z:4}
-  let objrot ={x:-1,y:34,z:3}
+  let objpos ={x:-2,y:24,z:6}
+  let objrot ={x:3,y:-180,z:3}
   let rotatedeg={rotatex:0,rotatey:0,rotatez:0}
   let islandrotate={rotatex:10,rotatey:-100,rotatez:0}
   const gui = new Gui.GUI()
@@ -67,12 +70,10 @@ const Island = () =>{
     // setitems(1)
   }
 //obj
-    const safe = useGLTF("build/1.glb");
-    const node2 = useLoader(GLTFLoader, 'build/1.glb');
+    const safe = useGLTF("capsule/Cap1.glb");
+    const node2 = useLoader(GLTFLoader, 'capsule/Cap1.glb');
     const refsafe = useRef<any>()
     const {actions} = useAnimations(safe.animations,refsafe)
-
-
 //obj
     gui.add(pos,"camx").min(-100).max(100).step(1)
     gui.add(pos,"camy").min(-100).max(100).step(1)
@@ -94,7 +95,8 @@ const Island = () =>{
   useEffect(()=>{
     // setdestination(new THREE.Vector3(pos.x,pos.y,pos.z))
     //obj
-    actions.Safe_safe_door_Anim_0?.play()
+   console.log(actions)
+   console.log(node2)
   })
   useFrame((state, delta) => {
     cameraref.current!.position.copy(new THREE.Vector3(pos.camx,pos.camy,pos.camz))
@@ -111,21 +113,12 @@ const Island = () =>{
   return(
   <>
   <PerspectiveCamera makeDefault={true}  ref={cameraref} />
-  {/* <Build position={{x:6,y:10,z:30}} rotation={{x:0,y:13,z:0}}/> */}
-  {/* <Safe position={{x:0,y:0,z:0}} rotation={{x:0,y:0,z:0}}/> */}
-  <Build position={{x:14,y:25.5,z:8}} rotation={{x:0,y:270,z:0}}/>
-  {/* <Safe position={{x:-10,y:19,z:12}} rotation={{x:10,y:0,z:0}}/> */}
-  <mesh scale={1} position={[0,0,0]}>
-          <sphereGeometry args={[1.5,32,32]}/>
-          <torusKnotGeometry />
-          <meshNormalMaterial wireframe/>
-  </mesh>
   <group ref={refsafe} position={[0,0,0]} rotation={[0,0,0]}  >
       <mesh scale={1.5}>
         <primitive object={node2.nodes.Main} />
       </mesh>
-    </group>
-  <group position={[0,0,0]}>
+  </group>
+  <group >
   <mesh scale={1} ref={islandref}>
       {/* <TransformControls object={ref2}/> */}
       <primitive object={nodesloader.Main} />
@@ -169,79 +162,4 @@ const Island = () =>{
   </group>
   </>
   )
-}
-
-const Build = ({
-  position,
-  rotation,
-}:{
-  position:any,
-  rotation:any,   
-}) =>{
-const glb1 = useGLTF("build/1.glb");
-const node1 = useLoader(GLTFLoader, 'build/1.glb');
-const glb2 = useGLTF("build/2.glb");
-const node2 = useLoader(GLTFLoader, 'build/2.glb');
-const glb3 = useGLTF("build/3.glb");
-const node3 = useLoader(GLTFLoader, 'build/3.glb');
-const glb4 = useGLTF("build/4.glb");
-const node4 = useLoader(GLTFLoader, 'build/4.glb');
-const glb5 = useGLTF("build/5.glb");
-const node5 = useLoader(GLTFLoader, 'build/5.glb');
-const glb6 = useGLTF("build/6.glb");
-const node6 = useLoader(GLTFLoader, 'build/6.glb');
-const ref1 = useRef<any>()
-const ref2 = useRef<any>()
-const ref3 = useRef<any>()
-const ref4 = useRef<any>()
-const ref5 = useRef<any>()
-const ref6 = useRef<any>()
-const animate2 = useAnimations(glb2.animations,ref2)
-const animate3 = useAnimations(glb3.animations,ref3)
-const animate4 = useAnimations(glb4.animations,ref4)
-const animate5 = useAnimations(glb5.animations,ref5)
-const animate6 = useAnimations(glb6.animations,ref6)
-// const mixer = new THREE.AnimationMixer(glb)
-// void mixer.clipAction(glb.animations[0]).play();
-useFrame((state, delta) => {
-// mixer.update(delta);
-});
-useEffect(()=>{
-console.log(animate6)
-animate2.actions.Building_ArmRotor_Animate_Anim_0?.play()
-animate3.actions.Building_LowerRotor_Animate_Anim_0?.play()
-animate4.actions.Building_UpperRotor_Animate_Anim_0?.play()
-animate5.actions.Building_Sphere_Animate_Anim_0?.play()
-animate6.actions.Building_Cylinder_Animate__2__Anim_0?.play()
-
-
-})
-return(
-<>
-
-<group ref={ref1} position={[position.x,position.y,position.z ]} rotation={[(Math.PI/180)*rotation.x,(Math.PI/180)*rotation.y,(Math.PI/180)*rotation.z]} >
-<group position={[0,-24.2,12]}>
-<mesh >
-  <primitive object={node1.nodes.Main} />
-</mesh>
-<mesh ref={ref2}>
-  <primitive object={node2.nodes.Main} />
-</mesh>
-<mesh ref={ref3}>
-  <primitive object={node3.nodes.Main} />
-</mesh>
-<mesh ref={ref4}>
-  <primitive object={node4.nodes.Main} />
-</mesh>
-<mesh ref={ref5}>
-  <primitive object={node5.nodes.Main} />
-</mesh>
-<mesh ref={ref6}>
-  <primitive object={node6.nodes.Main} />
-</mesh>
-</group>
-</group>
-{/* <TransformControls ref={ref1}/> */}
-</>
-)
 }

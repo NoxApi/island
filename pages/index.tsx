@@ -11,6 +11,8 @@ import { useFBX,useGLTF } from '@react-three/drei';
 import * as THREE from "three";
 import { Build } from '@/components/building';
 import { Safe } from '@/components/safe';
+import { Syn } from '@/components/syn';
+import { Capsule } from '@/components/capsule';
 export default  function Home() {
   const [ destination,setdestination ] = useState(() => new THREE.Vector3(5,20,80))
   const [items,setitems] = useState(0)
@@ -42,8 +44,10 @@ export default  function Home() {
         <directionalLight intensity={0.3}/>
           {/* <Box/> */}
           <Island setdestination={setdestination} destination={destination} setitems={setitems} items={items} />
+          <Syn position={{x:25,y:16.4,z:14}} rotation={{x:16,y:43,z:-11}}/>
           <Build position={{x:14,y:25.8,z:8}} rotation={{x:8,y:260,z:-2}}/>
           <Safe position={{x:-13,y:18.8,z:5}} rotation={{x:10,y:31,z:3}}/>
+          <Capsule position={{x:-2,y:24,z:6}} rotation={{x:3,y:-180,z:3}}/>
         {/* <OrbitControls enableRotate={true} enableZoom={true} enabled={true}
          minDistance={40}
          maxDistance={80}/> */}
@@ -83,11 +87,11 @@ const Island = ({
     setitems(0)
   }
   const movetosyn= () =>{
-    setdestination(() => new THREE.Vector3(28,20,20))
+    setdestination(() => new THREE.Vector3(32,20,34))
     setitems(1)
   }
   const movetobuild= () =>{
-    setdestination(() => new THREE.Vector3(17,24,30))
+    setdestination(() => new THREE.Vector3(19,27,30))
     setitems(2)
   }
   const movetoegg= () =>{
@@ -95,11 +99,11 @@ const Island = ({
     setitems(5)
   }
   const movetosafe= () =>{
-    setdestination(() => new THREE.Vector3(-10,20,18))
+    setdestination(() => new THREE.Vector3(-10,20,23))
     setitems(4)
   }
   const movetocapsule= () =>{
-    setdestination(() => new THREE.Vector3(-4.9,20,30))
+    setdestination(() => new THREE.Vector3(0.9,25,25))
     setitems(3)
   }
   // const cameraposition = new THREE.Vector3()
@@ -125,7 +129,7 @@ const Island = ({
       <primitive object={node.nodes.Main} />
   </mesh>
      <mesh ref={pos5}  position={[4.1,21,7]}   >    
-        <Html center={true} distanceFactor={60} >
+        <Html center={true} distanceFactor={70} >
         <div className='flex'>
           {items==0?(<button onClick={()=>movetoegg()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
               <a className='text-white text-2xl'>5</a>
@@ -146,8 +150,8 @@ const Island = ({
             </div>
         </Html>
       </mesh> 
-      <mesh ref={pos3}  position={[-4.9,28,0.9]}   >    
-        <Html center={true} distanceFactor={60} >
+      <mesh ref={pos3}  position={[-2,31,0.9]}   >    
+        <Html center={true} distanceFactor={70} >
           <div className='flex'>
           {items==0?(<button onClick={()=>movetocapsule()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
               <a className='text-white text-2xl'>3</a>
@@ -168,11 +172,11 @@ const Island = ({
             </div>
         </Html>
       </mesh> 
-      <mesh ref={pos4}  position={[-14.5,24,3.4]}   >    
-        <Html center={true} distanceFactor={60} >
+      <mesh ref={pos4}  position={[-13.5,25.5,2]}   >    
+        <Html center={true} distanceFactor={70} >
         <div className='flex'>
           {items==0?(<button onClick={()=>movetosafe()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
-              <a className='text-white text-2xl'>3</a>
+              <a className='text-white text-2xl'>4</a>
             </button>):(null)}
             {items==4?(
             <div className='flex flex-col ml-[320px] mt-[120px]'>
@@ -190,8 +194,8 @@ const Island = ({
             </div>
         </Html>
       </mesh> 
-      <mesh ref={pos1}  position={[24.6,23,3.4]}   >    
-        <Html center={true} distanceFactor={60} >
+      <mesh ref={pos1}  position={[27,22,15]}   >    
+        <Html center={true} distanceFactor={70} >
         <div className='flex'>
           {items==0?(<button onClick={()=>movetosyn()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
               <a className='text-white text-2xl'>1</a>
@@ -213,7 +217,7 @@ const Island = ({
         </Html>
       </mesh> 
       <mesh ref={pos2}  position={[15,31,6]}   >    
-        <Html center={true} distanceFactor={60} >
+        <Html center={true} distanceFactor={70} >
         <div className='flex'>
           {items==0?(<button onClick={()=>movetobuild()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
               <a className='text-white text-2xl'>2</a>
