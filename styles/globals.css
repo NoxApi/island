@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.box{
+    box-sizing: border-box;
+
+/* Auto layout */
+
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 10px;
+gap: 10px;
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: calc(50% - 44px/2 + 282px);
+top: calc(50% - 44px/2 + 79px);
+
+background: rgba(0, 0, 0, 0.4);
+/* white */
+
+border: 2px solid #FFFFFF;
+backdrop-filter: blur(2px);
+/* Note: backdrop-filter has minimal browser support */
+
+border-radius: 22px;
+}
