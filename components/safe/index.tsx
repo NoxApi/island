@@ -16,11 +16,12 @@ export const Safe = ({
         position,
         rotation,
       }:{
-        position:Object,
-        rotation:Object,   
+        position:any,
+        rotation:any,   
  }) =>{
     const glb = useGLTF("/safe/Safef.glb");
-    const ref = useRef()
+    const node = useLoader(GLTFLoader, '/safe/Safef.glb');
+    const ref = useRef<any>()
     const {actions} = useAnimations(glb.animations,ref)
     // const mixer = new THREE.AnimationMixer(glb)
     // void mixer.clipAction(glb.animations[0]).play();
@@ -33,7 +34,7 @@ export const Safe = ({
     <>
     <group ref={ref} position={[position.x,position.y,position.z]} rotation={[(Math.PI/180)*rotation.x,(Math.PI/180)*rotation.y,(Math.PI/180)*rotation.z]}  >
       <mesh scale={1.5}>
-        <primitive object={glb.nodes.Main} />
+        <primitive object={node.nodes.Main} />
       </mesh>
     </group>
     

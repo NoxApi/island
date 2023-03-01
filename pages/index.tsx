@@ -66,16 +66,15 @@ const Island = ({
   setitems:any,
   items:any
 }) =>{
-  const cameraref=useRef()
+  const cameraref=useRef<any>()
   const glb = useGLTF("island3.glb");
-  // // const gltf = useLoader(GLTFLoader, 'https://storage.googleapis.com/my-bucket/my-model.glb');
-  // console.log(gltf)
-  const ref2 = useRef()
-  const pos1 = useRef()
-  const pos2 = useRef()
-  const pos3 = useRef()
-  const pos4 = useRef()
-  const pos5 = useRef()
+  const node = useLoader(GLTFLoader, 'island3.glb');
+  const ref2 = useRef<any>()
+  const pos1 = useRef<any>()
+  const pos2 = useRef<any>()
+  const pos3 = useRef<any>()
+  const pos4 = useRef<any>()
+  const pos5 = useRef<any>()
   let pos ={x:0,y:0,z:60} 
   let rotatedeg={x:0,y:0,z:0}
   const [ smoothedCameraPosition ] = useState(() => new THREE.Vector3(0,20,60))
@@ -109,11 +108,11 @@ const Island = ({
   //   cameraposition.set(0,11,50)
   // }
   useEffect(()=>{
-    // setdestination(new THREE.Vector3(pos.x,pos.y,pos.z))
+    console.log(node)
   },[pos])
   useFrame((state, delta) => {
     smoothedCameraPosition.lerp(destination, 0.04)
-    cameraref.current!.position.copy(smoothedCameraPosition)
+    cameraref.current.position.copy(smoothedCameraPosition)
   });
   
   
@@ -123,7 +122,7 @@ const Island = ({
   <group position={[0,0,0]}>
   <mesh scale={1} ref={ref2} rotation={[(Math.PI/180)*10,(Math.PI/180)*-100,0]}  >
       {/* <TransformControls object={ref2}/> */}
-      <primitive object={glb.nodes.Main} />
+      <primitive object={node.nodes.Main} />
   </mesh>
      <mesh ref={pos5}  position={[4.1,21,7]}   >    
         <Html center={true} distanceFactor={60} >

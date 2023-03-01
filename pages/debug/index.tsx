@@ -45,15 +45,15 @@ export default function Home() {
   )
 }
 const Island = () =>{
-  const cameraref=useRef()
+  const cameraref=useRef<any>()
   const nodesloader = useLoader(GLTFLoader, 'island3.glb')['nodes'];
   const glb = useGLTF("island3.glb");
-  const islandref = useRef()
-  const pos1 = useRef()
-  const pos2 = useRef()
-  const pos3 = useRef()
-  const pos4 = useRef()
-  const pos5 = useRef()
+  const islandref = useRef<any>()
+  const pos1 = useRef<any>()
+  const pos2 = useRef<any>()
+  const pos3 = useRef<any>()
+  const pos4 = useRef<any>()
+  const pos5 = useRef<any>()
   let pos ={camx:5,camy:20,camz:80}
   let objpos ={x:-13,y:18,z:4}
   let objrot ={x:-1,y:34,z:3}
@@ -67,8 +67,9 @@ const Island = () =>{
     // setitems(1)
   }
 //obj
-    const safe = useGLTF("/safe/Safef.glb");
-    const refsafe = useRef()
+    const safe = useGLTF("build/1.glb");
+    const node2 = useLoader(GLTFLoader, 'build/1.glb');
+    const refsafe = useRef<any>()
     const {actions} = useAnimations(safe.animations,refsafe)
 
 
@@ -121,7 +122,7 @@ const Island = () =>{
   </mesh>
   <group ref={refsafe} position={[0,0,0]} rotation={[0,0,0]}  >
       <mesh scale={1.5}>
-        <primitive object={safe.nodes.Main} />
+        <primitive object={node2.nodes.Main} />
       </mesh>
     </group>
   <group position={[0,0,0]}>
@@ -174,21 +175,27 @@ const Build = ({
   position,
   rotation,
 }:{
-  position:Object,
-  rotation:Object,   
+  position:any,
+  rotation:any,   
 }) =>{
 const glb1 = useGLTF("build/1.glb");
+const node1 = useLoader(GLTFLoader, 'build/1.glb');
 const glb2 = useGLTF("build/2.glb");
+const node2 = useLoader(GLTFLoader, 'build/2.glb');
 const glb3 = useGLTF("build/3.glb");
+const node3 = useLoader(GLTFLoader, 'build/3.glb');
 const glb4 = useGLTF("build/4.glb");
+const node4 = useLoader(GLTFLoader, 'build/4.glb');
 const glb5 = useGLTF("build/5.glb");
+const node5 = useLoader(GLTFLoader, 'build/5.glb');
 const glb6 = useGLTF("build/6.glb");
-const ref1 = useRef()
-const ref2 = useRef()
-const ref3 = useRef()
-const ref4 = useRef()
-const ref5 = useRef()
-const ref6 = useRef()
+const node6 = useLoader(GLTFLoader, 'build/6.glb');
+const ref1 = useRef<any>()
+const ref2 = useRef<any>()
+const ref3 = useRef<any>()
+const ref4 = useRef<any>()
+const ref5 = useRef<any>()
+const ref6 = useRef<any>()
 const animate2 = useAnimations(glb2.animations,ref2)
 const animate3 = useAnimations(glb3.animations,ref3)
 const animate4 = useAnimations(glb4.animations,ref4)
@@ -215,22 +222,22 @@ return(
 <group ref={ref1} position={[position.x,position.y,position.z ]} rotation={[(Math.PI/180)*rotation.x,(Math.PI/180)*rotation.y,(Math.PI/180)*rotation.z]} >
 <group position={[0,-24.2,12]}>
 <mesh >
-  <primitive object={glb1.nodes.Main} />
+  <primitive object={node1.nodes.Main} />
 </mesh>
 <mesh ref={ref2}>
-  <primitive object={glb2.nodes.Main} />
+  <primitive object={node2.nodes.Main} />
 </mesh>
 <mesh ref={ref3}>
-  <primitive object={glb3.nodes.Main} />
+  <primitive object={node3.nodes.Main} />
 </mesh>
 <mesh ref={ref4}>
-  <primitive object={glb4.nodes.Main} />
+  <primitive object={node4.nodes.Main} />
 </mesh>
 <mesh ref={ref5}>
-  <primitive object={glb5.nodes.Main} />
+  <primitive object={node5.nodes.Main} />
 </mesh>
 <mesh ref={ref6}>
-  <primitive object={glb6.nodes.Main} />
+  <primitive object={node6.nodes.Main} />
 </mesh>
 </group>
 </group>
