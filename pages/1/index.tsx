@@ -36,10 +36,10 @@ export default function Home() {
         
           {/* <Box/> */}
           <Island/>
-          <Build position={{x:14,y:25.8,z:8}} rotation={{x:8,y:260,z:-2}}/>
+          {/* <Build position={{x:14,y:25.8,z:8}} rotation={{x:8,y:260,z:-2}}/>
           <Safe position={{x:-13,y:18.8,z:5}} rotation={{x:10,y:31,z:3}}/>
           <Syn position={{x:25,y:16.4,z:14}} rotation={{x:16,y:43,z:-11}}/>
-          <Capsule position={{x:-2,y:24,z:6}} rotation={{x:3,y:-180,z:3}}/>
+          <Capsule position={{x:-2,y:24,z:6}} rotation={{x:3,y:-180,z:3}}/> */}
         {/* <OrbitControls enableRotate={true} enableZoom={true} enabled={true}
          minDistance={40}
          maxDistance={80}/> */}
@@ -77,10 +77,10 @@ const Island = () =>{
 //position variable
 
 //obj
-    // const safe = useGLTF("capsule/Cap1.glb");
-    // const node2 = useLoader(GLTFLoader, 'capsule/Cap1.glb');
-    // const refsafe = useRef<any>()
-    // const {actions} = useAnimations(safe.animations,refsafe)
+    const safe = useGLTF("capsule/Cap1.glb");
+    const node2 = useLoader(GLTFLoader, 'capsule/Cap1.glb');
+    const refsafe = useRef<any>()
+    const {actions} = useAnimations(safe.animations,refsafe)
 //obj
 
 //light
@@ -158,23 +158,23 @@ const handleWheel = (e:any) => {
 
 //gui
     const gui = new Gui.GUI()
-    gui.add(pos,"camx").min(-100).max(100).step(1).name("cam-position-x")
-    gui.add(pos,"camy").min(-100).max(100).step(1).name("cam-position-y")
-    gui.add(pos,"camz").min(0).max(200).step(1).name("cam-position-z")
-    gui.add(rotatedeg,"rotatex").min(-180).max(180).step(1).name("cam-rotation-x")
-    gui.add(rotatedeg,"rotatey").min(-180).max(180).step(1).name("cam-rotation-y")
-    gui.add(rotatedeg,"rotatez").min(-180).max(180).step(1).name("cam-rotation-z")
-    // gui.add(objpos,"x").min(-40).max(40).step(1).name("obj pos-x")
-    // gui.add(objpos,"y").min(-40).max(40).step(1).name("obj pos-y")
-    // gui.add(objpos,"z").min(-10).max(40).step(1).name("obj pos-z")
-    // gui.add(objrot,"x").min(-180).max(180).step(1).name("obj rot-x")
-    // gui.add(objrot,"y").min(-180).max(180).step(1).name("obj rot-y")
-    // gui.add(objrot,"z").min(-180).max(180).step(1).name("obj rot-z")
-    gui.add(light,"alight").min(0).max(1).step(0.1).name("Ambient light")
-    gui.add(light,"dlight").min(0).max(1).step(0.1).name("Directional light") 
-    gui.add(islandrotate,"rotatex").min(-180).max(180).step(1).name("island rotate x")
-    gui.add(islandrotate,"rotatey").min(-180).max(180).step(1).name("island rotate y")
-    gui.add(islandrotate,"rotatez").min(-180).max(180).step(1).name("island rotate z")
+    // gui.add(pos,"camx").min(-100).max(100).step(1).name("cam-position-x")
+    // gui.add(pos,"camy").min(-100).max(100).step(1).name("cam-position-y")
+    // gui.add(pos,"camz").min(0).max(200).step(1).name("cam-position-z")
+    // gui.add(rotatedeg,"rotatex").min(-180).max(180).step(1).name("cam-rotation-x")
+    // gui.add(rotatedeg,"rotatey").min(-180).max(180).step(1).name("cam-rotation-y")
+    // gui.add(rotatedeg,"rotatez").min(-180).max(180).step(1).name("cam-rotation-z")
+        gui.add(objpos,"x").min(-40).max(40).step(1).name("obj pos-x")
+        gui.add(objpos,"y").min(-40).max(40).step(1).name("obj pos-y")
+        gui.add(objpos,"z").min(-10).max(40).step(1).name("obj pos-z")
+        gui.add(objrot,"x").min(-180).max(180).step(1).name("obj rot-x")
+        gui.add(objrot,"y").min(-180).max(180).step(1).name("obj rot-y")
+        gui.add(objrot,"z").min(-180).max(180).step(1).name("obj rot-z")
+    // gui.add(light,"alight").min(0).max(1).step(0.1).name("Ambient light")
+    // gui.add(light,"dlight").min(0).max(1).step(0.1).name("Directional light") 
+    // gui.add(islandrotate,"rotatex").min(-180).max(180).step(1).name("island rotate x")
+    // gui.add(islandrotate,"rotatey").min(-180).max(180).step(1).name("island rotate y")
+    // gui.add(islandrotate,"rotatez").min(-180).max(180).step(1).name("island rotate z")
     // gui.add(islandrotate,"rotatey").min(-180).max(180).step(1)
     // gui.add(islandrotate,"rotatez").min(-180).max(180).step(1)
 //gui
@@ -184,13 +184,13 @@ const handleWheel = (e:any) => {
   //  console.log(actions)
   //  console.log(node2)
    window.addEventListener("wheel", handleWheel);
-   window.addEventListener("mousedown", handleMouseDown);
-     window.addEventListener("mouseup", handleMouseUp);
-     window.addEventListener("mousemove", handleMouseMove);
+//    window.addEventListener("mousedown", handleMouseDown);
+//      window.addEventListener("mouseup", handleMouseUp);
+//      window.addEventListener("mousemove", handleMouseMove);
  return () =>{ window.removeEventListener("wheel", handleWheel);
- window.removeEventListener("mousedown", handleMouseDown);
- window.removeEventListener("mouseup", handleMouseUp);
- window.removeEventListener("mousemove", handleMouseMove);
+//  window.removeEventListener("mousedown", handleMouseDown);
+//  window.removeEventListener("mouseup", handleMouseUp);
+//  window.removeEventListener("mousemove", handleMouseMove);
 }
   })
   useFrame((state, delta) => {
@@ -201,10 +201,10 @@ const handleWheel = (e:any) => {
     islandref.current!.rotation.x = (Math.PI/180)*islandrotate.rotatex
     islandref.current!.rotation.y = (Math.PI/180)*islandrotate.rotatey
     islandref.current!.rotation.z = (Math.PI/180)*islandrotate.rotatez
-    // refsafe.current!.position.copy(new THREE.Vector3(objpos.x,objpos.y,objpos.z))
-    // refsafe.current.rotation.x = (Math.PI/180)*objrot.x
-    // refsafe.current.rotation.y = (Math.PI/180)*objrot.y
-    // refsafe.current.rotation.z = (Math.PI/180)*objrot.z
+    refsafe.current!.position.copy(new THREE.Vector3(objpos.x,objpos.y,objpos.z))
+    refsafe.current.rotation.x = (Math.PI/180)*objrot.x
+    refsafe.current.rotation.y = (Math.PI/180)*objrot.y
+    refsafe.current.rotation.z = (Math.PI/180)*objrot.z
     alightref.current.intensity= light.alight
     dlightref.current.intensity= light.dlight
       //control
@@ -216,25 +216,17 @@ const handleWheel = (e:any) => {
   <directionalLight intensity={0.3} ref={dlightref}/>
   
   <PerspectiveCamera makeDefault={true}  ref={cameraref} />
-  {/* <group ref={refsafe} position={[0,0,0]} rotation={[0,0,0]}  >
+  <group ref={refsafe} position={[0,0,0]} rotation={[0,0,0]}  >
       <mesh scale={1.5}>
         <primitive object={node2.nodes.Main} />
       </mesh>
-  </group> */}
+  </group>
   <group >
   <mesh scale={1} ref={islandref}>
       {/* <TransformControls object={ref2}/> */}
       <primitive object={nodesloader.Main} />
   </mesh>
-  {/* <TransformControls object={pos2}/> */}
   </group>
-  {/* <Html>
-    <div className="absolute top-[-20vw] left-[-45vw] w-[150px] h-[75px] bg-black">
-      <p className="text-md text-white">{"cam-pos-x : "+cameraref.current.position.x}</p>
-      <p className="text-md text-white">{"cam-pos-y : "+cameraref.current.position.y}</p>
-      <p className="text-md text-white">{"cam-pos-z : "+cameraref.current.position.z}</p>
-    </div>
-  </Html> */}
   </>
   )
 }

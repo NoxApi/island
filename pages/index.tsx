@@ -42,6 +42,7 @@ export default  function Home() {
         <Suspense fallback={null}>
         <ambientLight intensity={0.5} />
         <directionalLight intensity={0.3}/>
+        <directionalLight intensity={0.3} position={[2,1,3]}/>
           {/* <Box/> */}
           <Island setdestination={setdestination} destination={destination} setitems={setitems} items={items} />
           <Syn position={{x:25,y:16.4,z:14}} rotation={{x:16,y:43,z:-11}}/>
