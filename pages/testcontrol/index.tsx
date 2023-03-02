@@ -69,10 +69,10 @@ const Island = () =>{
 
 //position variable
   let light = {alight:0.5,dlight:0.3}
-  let pos ={camx:5,camy:20,camz:80}
+  let pos ={camx:6,camy:55,camz:60}
   let objpos ={x:-2,y:24,z:6}
   let objrot ={x:3,y:-180,z:3}
-  let rotatedeg={rotatex:0,rotatey:0,rotatez:0}
+  let rotatedeg={rotatex:-32,rotatey:0,rotatez:0}
   let islandrotate={rotatex:10,rotatey:-100,rotatez:0}
 //position variable
 
@@ -116,10 +116,30 @@ const handleWheel = (e:any) => {
     const dx = (e.clientX - x)/50;
     const dy = (e.clientY - y)/50;
     mousePosition.current = [e.clientX, e.clientY];
-    pos.camx += -dx
-    pos.camz += -dy
-  };
-
+    if (pos.camx<-20){
+      if (dx<0)
+      pos.camx += -dx
+    }
+    else if (pos.camx>35){
+      if (dx>0)
+      pos.camx += -dx
+    }
+    else{
+      pos.camx += -dx
+    }
+    
+    if (pos.camz<45){
+      if (dy<0)
+      pos.camz += -dy
+    }
+    else if (pos.camz>75){
+      if (dy>0)
+      pos.camz += -dy
+    }
+    else{
+      pos.camz += -dy
+    }
+  }  
 //control
 
 //gui
