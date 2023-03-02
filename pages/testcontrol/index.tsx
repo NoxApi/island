@@ -160,6 +160,7 @@ const handleWheel = (e:any) => {
     gui.add(light,"dlight").min(0).max(1).step(0.1).name("Directional light") 
     gui.add(islandrotate,"rotatex").min(-180).max(180).step(1).name("island rotate x")
     gui.add(islandrotate,"rotatey").min(-180).max(180).step(1).name("island rotate y")
+    gui.add(islandrotate,"rotatez").min(-180).max(180).step(1).name("island rotate z")
     // gui.add(islandrotate,"rotatey").min(-180).max(180).step(1)
     // gui.add(islandrotate,"rotatez").min(-180).max(180).step(1)
 //gui
@@ -185,6 +186,7 @@ const handleWheel = (e:any) => {
     cameraref.current.rotation.z = (Math.PI/180)*rotatedeg.rotatez
     islandref.current!.rotation.x = (Math.PI/180)*islandrotate.rotatex
     islandref.current!.rotation.y = (Math.PI/180)*islandrotate.rotatey
+    islandref.current!.rotation.z = (Math.PI/180)*islandrotate.rotatez
     // refsafe.current!.position.copy(new THREE.Vector3(objpos.x,objpos.y,objpos.z))
     // refsafe.current.rotation.x = (Math.PI/180)*objrot.x
     // refsafe.current.rotation.y = (Math.PI/180)*objrot.y
