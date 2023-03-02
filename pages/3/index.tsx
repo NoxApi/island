@@ -77,8 +77,8 @@ const Island = () =>{
 //position variable
 
 //obj
-    const safe = useGLTF("capsule/Cap1.glb");
-    const node2 = useLoader(GLTFLoader, 'capsule/Cap1.glb');
+    const safe = useGLTF("capsule/Cap3.glb");
+    const node2 = useLoader(GLTFLoader, 'capsule/Cap3.glb');
     const refsafe = useRef<any>()
     const {actions} = useAnimations(safe.animations,refsafe)
 //obj
