@@ -10,7 +10,7 @@ import { Environment, Html, OrbitControls, TransformControls, useAnimations } fr
 import { useFBX,useGLTF } from '@react-three/drei';
 import * as THREE from "three";
 import { a } from "@react-spring/three";
-import { AmbientLight, Vector3 } from 'three';
+import { AmbientLight, Vector3,PointLight,SpotLight } from 'three';
 
 export const Build = ({
         position,
@@ -19,6 +19,7 @@ export const Build = ({
         position:any,
         rotation:any,   
  }) =>{
+  const pointLight = new PointLight(0xffffff,0.1);
   const glb1 = useGLTF("build/1.glb");
   const node1 = useLoader(GLTFLoader, 'build/1.glb');
   const glb2 = useGLTF("build/2.glb");
@@ -31,6 +32,8 @@ export const Build = ({
   const node5 = useLoader(GLTFLoader, 'build/5.glb');
   const glb6 = useGLTF("build/6.glb");
   const node6 = useLoader(GLTFLoader, 'build/6.glb');
+  const refgroup = useRef<any>()
+  const reflight = useRef<any>()
   const ref1 = useRef<any>()
   const ref2 = useRef<any>()
   const ref3 = useRef<any>()
@@ -45,7 +48,8 @@ export const Build = ({
     // const mixer = new THREE.AnimationMixer(glb)
     // void mixer.clipAction(glb.animations[0]).play();
     useFrame((state, delta) => {
-      // mixer.update(delta);
+      // ref1.current.emissive.setScalar(0.4);
+      reflight.current.position.copy(refgroup)
     });
     useEffect(()=>{
       // console.log(glb2)
@@ -55,14 +59,13 @@ export const Build = ({
       animate5.actions.Building_Sphere_Animate_Anim_0?.play()
       animate6.actions.Building_Cylinder_Animate__2__Anim_0?.play()
       
-      
     })
     return(
-    <>
-   
-    <group ref={ref1} position={[position.x,position.y,position.z]} rotation={[(Math.PI/180)*rotation.x,(Math.PI/180)*rotation.y,(Math.PI/180)*rotation.z]} >
-    <group position={[0,-24.2,12]}>
-      <mesh >
+    <> 
+    <group ref={refgroup} position={[position.x,position.y,position.z]} rotation={[(Math.PI/180)*rotation.x,(Math.PI/180)*rotation.y,(Math.PI/180)*rotation.z]} >
+    <spotLight  intensity={1} renderOrder={2} ref={reflight} position={[0,0,0]} />
+    <group position={[0,-24.2,12]}> 
+      <mesh ref={ref1}>
         <primitive object={node1.nodes.Main} />
       </mesh>
       <mesh ref={ref2}>

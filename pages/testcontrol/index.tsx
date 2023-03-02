@@ -1,9 +1,9 @@
+import { useThree, useFrame,Canvas,useLoader } from "react-three-fiber";
+import { Vector3, Euler } from "three";
+import { useEffect, useRef ,useState,Suspense} from "react";
 import Head from 'next/head'
 import mesh from "react-three-fiber"
 import styles from '@/styles/Home.module.css'
-import { Canvas,useThree } from 'react-three-fiber'
-import { Suspense, useEffect, useState,useRef } from "react";
-import { useFrame, useLoader } from "@react-three/fiber";
 import { FBXLoader} from "three/examples/jsm/loaders/FBXLoader.js";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Environment, OrbitControls, useAnimations,Html, Stats, TransformControls,PerspectiveCamera, PivotControls } from "@react-three/drei";
@@ -15,6 +15,7 @@ import { Build } from '@/components/building';
 import { Safe } from '@/components/safe';
 import { Syn } from '@/components/syn';
 export default function Home() {
+    //madbox rotation island x-24 y-94 cam x -64
   useEffect(()=>{
   },[])
   return (
@@ -25,7 +26,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-     <div className='bg-red-300 w-[100vw] h-[100vh]'>
+     <div className='bg-red-300 w-[100vw] h-[100vh] cursor-grab active:cursor-grabbing '>
       <Canvas >
         {/* <PerspectiveCamera makeDefault={true}  position={[0,10,20]}/> */}
         {/* <PerspectiveCamera makeDefault={true} position={[position.x,position.y,15]} rotation={[-0.5,0,0]} /> */}
@@ -47,9 +48,13 @@ export default function Home() {
   )
 }
 const Island = () =>{
-  const cameraref=useRef<any>()
+//loader
   const nodesloader = useLoader(GLTFLoader, 'island3.glb')['nodes'];
   const glb = useGLTF("island3.glb");
+//loader
+
+//ref
+  const cameraref=useRef<any>()
   const islandref = useRef<any>()
   const alightref = useRef<any>()
   const dlightref = useRef<any>()
@@ -58,30 +63,64 @@ const Island = () =>{
   const pos3 = useRef<any>()
   const pos4 = useRef<any>()
   const pos5 = useRef<any>()
+//ref
+
+//position variable
   let light = {alight:0.5,dlight:0.3}
   let pos ={camx:5,camy:20,camz:80}
   let objpos ={x:-2,y:24,z:6}
   let objrot ={x:3,y:-180,z:3}
   let rotatedeg={rotatex:0,rotatey:0,rotatez:0}
   let islandrotate={rotatex:10,rotatey:-100,rotatez:0}
-  const gui = new Gui.GUI()
-  const [ smoothedCameraPosition ] = useState(() => new THREE.Vector3(0,20,60))
-  const [ destination,setdestination ] = useState(() => new THREE.Vector3(0,20,60))
-  const movetosafe= () =>{
-    setdestination(() => new THREE.Vector3(8.5,4,70))
-    // setitems(1)
-  }
+//position variable
+
 //obj
     const safe = useGLTF("capsule/Cap1.glb");
     const node2 = useLoader(GLTFLoader, 'capsule/Cap1.glb');
     const refsafe = useRef<any>()
     const {actions} = useAnimations(safe.animations,refsafe)
 //obj
+
 //light
     
 
 
 //light
+
+//control
+const handleWheel = (e:any) => {
+    e.preventDefault();
+    pos.camy += e.deltaY / 100;
+    console.log(pos.camy)
+  };
+
+  const mouseDown = useRef(false);
+  const mousePosition = useRef([0, 0]);
+
+  const handleMouseDown = (e:any) => {
+    e.preventDefault();
+    mouseDown.current = true;
+    mousePosition.current = [e.clientX, e.clientY];
+  };
+
+  const handleMouseUp = () => {
+    mouseDown.current = false;
+  };
+
+  const handleMouseMove = (e:any) => {
+    if (!mouseDown.current) return;
+    const [x, y] = mousePosition.current;
+    const dx = (e.clientX - x)/50;
+    const dy = (e.clientY - y)/50;
+    mousePosition.current = [e.clientX, e.clientY];
+    pos.camx += -dx
+    pos.camz += -dy
+  };
+
+//control
+
+//gui
+    const gui = new Gui.GUI()
     gui.add(pos,"camx").min(-100).max(100).step(1).name("cam-position-x")
     gui.add(pos,"camy").min(-100).max(100).step(1).name("cam-position-y")
     gui.add(pos,"camz").min(0).max(200).step(1).name("cam-position-z")
@@ -100,11 +139,21 @@ const Island = () =>{
     gui.add(islandrotate,"rotatey").min(-180).max(180).step(1).name("island rotate y")
     // gui.add(islandrotate,"rotatey").min(-180).max(180).step(1)
     // gui.add(islandrotate,"rotatez").min(-180).max(180).step(1)
+//gui
+
   useEffect(()=>{
-    // setdestination(new THREE.Vector3(pos.x,pos.y,pos.z))
-    //obj
+    //log
    console.log(actions)
    console.log(node2)
+   window.addEventListener("wheel", handleWheel);
+   window.addEventListener("mousedown", handleMouseDown);
+     window.addEventListener("mouseup", handleMouseUp);
+     window.addEventListener("mousemove", handleMouseMove);
+ return () =>{ window.removeEventListener("wheel", handleWheel);
+ window.removeEventListener("mousedown", handleMouseDown);
+ window.removeEventListener("mouseup", handleMouseUp);
+ window.removeEventListener("mousemove", handleMouseMove);
+}
   })
   useFrame((state, delta) => {
     cameraref.current!.position.copy(new THREE.Vector3(pos.camx,pos.camy,pos.camz))
@@ -119,6 +168,8 @@ const Island = () =>{
     refsafe.current.rotation.z = (Math.PI/180)*objrot.z
     alightref.current.intensity= light.alight
     dlightref.current.intensity= light.dlight
+      //control
+    
   });
   return(
   <>
@@ -135,41 +186,6 @@ const Island = () =>{
       {/* <TransformControls object={ref2}/> */}
       <primitive object={nodesloader.Main} />
   </mesh>
-     <mesh ref={pos5}  position={[4.1,21,7]}   >    
-        <Html center={true} distanceFactor={60} >
-            <button onClick={()=>null} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
-              <a className='text-white text-2xl'>5</a>
-            </button>
-        </Html>
-      </mesh> 
-      <mesh ref={pos3}  position={[-4.9,27,0.9]}   >    
-        <Html center={true} distanceFactor={60} >
-            <button onClick={()=>null} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
-              <a className='text-white text-2xl'>3</a>
-            </button>
-        </Html>
-      </mesh> 
-      <mesh ref={pos4}  position={[-14.5,24,3.4]}   >    
-        <Html center={true} distanceFactor={60} >
-            <button onClick={()=>movetosafe()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
-              <a className='text-white text-2xl'>4</a>
-            </button>
-        </Html>
-      </mesh> 
-      <mesh ref={pos1}  position={[24.6,23,3.4]}   >    
-        <Html center={true} distanceFactor={60} >
-            <button onClick={()=>null} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
-              <a className='text-white text-2xl'>1</a>
-            </button>
-        </Html>
-      </mesh> 
-      <mesh ref={pos2}  position={[12.21,29,-3]}   >    
-        <Html center={true} distanceFactor={60} >
-            <button onClick={()=>null} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
-              <a className='text-white text-2xl'>2</a>
-            </button>
-        </Html>
-      </mesh> 
   {/* <TransformControls object={pos2}/> */}
   </group>
   </>
