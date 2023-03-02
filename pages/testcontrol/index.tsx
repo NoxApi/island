@@ -92,7 +92,8 @@ const Island = () =>{
 //control
 const handleWheel = (e:any) => {
     e.preventDefault();
-    pos.camy += e.deltaY / 100;
+    pos.camy += e.deltaY / 200;
+    pos.camz += e.deltaY / 100;
     // console.log(pos.camy)
   };
 
