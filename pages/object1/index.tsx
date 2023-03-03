@@ -70,15 +70,16 @@ const Island = () =>{
 //position variable
   let light = {alight:0.5,dlight:0.3}
   let pos ={camx:6,camy:46,camz:60}
-  let objpos ={x:-2,y:24,z:6}
-  let objrot ={x:3,y:-180,z:3}
+  let objpos ={x:25,y:16.4,z:14,scale:1}
+  let objrot ={x:16,y:43,z:-11}
   let rotatedeg={rotatex:-19,rotatey:0,rotatez:0}
   let islandrotate={rotatex:10,rotatey:-100,rotatez:0}
+  let player = {play:true}
 //position variable
 
 //obj
-    const safe = useGLTF("capsule/Cap1.glb");
-    const node2 = useLoader(GLTFLoader, 'capsule/Cap1.glb');
+    const safe = useGLTF("syn/syn1.glb");
+    const node2 = useLoader(GLTFLoader, "syn/syn1.glb");
     const refsafe = useRef<any>()
     const {actions} = useAnimations(safe.animations,refsafe)
 //obj
@@ -164,12 +165,14 @@ const handleWheel = (e:any) => {
     // gui.add(rotatedeg,"rotatex").min(-180).max(180).step(1).name("cam-rotation-x")
     // gui.add(rotatedeg,"rotatey").min(-180).max(180).step(1).name("cam-rotation-y")
     // gui.add(rotatedeg,"rotatez").min(-180).max(180).step(1).name("cam-rotation-z")
-        gui.add(objpos,"x").min(-40).max(40).step(1).name("obj pos-x")
-        gui.add(objpos,"y").min(-40).max(40).step(1).name("obj pos-y")
-        gui.add(objpos,"z").min(-10).max(40).step(1).name("obj pos-z")
+        gui.add(objpos,"x").min(20).max(30).step(0.1).name("obj pos-x")
+        gui.add(objpos,"y").min(12).max(22).step(0.1).name("obj pos-y")
+        gui.add(objpos,"z").min(9).max(19).step(0.1).name("obj pos-z")
         gui.add(objrot,"x").min(-180).max(180).step(1).name("obj rot-x")
         gui.add(objrot,"y").min(-180).max(180).step(1).name("obj rot-y")
         gui.add(objrot,"z").min(-180).max(180).step(1).name("obj rot-z")
+        gui.add(objpos,"scale").min(0).max(2).step(0.1).name("obj scale")
+        gui.add( player, 'play' ).name("Play Animation")
     // gui.add(light,"alight").min(0).max(1).step(0.1).name("Ambient light")
     // gui.add(light,"dlight").min(0).max(1).step(0.1).name("Directional light") 
     // gui.add(islandrotate,"rotatex").min(-180).max(180).step(1).name("island rotate x")
@@ -182,6 +185,8 @@ const handleWheel = (e:any) => {
   useEffect(()=>{
     //log
   //  console.log(actions)
+   actions.Synthesis_pCube1_Anim_1?.play()
+   actions.Synthesis_polySurface47_Anim_0?.play()
   //  console.log(node2)
    window.addEventListener("wheel", handleWheel);
 //    window.addEventListener("mousedown", handleMouseDown);
@@ -205,8 +210,19 @@ const handleWheel = (e:any) => {
     refsafe.current.rotation.x = (Math.PI/180)*objrot.x
     refsafe.current.rotation.y = (Math.PI/180)*objrot.y
     refsafe.current.rotation.z = (Math.PI/180)*objrot.z
+    refsafe.current.scale.x = objpos.scale
+    refsafe.current.scale.y = objpos.scale
+    refsafe.current.scale.z = objpos.scale
     alightref.current.intensity= light.alight
     dlightref.current.intensity= light.dlight
+    if (player.play){
+      actions.Synthesis_pCube1_Anim_1?.play()
+      actions.Synthesis_polySurface47_Anim_0?.play()
+    }
+    else{
+      actions.Synthesis_pCube1_Anim_1?.reset()
+      actions.Synthesis_polySurface47_Anim_0?.reset()
+    }
       //control
     
   });
@@ -216,8 +232,8 @@ const handleWheel = (e:any) => {
   <directionalLight intensity={0.3} ref={dlightref}/>
   
   <PerspectiveCamera makeDefault={true}  ref={cameraref} />
-  <group ref={refsafe} position={[0,0,0]} rotation={[0,0,0]}  >
-      <mesh scale={1.5}>
+  <group ref={refsafe} position={[0,0,0]} rotation={[0,0,0]} scale={1.5}  >
+      <mesh >
         <primitive object={node2.nodes.Main} />
       </mesh>
   </group>
