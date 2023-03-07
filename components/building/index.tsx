@@ -6,11 +6,11 @@ import { Suspense, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useFrame, useLoader,useThree } from "@react-three/fiber";
 import { FBXLoader} from "three/examples/jsm/loaders/FBXLoader.js";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { Environment, Html, OrbitControls, TransformControls, useAnimations } from "@react-three/drei";
+import { Environment, Html, OrbitControls, TransformControls, useAnimations, useHelper } from "@react-three/drei";
 import { useFBX,useGLTF } from '@react-three/drei';
 import * as THREE from "three";
 import { a } from "@react-spring/three";
-import { AmbientLight, Vector3,PointLight,SpotLight } from 'three';
+import { AmbientLight, Vector3,PointLight,SpotLight, SpotLightHelper } from 'three';
 
 export const Build = ({
         position,
@@ -40,6 +40,7 @@ export const Build = ({
   const ref4 = useRef<any>()
   const ref5 = useRef<any>()
   const ref6 = useRef<any>()
+  const spotlightref1 = useRef<any>()
     const animate2 = useAnimations(glb2.animations,ref2)
     const animate3 = useAnimations(glb3.animations,ref3)
     const animate4 = useAnimations(glb4.animations,ref4)
@@ -49,7 +50,7 @@ export const Build = ({
     // void mixer.clipAction(glb.animations[0]).play();
     useFrame((state, delta) => {
       // ref1.current.emissive.setScalar(0.4);
-      reflight.current.position.copy(refgroup)
+      // reflight.current.position.copy(refgroup)
     });
     useEffect(()=>{
       // console.log(glb2)
@@ -60,10 +61,21 @@ export const Build = ({
       animate6.actions.Building_Cylinder_Animate__2__Anim_0?.play()
       
     })
+    // useHelper(spotlightref1, SpotLightHelper, 'yellow')
     return(
     <> 
     <group ref={refgroup} position={[position.x,position.y,position.z]} rotation={[(Math.PI/180)*rotation.x,(Math.PI/180)*rotation.y,(Math.PI/180)*rotation.z]} >
-    <spotLight  intensity={1} renderOrder={2} ref={reflight} position={[0,0,0]} />
+    <spotLight
+        ref={spotlightref1}
+        color="white"
+        intensity={0}
+        position={[0, 10,0]}  
+        penumbra={0}
+        angle={(Math.PI/180)*40}
+        distance={40}
+        castShadow={false} 
+        target={node2.nodes.Main}   
+      />
     <group position={[0,-24.2,12]}> 
       <mesh ref={ref1}>
         <primitive object={node1.nodes.Main} />

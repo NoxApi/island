@@ -30,7 +30,7 @@ export default  function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-     <div className='bg-red-300 w-[100vw] h-[100vh]'>
+     <div className='bg-black w-[100vw] h-[100vh]'>
      {/* <button onClick={()=>set0()} className='bg-[#000000] flex justify-center items-center bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[60px] h-[60px]  border-2 rounded-[50%] absolute top-[10vw] right-[10vw] z-30'>
               <a className='text-white text-5xl mb-3'>x</a>
       </button> */}
@@ -40,9 +40,9 @@ export default  function Home() {
         {/* <PerspectiveCamera makeDefault={true} position={[position.x,position.y,15]} rotation={[-0.5,0,0]} /> */}
         {/* <Scene/> */}
         <Suspense fallback={null}>
-        <ambientLight intensity={0.5} />
-        <directionalLight intensity={0.3}/>
-        <directionalLight intensity={0.3} position={[2,1,3]}/>
+        <ambientLight intensity={0} />
+        <directionalLight intensity={0}/>
+        <directionalLight intensity={0} position={[2,1,3]}/>
           {/* <Box/> */}
           <Island setdestination={setdestination} destination={destination} setitems={setitems} items={items} />
           <Syn position={{x:25,y:16.4,z:14}} rotation={{x:16,y:43,z:-11}}/>
@@ -119,7 +119,8 @@ const Island = ({
     smoothedCameraPosition.lerp(destination, 0.04)
     cameraref.current.position.copy(smoothedCameraPosition)
   });
-  
+  const object = new THREE.Object3D();
+  object.position.set(4,24,0)
   
   return(
   <>
@@ -241,6 +242,48 @@ const Island = ({
       </mesh> 
   {/* <TransformControls object={pos2}/> */}
   </group>
+  <spotLight
+
+        color="#FFD7D7"
+        intensity={0.15}
+        position={[30, 100,-20]}  
+        penumbra={1}
+        angle={(Math.PI/180)*40}
+        distance={400}
+        castShadow={false} 
+      />
+    <spotLight
+
+        color="#ffffff"
+        intensity={1.8}
+        position={[60, 50,30]}  
+        penumbra={1}
+        angle={(Math.PI/180)*40}
+        distance={90}
+        castShadow={false} 
+      />
+      <spotLight
+ 
+        color="#ffffff"
+        intensity={2}
+        position={[-60, 50,20]}  
+        penumbra={1}
+        angle={(Math.PI/180)*40}
+        distance={80}
+        castShadow={false} 
+      />
+      <spotLight
+
+        color="#ffffff"
+        intensity={1.5}
+        position={[5, 55,80]}
+        penumbra={1}
+        angle={(Math.PI/180)*40}
+        distance={160}
+        castShadow={false} 
+        target={object}
+        
+      />
   </>
   )
 }
