@@ -35,7 +35,7 @@ export const Safe = ({
     return(
     <>
     <group ref={ref} position={[position.x,position.y,position.z]} rotation={[(Math.PI/180)*rotation.x,(Math.PI/180)*rotation.y,(Math.PI/180)*rotation.z]}  >
-    <spotLight
+    {/* <spotLight
         ref={spotlightref1}
         color="white"
         intensity={2}//2
@@ -45,7 +45,7 @@ export const Safe = ({
         distance={35}
         castShadow={false} 
         target={node.nodes.Main}   
-      />
+      /> */}
       <mesh scale={1.5}>
         <primitive object={node.nodes.Main} />
       </mesh>

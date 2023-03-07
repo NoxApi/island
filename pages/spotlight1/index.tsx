@@ -139,7 +139,8 @@ const handleWheel = (e:any) => {
   });
   const refpoint = new THREE.Vector3(0,0,0)
   const object = new THREE.Object3D();
-  object.position.set(4,24,0)
+  object.position.set(0,0,0)
+  useHelper(spotlightref1,SpotLightHelper, 'yellow')
   return(
   <>
   <ambientLight intensity={0.5} ref={alightref} />
@@ -153,13 +154,13 @@ const handleWheel = (e:any) => {
   </group>
   <PerspectiveCamera makeDefault={true}  ref={cameraref} />
  
-  <group ref = {allgroupref} >
+  <group ref = {allgroupref}  >
   <Build position={{x:14,y:25.8,z:8}} rotation={{x:8,y:260,z:-2}}/>
   <Safe position={{x:-13,y:18.8,z:5}} rotation={{x:10,y:31,z:3}}/>
   <Syn position={{x:25,y:16.4,z:14}} rotation={{x:16,y:43,z:-11}}/>
   <Capsule position={{x:-2,y:24,z:6}} rotation={{x:3,y:-180,z:3}}/>
  
-  <mesh scale={1} ref={islandref}>
+  <mesh scale={1} ref={islandref} rotation={[(Math.PI/180)*10,(Math.PI/180)*-100,(Math.PI/180)*0]}>
       <primitive object={nodesloader.Main} />
   </mesh>
   <spotLight
@@ -171,37 +172,7 @@ const handleWheel = (e:any) => {
         angle={(Math.PI/180)*40}
         distance={400}
         castShadow={false} 
-      />
-    <spotLight
-        ref={spotlightref2}
-        color="#ffffff"
-        intensity={1.8}
-        position={[60, 50,30]}  
-        penumbra={1}
-        angle={(Math.PI/180)*40}
-        distance={90}
-        castShadow={false} 
-      />
-      <spotLight
-        ref={spotlightref3}
-        color="#ffffff"
-        intensity={2}
-        position={[-60, 50,20]}  
-        penumbra={1}
-        angle={(Math.PI/180)*40}
-        distance={80}
-        castShadow={false} 
-      />
-      <spotLight
-        ref={spotlightref4}
-        color="#ffffff"
-        intensity={1.5}
-        position={[5, 55,80]}
-        penumbra={1}
-        angle={(Math.PI/180)*40}
-        distance={160}
-        castShadow={false} 
-        target={object}       
+        target={object}
       />
   </group>
   

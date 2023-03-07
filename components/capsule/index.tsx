@@ -30,7 +30,7 @@ export const Capsule = ({
       <mesh scale={1.5}>
         <primitive object={node.nodes.Main} />
       </mesh>
-      <spotLight
+      {/* <spotLight
         ref={spotlightref1}
         color="white"
         intensity={4}//4
@@ -40,8 +40,7 @@ export const Capsule = ({
         distance={35}
         castShadow={false} 
         target={node.nodes.Main}   
-        power={10}
-      />
+      /> */}
     </group>
     
     </>
