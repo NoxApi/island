@@ -23,15 +23,14 @@ export default function Home() {
   const [message, setMessage] = useState("nomsg");
   const getsaved = async () => {
     const spolight1 = collection(firestore as any,'spotlight1');
-    const fetchvalue= query(spolight1);
-    const data = await getDocs(fetchvalue);
+    const Collection= query(spolight1);
+    const data = await getDocs(Collection);
     const result:any = [];
     data.forEach((data) => {
     result.push(data);
     });
     // set it to state
-    console.log(result)
-    setsaved(result[2]._document.data.value.mapValue.fields)
+    setsaved(result[1]._document.data.value.mapValue.fields)
   };
   
   let spotlight: { angle: any; x?: number; y?: number; z?: number; tx?: number; ty?: number; tz?: number; penum?: number; inten?: number; d?: number; } | null=null
@@ -45,7 +44,7 @@ export default function Home() {
   const update = async () => {
     console.log((spotlight!.inten)!.toFixed(2))
     try {
-      updateDoc(doc(firestore,'spotlight1',"OnqT2fzVBjZM48SoxbDM"),{
+      updateDoc(doc(firestore,'spotlight1',"4c2TsV8kVxFHcA3HzFQB"),{
         angle : (spotlight!.angle)!.toString(),
         color : (colorFormats!.string)!.toString(),
         distance: (spotlight!.d)!.toString(),
@@ -167,12 +166,12 @@ const handleWheel = (e:any) => {
     gui.add(rotatedeg,"rotatey").min(-180).max(180).step(1).name("cam-rotation-y")
     gui.add(rotatedeg,"rotatez").min(-180).max(180).step(1).name("cam-rotation-z")
     gui.add(light,"alight").min(0).max(1).step(0.1).name("Ambient light")
-    gui.add(spotlight,"x").min(parseFloat(saved.posx.stringValue)-10).max(parseFloat(saved.posx.stringValue)+10).step(0.5).name("spotlight-x")
-    gui.add(spotlight,"y").min(80).max(120).step(1).name("spotlight-y")
-    gui.add(spotlight,"z").min(-40).max(0).step(1).name("spotlight-z")
+    gui.add(spotlight,"x").min((spotlight.x)-10).max((spotlight.x)+10).step(0.5).name("spotlight-x")
+    gui.add(spotlight,"y").min((spotlight.y)-10).max((spotlight.y)+10).step(0.5).name("spotlight-y")
+    gui.add(spotlight,"z").min((spotlight.z)-10).max((spotlight.z)+10).step(0.5).name("spotlight-z")
     gui.add(spotlight,"tx").min(-100).max(100).step(0.5).name("lookat-x")
-    gui.add(spotlight,"ty").min(-100).max(100).step(1).name("lookat-y")
-    gui.add(spotlight,"tz").min(-100).max(100).step(1).name("lookat-z")
+    gui.add(spotlight,"ty").min(-100).max(100).step(0.5).name("lookat-y")
+    gui.add(spotlight,"tz").min(-100).max(100).step(0.5).name("lookat-z")
     gui.add(spotlight,"penum").min(0).max(1).step(0.1).name("penumbra")
     gui.add(spotlight,"inten").min(0).max(10).step(0.1).name("intensity")
     gui.add(spotlight,"d").min(0).max(600).step(1).name("distance")
