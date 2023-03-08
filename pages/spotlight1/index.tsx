@@ -15,31 +15,62 @@ import { Safe } from '@/components/safe';
 import { Syn } from '@/components/syn';
 import { Capsule } from "@/components/capsule";
 import firestore from "@/firebase/ClientApp";
-import {collection,QueryDocumentSnapshot,DocumentData,query,where,limit,getDocs} from "@firebase/firestore";
+import {collection,QueryDocumentSnapshot,DocumentData,query,where,limit,getDocs,addDoc,updateDoc, doc} from "@firebase/firestore";
 
  
 export default function Home() {
   const [saved,setsaved] = useState<any>(null)
-  useEffect(()=>{
-    const getsaved = async () => {
-      const spolight1 = collection(firestore as any,'spotlight1');
-      // construct a query to get up to 10 undone todos 
-      const todosQuery = query(spolight1);
-      // get the todos
-      const querySnapshot = await getDocs(todosQuery);
-      
-      // map through todos adding them to an array
-      const result:any = [];
-      querySnapshot.forEach((snapshot) => {
-      result.push(snapshot);
-      });
-      // set it to state
-      setsaved(result[0]._document.data.value.mapValue.fields)
+  const [message, setMessage] = useState("nomsg");
+  const getsaved = async () => {
+    const spolight1 = collection(firestore as any,'spotlight1');
+    const fetchvalue= query(spolight1);
+    const data = await getDocs(fetchvalue);
+    const result:any = [];
+    data.forEach((data) => {
+    result.push(data);
+    });
+    // set it to state
+    setsaved(result[0]._document.data.value.mapValue.fields)
+  };
+  
+  let spotlight: { angle: any; x?: number; y?: number; z?: number; tx?: number; ty?: number; tz?: number; penum?: number; inten?: number; d?: number; } | null=null
+  let colorFormats : {string :any}| null=null
+  if(saved){
+    spotlight = {x:parseInt(saved.posx.integerValue),y:parseInt(saved.posy.integerValue),z:parseInt(saved.posz.integerValue),tx:parseInt(saved.targetx.integerValue),ty:parseInt(saved.targety.integerValue),tz:parseInt(saved.targetz.integerValue),penum:parseInt(saved.penumbra.integerValue),inten:parseInt(saved.intensity.integerValue),d:parseInt(saved.distance.integerValue),angle:parseInt(saved.angle.integerValue)}
+    colorFormats = {
+      string: saved.color.stringValue,
     };
-  setTimeout( () => {
-    getsaved()
-  },2000)
-  },[])
+    console.log((parseInt(saved.color.stringValue)).toString(16))
+  }
+  const update = async () => {
+    try {
+      updateDoc(doc(firestore,'spotlight1',"OnqT2fzVBjZM48SoxbDM"),{
+        angle : spotlight!.angle,
+        color : colorFormats!.string,
+        distance: spotlight!.d,
+        intensity: spotlight!.inten,
+        penumbra: spotlight!.penum,
+        posx: spotlight!.x,
+        posy: spotlight!.y,
+        posz: spotlight!.z,
+        targetx: spotlight!.tx,
+        targety: spotlight!.ty,
+        targetz: spotlight!.tz,
+      });
+      // Set a success message
+      setMessage("save เสดแล้วไอ่สัส click สี่เหลี่ยมนี้เพื่อปิด");
+      getsaved()
+    } catch (error) {
+      // Set an error message
+      setMessage("update ผิดพลาด เสดแล้วไอ่สัส เกิดปัญหาอะดิ๊ click สี่เหลี่ยมนี้เพื่อปิด");
+    }
+  };
+  useEffect(()=>{ 
+    setTimeout( () => {
+      getsaved()
+      console.log(saved)
+    },2000)
+    },[])
   return (
     <>
       <Head>
@@ -49,10 +80,16 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {saved!==null?
-     (<div className='bg-black w-[100vw] h-[100vh] cursor-grab active:cursor-grabbing '>
+     (<div className='bg-black w-[100vw] h-[100vh]  '>
+      <button onClick={()=>update()} className="w-60 h-20 bg-slate-400 bg-opacity-20 absolute bottom-[1vw] left-[1vw] z-40 rounded-xl border-4 border-teal-200">
+        <p className="text-xl text-teal-200">{"SAVE"}</p>
+      </button>
+      {message=="nomsg"?(null):(<button onClick={()=>setMessage("nomsg")} className="w-[50vw] h-[20vw] bg-slate-400 bg-opacity-20 absolute bottom-[50%] left-[50%] translate-x-[-50%] translate-y-[50%] z-40 rounded-xl border-4 border-teal-200">
+        <p className="text-4xl text-teal-200">{message}</p>
+      </button>)}     
       <Canvas >
         <Suspense fallback={null}>
-          <Island saved={saved}/>
+          <Island saved={saved} spotlight={spotlight} colorFormats={colorFormats}/>
         </Suspense>
       </Canvas>
      </div>
@@ -60,7 +97,11 @@ export default function Home() {
     </>
   )
 }
-const Island = ({saved}:{saved:any}) =>{
+
+
+
+
+const Island = ({saved,spotlight,colorFormats}:{saved:any,spotlight:any,colorFormats:any}) =>{
 //loader
   const nodesloader = useLoader(GLTFLoader, 'island3.glb')['nodes'];
   const glb = useGLTF("island3.glb");
@@ -88,13 +129,7 @@ const Island = ({saved}:{saved:any}) =>{
   let sunrotate={rotatex:0,rotatey:0,rotatez:0}
   let islandrotate={rotatex:10,rotatey:-100,rotatez:0}
   let grouprotate={rotatex:0,rotatey:0,rotatez:0}
-  let spotlight = {x:parseInt(saved.posx.integerValue),y:parseInt(saved.posy.integerValue),z:parseInt(saved.posz.integerValue),tx:0,ty:0,tz:0,penum:1,inten:0.25,d:400,angel:40}
-  const colorFormats = {
-    string: '#ffffff',
-    int: 0xffffff,
-    object: { r: 1, g: 1, b: 1 },
-    array: [ 1, 1, 1 ]
-  };
+  
 //position variable
 
 //light
@@ -137,10 +172,10 @@ const handleWheel = (e:any) => {
     gui.add(spotlight,"ty").min(-100).max(100).step(1).name("lookat-y")
     gui.add(spotlight,"tz").min(-100).max(100).step(1).name("lookat-z")
     gui.add(spotlight,"penum").min(0).max(1).step(0.1).name("penumbra")
-    gui.add(spotlight,"inten").min(0).max(100).step(1).name("intensity")
+    gui.add(spotlight,"inten").min(0).max(10).step(0.1).name("intensity")
     gui.add(spotlight,"d").min(0).max(600).step(1).name("distance")
-    gui.add(spotlight,"angel").min(0).max(90).step(1).name("angel")
-    gui.addColor( colorFormats, 'int' ).name("spotlight light color");
+    gui.add(spotlight,"angle").min(0).max(90).step(1).name("angle")
+    gui.addColor( colorFormats, 'string' ).name("spotlight light color");
 //gui
   useEffect(()=>{
    window.addEventListener("wheel", handleWheel);
@@ -161,8 +196,8 @@ const handleWheel = (e:any) => {
     spotlightref1.current.intensity=spotlight.inten
     spotlightref1.current.distance=spotlight.d
     spotlightref1.current.penumbra=spotlight.penum
-    spotlightref1.current.angle=(Math.PI/180)*spotlight.angel
-    spotlightref1.  current.color.set(colorFormats.int)
+    spotlightref1.current.angle=(Math.PI/180)*spotlight.angle
+    spotlightref1.current.color.set(colorFormats.string)
     
       //control
     
@@ -171,10 +206,10 @@ const handleWheel = (e:any) => {
   const object = new THREE.Object3D();
   object.position.set(0,0,0)
   useHelper(spotlightref1,SpotLightHelper, 'yellow')
+  
   return(
   <>
   <ambientLight intensity={0.5} ref={alightref} />
-  
   <group rotation={[(Math.PI/180)*0,0,(Math.PI/180)*0]} ref={sunref}>
   {/* <directionalLight intensity={1} ref={dlightref} position={[5,65,1]} color={"#ff0000"}/> */}
   <mesh  position={object.position} ref={objectref} >
@@ -185,27 +220,26 @@ const handleWheel = (e:any) => {
   <PerspectiveCamera makeDefault={true}  ref={cameraref} />
  
   <group ref = {allgroupref}  >
-  <Build position={{x:14,y:25.8,z:8}} rotation={{x:8,y:260,z:-2}}/>
-  <Safe position={{x:-13,y:18.8,z:5}} rotation={{x:10,y:31,z:3}}/>
-  <Syn position={{x:25,y:16.4,z:14}} rotation={{x:16,y:43,z:-11}}/>
-  <Capsule position={{x:-2,y:24,z:6}} rotation={{x:3,y:-180,z:3}}/>
- 
-  <mesh scale={1} ref={islandref} rotation={[(Math.PI/180)*10,(Math.PI/180)*-100,(Math.PI/180)*0]}>
-      <primitive object={nodesloader.Main} />
-  </mesh>
-  <spotLight
-        ref={spotlightref1}
-        color="#FFD7D7"
-        intensity={0.15}
-        position={[30, 100,-20]}  
-        penumbra={1}
-        angle={(Math.PI/180)*40}
-        distance={400}
-        castShadow={false} 
-        target={object}
-      />
-  </group>
+    <Build position={{x:14,y:25.8,z:8}} rotation={{x:8,y:260,z:-2}}/>
+    <Safe position={{x:-13,y:18.8,z:5}} rotation={{x:10,y:31,z:3}}/>
+    <Syn position={{x:25,y:16.4,z:14}} rotation={{x:16,y:43,z:-11}}/>
+    <Capsule position={{x:-2,y:24,z:6}} rotation={{x:3,y:-180,z:3}}/>
   
+    <mesh scale={1} ref={islandref} rotation={[(Math.PI/180)*10,(Math.PI/180)*-100,(Math.PI/180)*0]}>
+        <primitive object={nodesloader.Main} />
+    </mesh>
+    <spotLight
+          ref={spotlightref1}
+          color="#FFD7D7"
+          intensity={0.15}
+          position={[30, 100,-20]}  
+          penumbra={1}
+          angle={(Math.PI/180)*40}
+          distance={400}
+          castShadow={false} 
+          target={object}
+        />
+    </group> 
   </>
   )
 }

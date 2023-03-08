@@ -1,8 +1,8 @@
 import {initializeApp} from "firebase/app";
-import firebase from "firebase/app"
+import firebase from 'firebase/app';
+import type { FirebaseApp } from 'firebase/app';
+import type { Firestore } from '@firebase/firestore';
 import {getFirestore} from "firebase/firestore";
-import admin from 'firebase-admin';
-import serviceAccount from './serviceAccountKey.json';
 declare module 'firebase/app' {
   namespace credential {
     function cert(serviceAccountPathOrObject: string | Object): Credential;
@@ -20,10 +20,9 @@ declare module 'firebase/app' {
   };
   // const credential = firebase.credential.cert(serviceAccount);
   initializeApp(firebaseConfig as any)
-  // admin.initializeApp({
-  //   credential: admin.credential.cert(serviceAccount as any)
-  // });
-  // let db = admin.firestore();
   const firestore = getFirestore();
-  // const firestore = db
+  // const collectionRef = firestore.collection('spotlight1');
+  // collectionRef.doc('OnqT2fzVBjZM48SoxbDM').update({
+  //   "angel(deg)": 40,
+  // });
 export default firestore;

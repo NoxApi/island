@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@firebase/firestore": "^3.8.4",
     "@next/font": "13.1.6",
     "@react-three/drei": "^9.56.24",
     "@types/node": "18.13.0",
@@ -40,6 +41,5 @@
     "net": false,
     "fs": false,
     "child_process": false
-
   }
 }
