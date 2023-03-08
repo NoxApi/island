@@ -14,12 +14,31 @@ import { Build } from '@/components/building';
 import { Safe } from '@/components/safe';
 import { Syn } from '@/components/syn';
 import { Capsule } from "@/components/capsule";
-import { redirect } from "next/dist/server/api-utils";
-import {RectAreaLightHelper} from "three/examples/jsm/helpers/RectAreaLightHelper"
+import firestore from "@/firebase/ClientApp";
+import {collection,QueryDocumentSnapshot,DocumentData,query,where,limit,getDocs} from "@firebase/firestore";
 
+ 
 export default function Home() {
-    //madbox rotation island x-24 y-94 cam x -64
+  const [saved,setsaved] = useState<any>(null)
   useEffect(()=>{
+    const getsaved = async () => {
+      const spolight1 = collection(firestore as any,'spotlight1');
+      // construct a query to get up to 10 undone todos 
+      const todosQuery = query(spolight1);
+      // get the todos
+      const querySnapshot = await getDocs(todosQuery);
+      
+      // map through todos adding them to an array
+      const result:any = [];
+      querySnapshot.forEach((snapshot) => {
+      result.push(snapshot);
+      });
+      // set it to state
+      setsaved(result[0]._document.data.value.mapValue.fields)
+    };
+  setTimeout( () => {
+    getsaved()
+  },2000)
   },[])
   return (
     <>
@@ -29,26 +48,27 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-     <div className='bg-black w-[100vw] h-[100vh] cursor-grab active:cursor-grabbing '>
+      {saved!==null?
+     (<div className='bg-black w-[100vw] h-[100vh] cursor-grab active:cursor-grabbing '>
       <Canvas >
         <Suspense fallback={null}>
-          <Island/>
+          <Island saved={saved}/>
         </Suspense>
       </Canvas>
      </div>
+      ):(null)}
     </>
   )
 }
-const Island = () =>{
+const Island = ({saved}:{saved:any}) =>{
 //loader
   const nodesloader = useLoader(GLTFLoader, 'island3.glb')['nodes'];
   const glb = useGLTF("island3.glb");
-//loader
-
+//firebase
 //ref
   const cameraref=useRef<any>()
   const islandref = useRef<any>()
- 
+  const objectref = useRef<any>()
   const allgroupref = useRef<any>()
   const alightref = useRef<any>()
   const dlightref = useRef<any>()
@@ -59,7 +79,6 @@ const Island = () =>{
   const spotlightref3 = useRef<any>()
   const spotlightref4 = useRef<any>()
   
-
 //position variable
   let light = {alight:0,dlight:0}
   let pos ={camx:6,camy:60,camz:100}
@@ -69,6 +88,7 @@ const Island = () =>{
   let sunrotate={rotatex:0,rotatey:0,rotatez:0}
   let islandrotate={rotatex:10,rotatey:-100,rotatez:0}
   let grouprotate={rotatex:0,rotatey:0,rotatez:0}
+  let spotlight = {x:parseInt(saved.posx.integerValue),y:parseInt(saved.posy.integerValue),z:parseInt(saved.posz.integerValue),tx:0,ty:0,tz:0,penum:1,inten:0.25,d:400,angel:40}
   const colorFormats = {
     string: '#ffffff',
     int: 0xffffff,
@@ -83,7 +103,7 @@ const Island = () =>{
 //control
 const handleWheel = (e:any) => {
     e.preventDefault();
-    if(pos.camy>50){
+    if(pos.camy>100){
       if (e.deltaY<0){
     pos.camz += e.deltaY / 100;
     pos.camy += e.deltaY / 200;
@@ -110,14 +130,22 @@ const handleWheel = (e:any) => {
     gui.add(rotatedeg,"rotatey").min(-180).max(180).step(1).name("cam-rotation-y")
     gui.add(rotatedeg,"rotatez").min(-180).max(180).step(1).name("cam-rotation-z")
     gui.add(light,"alight").min(0).max(1).step(0.1).name("Ambient light")
-    gui.add(light,"dlight").min(0).max(1).step(0.1).name("Directional light") 
-    gui.addColor( colorFormats, 'int' ).name("Directional light color");
-    gui.add(sunrotate,"rotatex").min(-180).max(180).step(1).name("d-light-rotate x")
-    gui.add(sunrotate,"rotatez").min(-180).max(180).step(1).name("d-light-rotate z")
+    gui.add(spotlight,"x").min(parseInt(saved.posx.integerValue)-10).max(parseInt(saved.posx.integerValue)+10).step(0.5).name("spotlight-x")
+    gui.add(spotlight,"y").min(80).max(120).step(1).name("spotlight-y")
+    gui.add(spotlight,"z").min(-40).max(0).step(1).name("spotlight-z")
+    gui.add(spotlight,"tx").min(-100).max(100).step(0.5).name("lookat-x")
+    gui.add(spotlight,"ty").min(-100).max(100).step(1).name("lookat-y")
+    gui.add(spotlight,"tz").min(-100).max(100).step(1).name("lookat-z")
+    gui.add(spotlight,"penum").min(0).max(1).step(0.1).name("penumbra")
+    gui.add(spotlight,"inten").min(0).max(100).step(1).name("intensity")
+    gui.add(spotlight,"d").min(0).max(600).step(1).name("distance")
+    gui.add(spotlight,"angel").min(0).max(90).step(1).name("angel")
+    gui.addColor( colorFormats, 'int' ).name("spotlight light color");
 //gui
   useEffect(()=>{
    window.addEventListener("wheel", handleWheel);
    return () =>{ window.removeEventListener("wheel", handleWheel);
+   
 }
   })
   
@@ -126,14 +154,16 @@ const handleWheel = (e:any) => {
     cameraref.current.rotation.x = (Math.PI/180)*rotatedeg.rotatex
     cameraref.current.rotation.y = (Math.PI/180)*rotatedeg.rotatey
     cameraref.current.rotation.z = (Math.PI/180)*rotatedeg.rotatez
-    allgroupref.current!.rotation.x = (Math.PI/180)*grouprotate.rotatex
-    allgroupref.current!.rotation.y = (Math.PI/180)*grouprotate.rotatey
-    allgroupref.current!.rotation.z = (Math.PI/180)*grouprotate.rotatez
     alightref.current.intensity= light.alight
-    dlightref.current.intensity= light.dlight
-    dlightref.current.color.set(colorFormats.int)
-    sunref.current.rotation.x = (Math.PI/180)*sunrotate.rotatex
-    sunref.current.rotation.z = (Math.PI/180)*sunrotate.rotatez
+    spotlightref1.current.position.copy(new THREE.Vector3(spotlight.x,spotlight.y,spotlight.z))
+    object.position.set(spotlight.tx,spotlight.ty,spotlight.tz)
+    objectref.current.position.copy((object.position))
+    spotlightref1.current.intensity=spotlight.inten
+    spotlightref1.current.distance=spotlight.d
+    spotlightref1.current.penumbra=spotlight.penum
+    spotlightref1.current.angle=(Math.PI/180)*spotlight.angel
+    spotlightref1.  current.color.set(colorFormats.int)
+    
       //control
     
   });
@@ -146,10 +176,10 @@ const handleWheel = (e:any) => {
   <ambientLight intensity={0.5} ref={alightref} />
   
   <group rotation={[(Math.PI/180)*0,0,(Math.PI/180)*0]} ref={sunref}>
-  <directionalLight intensity={1} ref={dlightref} position={[5,65,1]} color={"#ff0000"}/>
-  <mesh  position={[5,65,1]}>
+  {/* <directionalLight intensity={1} ref={dlightref} position={[5,65,1]} color={"#ff0000"}/> */}
+  <mesh  position={object.position} ref={objectref} >
       <sphereBufferGeometry args={[4, 50, 50]} wireframe={true} />
-      <meshStandardMaterial  color={"#ff0000"} />
+      <meshStandardMaterial  color={"#ffffff"} />
   </mesh>
   </group>
   <PerspectiveCamera makeDefault={true}  ref={cameraref} />
@@ -179,3 +209,5 @@ const handleWheel = (e:any) => {
   </>
   )
 }
+
+
