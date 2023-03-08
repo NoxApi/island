@@ -37,13 +37,13 @@ export default function Home() {
   const update = async () => {
     try {
       updateDoc(doc(firestore,'safe',"TtO7RwUpHHN1wfxbCxdm"),{
-        s: safevalue!.s,
-        x: safevalue!.x,
-        y: safevalue!.y,
-        z: safevalue!.z,
-        rx: safevalue!.rx,
-        ry: safevalue!.ry,
-        rz: safevalue!.rz,
+        s: (safevalue!.s).toString(),
+        x: (safevalue!.x).toString(),
+        y: (safevalue!.y).toString(),
+        z: (safevalue!.z).toString(),
+        rx: (safevalue!.rx).toString(),
+        ry: (safevalue!.ry).toString(),
+        rz: (safevalue!.rz).toString(),
       });
       // Set a success message
       setMessage("save เสดแล้วไอ่สัส click สี่เหลี่ยมนี้เพื่อปิด");
@@ -69,6 +69,12 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
      {saved?(<div className='bg-white w-[100vw] h-[100vh] cursor-grab active:cursor-grabbing '>
+     <button onClick={()=>update()} className="w-60 h-20 bg-slate-400 bg-opacity-80 absolute bottom-[1vw] left-[1vw] z-40 rounded-xl border-4 border-black">
+        <p className="text-xl text-black">{"SAVE"}</p>
+      </button>
+      {message=="nomsg"?(null):(<button onClick={()=>setMessage("nomsg")} className="w-[50vw] h-[20vw] bg-slate-400 bg-opacity-80 absolute bottom-[50%] left-[50%] translate-x-[-50%] translate-y-[50%] z-40 rounded-xl border-4 border-black">
+        <p className="text-4xl text-black">{message}</p>
+      </button>)}     
       <Canvas >
         {/* <PerspectiveCamera makeDefault={true}  position={[0,10,20]}/> */}
         {/* <PerspectiveCamera makeDefault={true} position={[position.x,position.y,15]} rotation={[-0.5,0,0]} /> */}
@@ -190,12 +196,12 @@ const handleWheel = (e:any) => {
     islandref.current!.rotation.y = (Math.PI/180)*islandrotate.rotatey
     islandref.current!.rotation.z = (Math.PI/180)*islandrotate.rotatez
     refsafe.current!.position.copy(new THREE.Vector3(safevalue.x,safevalue.y,safevalue.z))
-    refsafe.current.rotation.x = (Math.PI/180)*safevalue.x
-    refsafe.current.rotation.y = (Math.PI/180)*safevalue.y
-    refsafe.current.rotation.z = (Math.PI/180)*safevalue.z
-    refsafe.current.scale.x = safevalue.scale
-    refsafe.current.scale.y = safevalue.scale
-    refsafe.current.scale.z = safevalue.scale
+    refsafe.current.rotation.x = (Math.PI/180)*safevalue.rx
+    refsafe.current.rotation.y = (Math.PI/180)*safevalue.ry
+    refsafe.current.rotation.z = (Math.PI/180)*safevalue.rz
+    refsafe.current.scale.x = safevalue.s
+    refsafe.current.scale.y = safevalue.s
+    refsafe.current.scale.z = safevalue.s
       //control
     
   });

@@ -37,7 +37,7 @@ export default function Home() {
   let spotlight: { angle: any; x?: number; y?: number; z?: number; tx?: number; ty?: number; tz?: number; penum?: number; inten?: number; d?: number; } | null=null
   let colorFormats : {string :any}| null=null
   if(saved){
-    spotlight = {x:parseInt(saved.posx.integerValue),y:parseInt(saved.posy.integerValue),z:parseInt(saved.posz.integerValue),tx:parseInt(saved.targetx.integerValue),ty:parseInt(saved.targety.integerValue),tz:parseInt(saved.targetz.integerValue),penum:parseFloat(saved.penumbra.stringValue),inten:parseFloat(saved.intensity.stringValue),d:parseInt(saved.distance.integerValue),angle:parseInt(saved.angle.integerValue)}
+    spotlight = {x:parseFloat(saved.posx.stringValue),y:parseFloat(saved.posy.stringValue),z:parseFloat(saved.posz.stringValue),tx:parseFloat(saved.targetx.stringValue),ty:parseFloat(saved.targety.stringValue),tz:parseFloat(saved.targetz.stringValue),penum:parseFloat(saved.penumbra.stringValue),inten:parseFloat(saved.intensity.stringValue),d:parseFloat(saved.distance.stringValue),angle:parseFloat(saved.angle.stringValue)}
     colorFormats = {
       string: saved.color.stringValue,
     };
@@ -46,17 +46,17 @@ export default function Home() {
     console.log((spotlight!.inten)!.toFixed(2))
     try {
       updateDoc(doc(firestore,'spotlight1',"OnqT2fzVBjZM48SoxbDM"),{
-        angle : spotlight!.angle,
-        color : colorFormats!.string,
-        distance: spotlight!.d,
-        intensity: (spotlight!.inten)!.toFixed(1),
-        penumbra: (spotlight!.penum)!.toFixed(1),
-        posx: spotlight!.x,
-        posy: spotlight!.y,
-        posz: spotlight!.z,
-        targetx: spotlight!.tx,
-        targety: spotlight!.ty,
-        targetz: spotlight!.tz,
+        angle : (spotlight!.angle)!.toString(),
+        color : (colorFormats!.string)!.toString(),
+        distance: (spotlight!.d)!.toString(),
+        intensity: (spotlight!.inten)!.toString(),
+        penumbra: (spotlight!.penum)!.toString(),
+        posx: (spotlight!.x)!.toString(),
+        posy: (spotlight!.y)!.toString(),
+        posz: (spotlight!.z)!.toString(),
+        targetx: (spotlight!.tx)!.toString(),
+        targety: (spotlight!.ty)!.toString(),
+        targetz: (spotlight!.tz)!.toString(),
       });
       // Set a success message
       setMessage("save เสดแล้วไอ่สัส click สี่เหลี่ยมนี้เพื่อปิด");
@@ -167,7 +167,7 @@ const handleWheel = (e:any) => {
     gui.add(rotatedeg,"rotatey").min(-180).max(180).step(1).name("cam-rotation-y")
     gui.add(rotatedeg,"rotatez").min(-180).max(180).step(1).name("cam-rotation-z")
     gui.add(light,"alight").min(0).max(1).step(0.1).name("Ambient light")
-    gui.add(spotlight,"x").min(parseInt(saved.posx.integerValue)-10).max(parseInt(saved.posx.integerValue)+10).step(0.5).name("spotlight-x")
+    gui.add(spotlight,"x").min(parseFloat(saved.posx.stringValue)-10).max(parseFloat(saved.posx.stringValue)+10).step(0.5).name("spotlight-x")
     gui.add(spotlight,"y").min(80).max(120).step(1).name("spotlight-y")
     gui.add(spotlight,"z").min(-40).max(0).step(1).name("spotlight-z")
     gui.add(spotlight,"tx").min(-100).max(100).step(0.5).name("lookat-x")
