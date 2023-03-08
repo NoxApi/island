@@ -30,27 +30,27 @@ export default function Home() {
     result.push(data);
     });
     // set it to state
+    console.log(result)
     setsaved(result[0]._document.data.value.mapValue.fields)
-    console.log(saved)
   };
   
   let spotlight: { angle: any; x?: number; y?: number; z?: number; tx?: number; ty?: number; tz?: number; penum?: number; inten?: number; d?: number; } | null=null
   let colorFormats : {string :any}| null=null
   if(saved){
-    spotlight = {x:parseInt(saved.posx.integerValue),y:parseInt(saved.posy.integerValue),z:parseInt(saved.posz.integerValue),tx:parseInt(saved.targetx.integerValue),ty:parseInt(saved.targety.integerValue),tz:parseInt(saved.targetz.integerValue),penum:parseInt(saved.penumbra.doubleValue),inten:parseInt(saved.intensity.doubleValue),d:parseInt(saved.distance.integerValue),angle:parseInt(saved.angle.integerValue)}
+    spotlight = {x:parseInt(saved.posx.integerValue),y:parseInt(saved.posy.integerValue),z:parseInt(saved.posz.integerValue),tx:parseInt(saved.targetx.integerValue),ty:parseInt(saved.targety.integerValue),tz:parseInt(saved.targetz.integerValue),penum:parseFloat(saved.penumbra.stringValue),inten:parseFloat(saved.intensity.stringValue),d:parseInt(saved.distance.integerValue),angle:parseInt(saved.angle.integerValue)}
     colorFormats = {
       string: saved.color.stringValue,
     };
-    console.log((parseInt(saved.color.stringValue)).toString(16))
   }
   const update = async () => {
+    console.log((spotlight!.inten)!.toFixed(2))
     try {
       updateDoc(doc(firestore,'spotlight1',"OnqT2fzVBjZM48SoxbDM"),{
         angle : spotlight!.angle,
         color : colorFormats!.string,
         distance: spotlight!.d,
-        intensity: spotlight!.inten,
-        penumbra: spotlight!.penum,
+        intensity: (spotlight!.inten)!.toFixed(1),
+        penumbra: (spotlight!.penum)!.toFixed(1),
         posx: spotlight!.x,
         posy: spotlight!.y,
         posz: spotlight!.z,
@@ -60,7 +60,9 @@ export default function Home() {
       });
       // Set a success message
       setMessage("save เสดแล้วไอ่สัส click สี่เหลี่ยมนี้เพื่อปิด");
-      getsaved()
+      setTimeout( () => {
+        getsaved()
+      },2000)
     } catch (error) {
       // Set an error message
       setMessage("update ผิดพลาด เสดแล้วไอ่สัส เกิดปัญหาอะดิ๊ click สี่เหลี่ยมนี้เพื่อปิด");
@@ -69,7 +71,6 @@ export default function Home() {
   useEffect(()=>{ 
     setTimeout( () => {
       getsaved()
-      console.log(saved)
     },2000)
     },[])
   return (

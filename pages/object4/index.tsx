@@ -9,16 +9,57 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Environment, OrbitControls, useAnimations,Html, Stats, TransformControls,PerspectiveCamera, PivotControls } from "@react-three/drei";
 import { useFBX,useGLTF } from '@react-three/drei';
 import * as THREE from "three";
-import { Camera,PointLight } from 'three';
 import * as Gui from "lil-gui";
-import { Build } from '@/components/building';
-import { Safe } from '@/components/safe';
-import { Syn } from '@/components/syn';
-import { Capsule } from "@/components/capsule";
+import firestore from "@/firebase/ClientApp";
+import {collection,QueryDocumentSnapshot,DocumentData,query,where,limit,getDocs,addDoc,updateDoc, doc} from "@firebase/firestore";
+
 export default function Home() {
-    //madbox rotation island x-24 y-94 cam x -64
-  useEffect(()=>{
-  },[])
+  const [saved,setsaved] = useState<any>(null)
+  const [message, setMessage] = useState("nomsg");
+  const getsaved = async () => {
+    const spolight1 = collection(firestore as any,'safe');
+    const fetchvalue= query(spolight1);
+    const data = await getDocs(fetchvalue);
+    const result:any = [];
+    data.forEach((data) => {
+    result.push(data);
+    });
+    // set it to state
+    // console.log(result)
+    setsaved(result[0]._document.data.value.mapValue.fields)
+  };
+  
+  let safevalue: { x?: any; y?: any; z?: any; rx?: any; ry?: any; rz?: any; s?: any; } | null=null
+  if(saved){
+    // console.log(saved)
+    safevalue = {x:parseFloat(saved.x.stringValue),y:parseFloat(saved.y.stringValue),z:parseFloat(saved.z.stringValue),rx:parseFloat(saved.rx.stringValue),ry:parseFloat(saved.ry.stringValue),rz:parseFloat(saved.rz.stringValue),s:parseFloat(saved.s.stringValue)}
+  }
+  const update = async () => {
+    try {
+      updateDoc(doc(firestore,'safe',"TtO7RwUpHHN1wfxbCxdm"),{
+        s: safevalue!.s,
+        x: safevalue!.x,
+        y: safevalue!.y,
+        z: safevalue!.z,
+        rx: safevalue!.rx,
+        ry: safevalue!.ry,
+        rz: safevalue!.rz,
+      });
+      // Set a success message
+      setMessage("save เสดแล้วไอ่สัส click สี่เหลี่ยมนี้เพื่อปิด");
+      setTimeout( () => {
+        getsaved()
+      },2000)
+    } catch (error) {
+      // Set an error message
+      setMessage("update ผิดพลาด เสดแล้วไอ่สัส เกิดปัญหาอะดิ๊ click สี่เหลี่ยมนี้เพื่อปิด");
+    }
+  };
+  useEffect(()=>{ 
+    setTimeout( () => {
+      getsaved()
+    },2000)
+    },[])
   return (
     <>
       <Head>
@@ -27,7 +68,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-     <div className='bg-red-300 w-[100vw] h-[100vh] cursor-grab active:cursor-grabbing '>
+     {saved?(<div className='bg-white w-[100vw] h-[100vh] cursor-grab active:cursor-grabbing '>
       <Canvas >
         {/* <PerspectiveCamera makeDefault={true}  position={[0,10,20]}/> */}
         {/* <PerspectiveCamera makeDefault={true} position={[position.x,position.y,15]} rotation={[-0.5,0,0]} /> */}
@@ -35,7 +76,7 @@ export default function Home() {
         <Suspense fallback={null}>
         
           {/* <Box/> */}
-          <Island/>
+          <Island safevalue = {safevalue}/>
           {/* <Build position={{x:14,y:25.8,z:8}} rotation={{x:8,y:260,z:-2}}/>
           <Safe position={{x:-13,y:18.8,z:5}} rotation={{x:10,y:31,z:3}}/>
           <Syn position={{x:25,y:16.4,z:14}} rotation={{x:16,y:43,z:-11}}/>
@@ -45,11 +86,12 @@ export default function Home() {
          maxDistance={80}/> */}
         </Suspense>
       </Canvas>
-     </div>
+     </div>):(null)}
     </>
   )
 }
-const Island = () =>{
+const Island = ({safevalue}:{safevalue:any}) =>{
+  console.log(safevalue)
 //loader
   const nodesloader = useLoader(GLTFLoader, 'island3.glb')['nodes'];
   const glb = useGLTF("island3.glb");
@@ -70,8 +112,6 @@ const Island = () =>{
 //position variable
   let light = {alight:0.5,dlight:0.3}
   let pos ={camx:6,camy:46,camz:60}
-  let objpos ={x:-13,y:18.8,z:5,scale:1.5}
-  let objrot ={x:10,y:31,z:3}
   // <Safe position={{x:-13,y:18.8,z:5}} rotation={{x:10,y:31,z:3}}/>
   let rotatedeg={rotatex:-19,rotatey:0,rotatez:0}
   let islandrotate={rotatex:10,rotatey:-100,rotatez:0}
@@ -112,73 +152,18 @@ const handleWheel = (e:any) => {
     // console.log(pos.camy)
   };
 
-  const mouseDown = useRef(false);
-  const mousePosition = useRef([0, 0]);
-
-  const handleMouseDown = (e:any) => {
-    e.preventDefault();
-    mouseDown.current = true;
-    mousePosition.current = [e.clientX, e.clientY];
-  };
-
-  const handleMouseUp = () => {
-    mouseDown.current = false;
-  };
-
-  const handleMouseMove = (e:any) => {
-    if (!mouseDown.current) return;
-    const [x, y] = mousePosition.current;
-    const dx = (e.clientX - x)/50;
-    const dy = (e.clientY - y)/50;
-    mousePosition.current = [e.clientX, e.clientY];
-    if (pos.camx<-20){
-      if (dx<0)
-      pos.camx += -dx
-    }
-    else if (pos.camx>35){
-      if (dx>0)
-      pos.camx += -dx
-    }
-    else{
-      pos.camx += -dx
-    }
-    
-    if (pos.camz<45){
-      if (dy<0)
-      pos.camz += -dy
-    }
-    else if (pos.camz>75){
-      if (dy>0)
-      pos.camz += -dy
-    }
-    else{
-      pos.camz += -dy
-    }
-  }  
 //control
 
 //gui
     const gui = new Gui.GUI()
-    // gui.add(pos,"camx").min(-100).max(100).step(1).name("cam-position-x")
-    // gui.add(pos,"camy").min(-100).max(100).step(1).name("cam-position-y")
-    // gui.add(pos,"camz").min(0).max(200).step(1).name("cam-position-z")
-    // gui.add(rotatedeg,"rotatex").min(-180).max(180).step(1).name("cam-rotation-x")
-    // gui.add(rotatedeg,"rotatey").min(-180).max(180).step(1).name("cam-rotation-y")
-    // gui.add(rotatedeg,"rotatez").min(-180).max(180).step(1).name("cam-rotation-z")
-        gui.add(objpos,"x").min(-18).max(-7).step(0.1).name("obj pos-x")
-        gui.add(objpos,"y").min(13).max(23).step(0.1).name("obj pos-y")
-        gui.add(objpos,"z").min(0).max(10).step(0.1).name("obj pos-z")
-        gui.add(objrot,"x").min(-180).max(180).step(1).name("obj rot-x")
-        gui.add(objrot,"y").min(-180).max(180).step(1).name("obj rot-y")
-        gui.add(objrot,"z").min(-180).max(180).step(1).name("obj rot-z")
-        gui.add(objpos,"scale").min(0).max(2).step(0.1).name("obj scale")
-    // gui.add(light,"alight").min(0).max(1).step(0.1).name("Ambient light")
-    // gui.add(light,"dlight").min(0).max(1).step(0.1).name("Directional light") 
-    // gui.add(islandrotate,"rotatex").min(-180).max(180).step(1).name("island rotate x")
-    // gui.add(islandrotate,"rotatey").min(-180).max(180).step(1).name("island rotate y")
-    // gui.add(islandrotate,"rotatez").min(-180).max(180).step(1).name("island rotate z")
-    // gui.add(islandrotate,"rotatey").min(-180).max(180).step(1)
-    // gui.add(islandrotate,"rotatez").min(-180).max(180).step(1)
+        gui.add(safevalue,"x").min(-18).max(-7).step(0.1).name("obj pos-x")
+        gui.add(safevalue,"y").min(13).max(23).step(0.1).name("obj pos-y")
+        gui.add(safevalue,"z").min(0).max(10).step(0.1).name("obj pos-z")
+        gui.add(safevalue,"rx").min(-180).max(180).step(1).name("obj rot-x")
+        gui.add(safevalue,"ry").min(-180).max(180).step(1).name("obj rot-y")
+        gui.add(safevalue,"rz").min(-180).max(180).step(1).name("obj rot-z")
+        gui.add(safevalue,"s").min(0).max(2).step(0.1).name("obj scale")
+   
 //gui
 
   useEffect(()=>{
@@ -204,15 +189,13 @@ const handleWheel = (e:any) => {
     islandref.current!.rotation.x = (Math.PI/180)*islandrotate.rotatex
     islandref.current!.rotation.y = (Math.PI/180)*islandrotate.rotatey
     islandref.current!.rotation.z = (Math.PI/180)*islandrotate.rotatez
-    refsafe.current!.position.copy(new THREE.Vector3(objpos.x,objpos.y,objpos.z))
-    refsafe.current.rotation.x = (Math.PI/180)*objrot.x
-    refsafe.current.rotation.y = (Math.PI/180)*objrot.y
-    refsafe.current.rotation.z = (Math.PI/180)*objrot.z
-    refsafe.current.scale.x = objpos.scale
-    refsafe.current.scale.y = objpos.scale
-    refsafe.current.scale.z = objpos.scale
-    alightref.current.intensity= light.alight
-    dlightref.current.intensity= light.dlight
+    refsafe.current!.position.copy(new THREE.Vector3(safevalue.x,safevalue.y,safevalue.z))
+    refsafe.current.rotation.x = (Math.PI/180)*safevalue.x
+    refsafe.current.rotation.y = (Math.PI/180)*safevalue.y
+    refsafe.current.rotation.z = (Math.PI/180)*safevalue.z
+    refsafe.current.scale.x = safevalue.scale
+    refsafe.current.scale.y = safevalue.scale
+    refsafe.current.scale.z = safevalue.scale
       //control
     
   });
