@@ -14,45 +14,13 @@ import { Build } from '@/components/building';
 import { Safe } from '@/components/safe';
 import { Syn } from '@/components/syn';
 import { Capsule } from "@/components/capsule";
-import firestore from "@/firebase/ClientApp";
-import {collection,QueryDocumentSnapshot,DocumentData,query,where,limit,getDocs,addDoc,updateDoc, doc} from "@firebase/firestore";
+import { redirect } from "next/dist/server/api-utils";
+import {RectAreaLightHelper} from "three/examples/jsm/helpers/RectAreaLightHelper"
 
 export default function Home() {
-  const [saved,setsaved] = useState<any>(null)
-  const [saved2,setsaved2] = useState<any>(null)
-  const [saved3,setsaved3] = useState<any>(null)
-  const [saved4,setsaved4] = useState<any>(null)
-  const [message, setMessage] = useState("nomsg");
-  const getsaved = async () => {
-    const spolight1 = collection(firestore as any,'spotlight1');
-    const Collection= query(spolight1);
-    const data = await getDocs(Collection);
-    const result:any = [];
-    data.forEach((data) => {
-    result.push(data);
-    });
-    // set it to state
-    setsaved2(result[1]._document.data.value.mapValue.fields)
-    setsaved3(result[2]._document.data.value.mapValue.fields)
-    setsaved4(result[3]._document.data.value.mapValue.fields)
-    setsaved(result[0]._document.data.value.mapValue.fields)
-  };
-  let spotlight: { angle: any; x?: number; y?: number; z?: number; tx?: number; ty?: number; tz?: number; penum?: number; inten?: number; d?: number; c?: any; } | null=null
-  let spotlight2: { angle: any; x?: number; y?: number; z?: number; tx?: number; ty?: number; tz?: number; penum?: number; inten?: number; d?: number; c?: any; } | null=null
-  let spotlight3: { angle: any; x?: number; y?: number; z?: number; tx?: number; ty?: number; tz?: number; penum?: number; inten?: number; d?: number; c?: any; } | null=null
-  let spotlight4: { angle: any; x?: number; y?: number; z?: number; tx?: number; ty?: number; tz?: number; penum?: number; inten?: number; d?: number; c?: any; } | null=null  
-  if(saved){
-    console.log(saved2)
-    spotlight = {x:parseFloat(saved.posx.stringValue),y:parseFloat(saved.posy.stringValue),z:parseFloat(saved.posz.stringValue),tx:parseFloat(saved.targetx.stringValue),ty:parseFloat(saved.targety.stringValue),tz:parseFloat(saved.targetz.stringValue),penum:parseFloat(saved.penumbra.stringValue),inten:parseFloat(saved.intensity.stringValue),d:parseFloat(saved.distance.stringValue),angle:parseFloat(saved.angle.stringValue),c:saved.color}
-    spotlight2 = {x:parseFloat(saved2.posx.stringValue),y:parseFloat(saved2.posy.stringValue),z:parseFloat(saved2.posz.stringValue),tx:parseFloat(saved2.targetx.stringValue),ty:parseFloat(saved2.targety.stringValue),tz:parseFloat(saved2.targetz.stringValue),penum:parseFloat(saved2.penumbra.stringValue),inten:parseFloat(saved2.intensity.stringValue),d:parseFloat(saved2.distance.stringValue),angle:parseFloat(saved2.angle.stringValue),c:saved2.color}
-    spotlight3 = {x:parseFloat(saved3.posx.stringValue),y:parseFloat(saved3.posy.stringValue),z:parseFloat(saved3.posz.stringValue),tx:parseFloat(saved3.targetx.stringValue),ty:parseFloat(saved3.targety.stringValue),tz:parseFloat(saved3.targetz.stringValue),penum:parseFloat(saved3.penumbra.stringValue),inten:parseFloat(saved3.intensity.stringValue),d:parseFloat(saved3.distance.stringValue),angle:parseFloat(saved3.angle.stringValue),c:saved3.color}
-    spotlight4 = {x:parseFloat(saved4.posx.stringValue),y:parseFloat(saved4.posy.stringValue),z:parseFloat(saved4.posz.stringValue),tx:parseFloat(saved4.targetx.stringValue),ty:parseFloat(saved4.targety.stringValue),tz:parseFloat(saved4.targetz.stringValue),penum:parseFloat(saved4.penumbra.stringValue),inten:parseFloat(saved4.intensity.stringValue),d:parseFloat(saved4.distance.stringValue),angle:parseFloat(saved4.angle.stringValue),c:saved4.color}
-  }
-  useEffect(()=>{ 
-    setTimeout( () => {
-      getsaved()
-    },2000)
-    },[])
+    //madbox rotation island x-24 y-94 cam x -64
+  useEffect(()=>{
+  },[])
   return (
     <>
       <Head>
@@ -64,14 +32,14 @@ export default function Home() {
      <div className='bg-black w-[100vw] h-[100vh] cursor-grab active:cursor-grabbing '>
       <Canvas >
         <Suspense fallback={null}>
-          {saved?(<Island s1={spotlight} s2={spotlight2} s3={spotlight3} s4={spotlight4}/>):(null)}
+          <Island/>
         </Suspense>
       </Canvas>
      </div>
     </>
   )
 }
-const Island = ({s1,s2,s3,s4}:{s1:any,s2:any,s3:any,s4:any}) =>{
+const Island = () =>{
 //loader
   const nodesloader = useLoader(GLTFLoader, 'island3.glb')['nodes'];
   const glb = useGLTF("island3.glb");
@@ -167,6 +135,7 @@ const handleWheel = (e:any) => {
     sunref.current.rotation.x = (Math.PI/180)*sunrotate.rotatex
     sunref.current.rotation.z = (Math.PI/180)*sunrotate.rotatez
       //control
+    
   });
   const refpoint = new THREE.Vector3(0,0,0)
   const object = new THREE.Object3D();
@@ -174,6 +143,7 @@ const handleWheel = (e:any) => {
   return(
   <>
   <ambientLight intensity={0.5} ref={alightref} />
+  
   <group rotation={[(Math.PI/180)*0,0,(Math.PI/180)*0]} ref={sunref}>
   <directionalLight intensity={1} ref={dlightref} position={[5,65,1]} color={"#ff0000"}/>
   <mesh  position={[5,65,1]}>
@@ -193,40 +163,45 @@ const handleWheel = (e:any) => {
       <primitive object={nodesloader.Main} />
   </mesh>
   <spotLight
-        color={s1.color}
-        intensity={s1.inte}
-        position={[s1.x,s1.y,s1.z]}  
-        penumbra={s1.penum}
-        angle={(Math.PI/180)*0}
-        distance={s1.d}
+        ref={spotlightref1}
+        color="#FFD7D7"
+        intensity={0.15}
+        position={[30, 100,-20]}  
+        penumbra={1}
+        angle={(Math.PI/180)*40}
+        distance={400}
         castShadow={false} 
       />
     <spotLight
-        color={s2.color}
-        intensity={s2.inten}
-        position={[s2.x,s2.y,s2.z]}  
-        penumbra={s2.penum}
-        angle={(Math.PI/180)*s2.angle}
-        distance={s2.d}
+        ref={spotlightref2}
+        color="#ffffff"
+        intensity={1.8}
+        position={[60, 50,30]}  
+        penumbra={1}
+        angle={(Math.PI/180)*40}
+        distance={90}
         castShadow={false} 
       />
-     <spotLight
-        color={s3.color}
-        intensity={s3.inten}
-        position={[s3.x,s3.y,s3.z]}  
-        penumbra={s3.penum}
-        angle={(Math.PI/180)*s3.angle}
-        distance={s3.d}
+      <spotLight
+        ref={spotlightref3}
+        color="#ffffff"
+        intensity={2}
+        position={[-60, 50,20]}  
+        penumbra={1}
+        angle={(Math.PI/180)*40}
+        distance={80}
         castShadow={false} 
       />
-     <spotLight
-        color={s4.color}
-        intensity={s4.inten}
-        position={[s4.x,s4.y,s4.z]}  
-        penumbra={s4.penum}
-        angle={(Math.PI/180)*s4.angle}
-        distance={s4.d}
+      <spotLight
+        ref={spotlightref4}
+        color="#ffffff"
+        intensity={1.5}
+        position={[5, 55,80]}
+        penumbra={1}
+        angle={(Math.PI/180)*40}
+        distance={160}
         castShadow={false} 
+        target={object}       
       />
   </group>
   
