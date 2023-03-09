@@ -150,8 +150,8 @@ const Island = ({safevalue,s1,s2,s3,s4,d}:{safevalue:any,s1:any,s2:any,s3:any,s4
 //position variable
 
 //obj
-    const safe = useGLTF("safe/Safef2.glb");
-    const node2 = useLoader(GLTFLoader, "safe/Safef2.glb");
+    const safe = useGLTF("safe/safef2.glb");
+    const node2 = useLoader(GLTFLoader, "safe/safef2.glb");
     const refsafe = useRef<any>()
     const {actions} = useAnimations(safe.animations,refsafe)
     
