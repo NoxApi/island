@@ -201,8 +201,7 @@ const handleWheel = (e:any) => {
     spotlightref1.current.angle=(Math.PI/180)*spotlight.angle
     spotlightref1.current.color.set(colorFormats.string)
     
-      //control
-    
+      //control 
   });
   const refpoint = new THREE.Vector3(0,0,0)
   const object = new THREE.Object3D();

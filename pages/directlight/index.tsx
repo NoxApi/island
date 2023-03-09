@@ -1,5 +1,4 @@
 import { useThree, useFrame,Canvas,useLoader } from "react-three-fiber";
-import { Vector3, Euler,Camera, HemisphereLight, PointLightHelper,SpotLight, SpotLightHelper, RectAreaLight, Vector} from "three";
 import { useEffect, useRef ,useState,Suspense} from "react";
 import Head from 'next/head'
 import mesh from "react-three-fiber"
@@ -16,11 +15,59 @@ import { Syn } from '@/components/syn';
 import { Capsule } from "@/components/capsule";
 import { redirect } from "next/dist/server/api-utils";
 import {RectAreaLightHelper} from "three/examples/jsm/helpers/RectAreaLightHelper"
+import firestore from "@/firebase/ClientApp";
+import {collection,QueryDocumentSnapshot,DocumentData,query,where,limit,getDocs,addDoc,updateDoc, doc} from "@firebase/firestore";
 
 export default function Home() {
-    //madbox rotation island x-24 y-94 cam x -64
-  useEffect(()=>{
-  },[])
+  const [saved,setsaved] = useState<any>(null)
+  const [message, setMessage] = useState("nomsg");
+  const getsaved = async () => {
+    setsaved(null)
+    const spolight1 = collection(firestore as any,'spotlight1');
+    const fetchvalue= query(spolight1);
+    const data = await getDocs(fetchvalue);
+    const result:any = [];
+    data.forEach((data) => {
+    result.push(data);
+    });
+    // set it to state
+    console.log(result)
+    setsaved(result[4]._document.data.value.mapValue.fields)
+  };
+  
+  let d: { al: any; dc?: any; dl?: number; drx?: number; drz?: number;} | null=null
+  let colorFormats : {string :any}| null=null
+  if(saved){
+    d = {al:parseFloat(saved.al.stringValue),dc:saved.dc.stringValue,dl:parseFloat(saved.dl.stringValue),drx:parseFloat(saved.drx.stringValue),drz:parseFloat(saved.drz.stringValue)}
+    colorFormats = {
+      string: saved.dc.stringValue,
+    };
+    console.log(d)
+  }
+  const update = async () => {
+    try {
+      updateDoc(doc(firestore,'spotlight1',"zdirect"),{
+        al : (d!.al)!.toString(),
+        dc: (d!.dc)!.toString(),
+        dl: (d!.dl)!.toString(),
+        drx: (d!.drx)!.toString(),
+        drz: (d!.drz)!.toString(),
+      });
+      // Set a success message
+      setMessage("save เสดแล้วไอ่สัส click สี่เหลี่ยมนี้เพื่อปิด");
+      setTimeout( () => {
+        getsaved()
+      },2000)
+    } catch (error) {
+      // Set an error message
+      setMessage("update ผิดพลาด เสดแล้วไอ่สัส เกิดปัญหาอะดิ๊ click สี่เหลี่ยมนี้เพื่อปิด");
+    }
+  };
+  useEffect(()=>{ 
+    setTimeout( () => {
+      getsaved()
+    },2000)
+    },[])
   return (
     <>
       <Head>
@@ -29,17 +76,24 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-     <div className='bg-black w-[100vw] h-[100vh] cursor-grab active:cursor-grabbing '>
+
+     {saved?(<div className='bg-black w-[100vw] h-[100vh] cursor-grab active:cursor-grabbing '>
+     <button onClick={()=>update()} className="w-60 h-20 bg-slate-400 bg-opacity-20 absolute bottom-[1vw] left-[1vw] z-40 rounded-xl border-4 border-teal-200">
+        <p className="text-xl text-teal-200">{"SAVE"}</p>
+      </button>
+      {message=="nomsg"?(null):(<button onClick={()=>setMessage("nomsg")} className="w-[50vw] h-[20vw] bg-slate-400 bg-opacity-20 absolute bottom-[50%] left-[50%] translate-x-[-50%] translate-y-[50%] z-40 rounded-xl border-4 border-teal-200">
+        <p className="text-4xl text-teal-200">{message}</p>
+      </button>)}     
       <Canvas >
         <Suspense fallback={null}>
-          <Island/>
+          <Island dlight={d} colorFormats={colorFormats}/>
         </Suspense>
       </Canvas>
-     </div>
+     </div>):(null)}
     </>
   )
 }
-const Island = () =>{
+const Island = ({dlight,colorFormats}:{dlight:any,colorFormats:any}) =>{
 //loader
   const nodesloader = useLoader(GLTFLoader, 'island3.glb')['nodes'];
   const glb = useGLTF("island3.glb");
@@ -54,10 +108,10 @@ const Island = () =>{
   const dlightref = useRef<any>()
 //lightref
   const sunref = useRef<any>()
-  const spotlightref1 = useRef<any>()
-  const spotlightref2 = useRef<any>()
-  const spotlightref3 = useRef<any>()
-  const spotlightref4 = useRef<any>()
+  const dref1 = useRef<any>()
+  const dref2 = useRef<any>()
+  const dref3 = useRef<any>()
+  const dref4 = useRef<any>()
   
 
 //position variable
@@ -69,12 +123,6 @@ const Island = () =>{
   let sunrotate={rotatex:0,rotatey:0,rotatez:0}
   let islandrotate={rotatex:10,rotatey:-100,rotatez:0}
   let grouprotate={rotatex:0,rotatey:0,rotatez:0}
-  const colorFormats = {
-    string: '#ffffff',
-    int: 0xffffff,
-    object: { r: 1, g: 1, b: 1 },
-    array: [ 1, 1, 1 ]
-  };
 //position variable
 
 //light
@@ -109,11 +157,11 @@ const handleWheel = (e:any) => {
     gui.add(rotatedeg,"rotatex").min(-180).max(180).step(1).name("cam-rotation-x")
     gui.add(rotatedeg,"rotatey").min(-180).max(180).step(1).name("cam-rotation-y")
     gui.add(rotatedeg,"rotatez").min(-180).max(180).step(1).name("cam-rotation-z")
-    gui.add(light,"alight").min(0).max(1).step(0.1).name("Ambient light")
-    gui.add(light,"dlight").min(0).max(1).step(0.1).name("Directional light") 
-    gui.addColor( colorFormats, 'int' ).name("Directional light color");
-    gui.add(sunrotate,"rotatex").min(-180).max(180).step(1).name("d-light-rotate x")
-    gui.add(sunrotate,"rotatez").min(-180).max(180).step(1).name("d-light-rotate z")
+    gui.add(dlight,"al").min(0).max(1).step(0.1).name("Ambient light")
+    gui.add(dlight,"dl").min(0).max(1).step(0.1).name("Directional light") 
+    gui.addColor( dlight, 'dc' ).name("Directional light color");
+    gui.add(dlight,"drx").min(-180).max(180).step(1).name("d-light-rotate x")
+    gui.add(dlight,"drz").min(-180).max(180).step(1).name("d-light-rotate z")
 //gui
   useEffect(()=>{
    window.addEventListener("wheel", handleWheel);
@@ -129,11 +177,11 @@ const handleWheel = (e:any) => {
     allgroupref.current!.rotation.x = (Math.PI/180)*grouprotate.rotatex
     allgroupref.current!.rotation.y = (Math.PI/180)*grouprotate.rotatey
     allgroupref.current!.rotation.z = (Math.PI/180)*grouprotate.rotatez
-    alightref.current.intensity= light.alight
-    dlightref.current.intensity= light.dlight
-    dlightref.current.color.set(colorFormats.int)
-    sunref.current.rotation.x = (Math.PI/180)*sunrotate.rotatex
-    sunref.current.rotation.z = (Math.PI/180)*sunrotate.rotatez
+    alightref.current.intensity= dlight.al
+    dlightref.current.intensity= dlight.dl
+    dlightref.current.color.set(dlight.dc)
+    sunref.current.rotation.x = (Math.PI/180)*dlight.drx
+    sunref.current.rotation.z = (Math.PI/180)*dlight.drz
       //control
     
   });
@@ -162,47 +210,6 @@ const handleWheel = (e:any) => {
   <mesh scale={1} rotation={[(Math.PI/180)*10,(Math.PI/180)*-100,(Math.PI/180)*0]}>
       <primitive object={nodesloader.Main} />
   </mesh>
-  <spotLight
-        ref={spotlightref1}
-        color="#FFD7D7"
-        intensity={0.15}
-        position={[30, 100,-20]}  
-        penumbra={1}
-        angle={(Math.PI/180)*40}
-        distance={400}
-        castShadow={false} 
-      />
-    <spotLight
-        ref={spotlightref2}
-        color="#ffffff"
-        intensity={1.8}
-        position={[60, 50,30]}  
-        penumbra={1}
-        angle={(Math.PI/180)*40}
-        distance={90}
-        castShadow={false} 
-      />
-      <spotLight
-        ref={spotlightref3}
-        color="#ffffff"
-        intensity={2}
-        position={[-60, 50,20]}  
-        penumbra={1}
-        angle={(Math.PI/180)*40}
-        distance={80}
-        castShadow={false} 
-      />
-      <spotLight
-        ref={spotlightref4}
-        color="#ffffff"
-        intensity={1.5}
-        position={[5, 55,80]}
-        penumbra={1}
-        angle={(Math.PI/180)*40}
-        distance={160}
-        castShadow={false} 
-        target={object}       
-      />
   </group>
   
   </>
