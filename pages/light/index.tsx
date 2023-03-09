@@ -204,8 +204,7 @@ const handleWheel = (e:any) => {
     allgroupref.current!.rotation.y = (Math.PI/180)*grouprotate.rotatey
     allgroupref.current!.rotation.z = (Math.PI/180)*grouprotate.rotatez
     //todo
-    alightref.current.intensity= d.al
-    dlightref.current.intensity= d.dl
+   
     dlightref.current.color.set(d.dc)
     sunref.current.rotation.x = (Math.PI/180)*d.drx
     sunref.current.rotation.z = (Math.PI/180)*d.drz
@@ -213,6 +212,8 @@ const handleWheel = (e:any) => {
     spotlightref1.current.intensity=s1.inten
     spotlightref2.current.intensity=s2.inten
     spotlightref4.current.intensity=s4.inten
+    alightref.current.intensity= d.al
+    dlightref.current.intensity= d.dl
       //lightcondition
     if(!(alllight.s1&&alllight.s2&&alllight.s3&&alllight.s4&&alllight.d&&alllight.a)){
       if(alllight.s1==false)
@@ -223,6 +224,10 @@ const handleWheel = (e:any) => {
         spotlightref2.current.intensity=0
       if(alllight.s4==false)
         spotlightref4.current.intensity=0
+        if(alllight.d==false)
+        dlightref.current.intensity=0
+        if(alllight.a==false)
+        alightref.current.intensity=0
     }
   });
   const refpoint = new THREE.Vector3(0,0,0)
