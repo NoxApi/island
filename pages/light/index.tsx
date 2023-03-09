@@ -14,8 +14,10 @@ import { Build } from '@/components/building';
 import { Safe } from '@/components/safe';
 import { Syn } from '@/components/syn';
 import { Capsule } from "@/components/capsule";
+import LinkNewTab from "@/components/generals/LinkNewTab";
 import firestore from "@/firebase/ClientApp";
 import {collection,QueryDocumentSnapshot,DocumentData,query,where,limit,getDocs,addDoc,updateDoc, doc} from "@firebase/firestore";
+import Image from "next/image";
 
 export default function Home() {
   const [saved,setsaved] = useState<any>(null)
@@ -24,6 +26,7 @@ export default function Home() {
   const [saved4,setsaved4] = useState<any>(null)
   const [message, setMessage] = useState("nomsg");
   const getsaved = async () => {
+    setsaved(null)
     const spolight1 = collection(firestore as any,'spotlight1');
     const Collection= query(spolight1);
     const data = await getDocs(Collection);
@@ -61,7 +64,43 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-     <div className='bg-black w-[100vw] h-[100vh] cursor-grab active:cursor-grabbing '>
+     <div className='bg-black w-[100vw] h-[100vh] '>
+      <div className="absolute bottom-[1vw] left-[1vw] flex z-40">
+      <LinkNewTab href="https://island-kappa.vercel.app/spotlight1">
+        <button onClick={()=>null} className=" w-28 h-10 bg-slate-400 bg-opacity-20   rounded-xl border-2 border-teal-200">
+          <p className="text-sm text-teal-200">{"Light1(back)"}</p>
+        </button>
+      </LinkNewTab>
+      <LinkNewTab href="https://island-kappa.vercel.app/spotlight2">
+        <button onClick={()=>null} className=" w-28 h-10 bg-slate-400 bg-opacity-20  z-40 rounded-xl border-2 border-teal-200 ml-1">
+          <p className="text-sm text-teal-200">{"Light2(right)"}</p>
+        </button>
+      </LinkNewTab>
+      <LinkNewTab href="https://island-kappa.vercel.app/spotlight3">
+        <button onClick={()=>null} className=" w-28 h-10 bg-slate-400 bg-opacity-20  z-40 rounded-xl border-2 border-teal-200 ml-1">
+          <p className="text-sm text-teal-200">{"Light3(left)"}</p>
+        </button>
+      </LinkNewTab>
+      <LinkNewTab href="https://island-kappa.vercel.app/spotlight4">
+        <button onClick={()=>null} className=" w-28 h-10 bg-slate-400 bg-opacity-20  z-40 rounded-xl border-2 border-teal-200 ml-1">
+          <p className="text-sm text-teal-200">{"Light4(front)"}</p>
+        </button>
+      </LinkNewTab>
+      <LinkNewTab href="https://island-kappa.vercel.app/directlight">
+        <button onClick={()=>null} className=" w-28 h-10 bg-slate-400 bg-opacity-20  z-40 rounded-xl border-2 border-teal-200 ml-1">
+          <p className="text-sm text-teal-200">{"Direct&Ambient"}</p>
+        </button>
+      </LinkNewTab>
+      </div>
+      <div className="absolute top-[1vw] left-[1vw] flex z-40">
+        <button onClick={()=>getsaved()} className=" w-16 h-16 bg-slate-400 bg-opacity-20  z-40 rounded-xl border-2 border-teal-200 flex justify-center items-center">
+          <div className="w-12 h-12 relative">
+          <Image src="/sync.png" alt="" width={80} height={80}/>
+          <p className="absolute text-xs top-[50%] left-[50%] translate-x-[-50%] translate-y-[-55%] text-teal-200">{"sync"}</p>
+          </div>
+        </button>
+      </div>
+   
       <Canvas >
         <Suspense fallback={null}>
           {saved?(<Island s1={spotlight} s2={spotlight2} s3={spotlight3} s4={spotlight4}/>):(null)}
@@ -95,12 +134,10 @@ const Island = ({s1,s2,s3,s4}:{s1:any,s2:any,s3:any,s4:any}) =>{
 //position variable
   let light = {alight:0,dlight:0}
   let pos ={camx:6,camy:60,camz:100}
-  let objpos ={x:-2,y:24,z:6}
-  let objrot ={x:3,y:-180,z:3}
   let rotatedeg={rotatex:-19,rotatey:0,rotatez:0}
   let sunrotate={rotatex:0,rotatey:0,rotatez:0}
-  let islandrotate={rotatex:10,rotatey:-100,rotatez:0}
   let grouprotate={rotatex:0,rotatey:0,rotatez:0}
+  let alllight={s1:true,s2:true,s3:true,s4:true,d:true,a:true,}
   const colorFormats = {
     string: '#ffffff',
     int: 0xffffff,
@@ -141,11 +178,12 @@ const handleWheel = (e:any) => {
     gui.add(rotatedeg,"rotatex").min(-180).max(180).step(1).name("cam-rotation-x")
     gui.add(rotatedeg,"rotatey").min(-180).max(180).step(1).name("cam-rotation-y")
     gui.add(rotatedeg,"rotatez").min(-180).max(180).step(1).name("cam-rotation-z")
-    gui.add(light,"alight").min(0).max(1).step(0.1).name("Ambient light")
-    gui.add(light,"dlight").min(0).max(1).step(0.1).name("Directional light") 
-    gui.addColor( colorFormats, 'int' ).name("Directional light color");
-    gui.add(sunrotate,"rotatex").min(-180).max(180).step(1).name("d-light-rotate x")
-    gui.add(sunrotate,"rotatez").min(-180).max(180).step(1).name("d-light-rotate z")
+    gui.add( alllight, 's1' ).name("Light1(back)");  // Checkbox
+    gui.add( alllight, 's2' ).name("Light2(right)");  // Checkbox
+    gui.add( alllight, 's3' ).name("Light3(left)");  // Checkbox
+    gui.add( alllight, 's4' ).name("Light4(front)");  // Checkbox
+    gui.add( alllight, 'd' ).name("Directlight)");  // Checkbox
+    gui.add( alllight, 'a' ).name("Ambientlight");  // Checkbox
 //gui
   useEffect(()=>{
    window.addEventListener("wheel", handleWheel);
@@ -161,16 +199,32 @@ const handleWheel = (e:any) => {
     allgroupref.current!.rotation.x = (Math.PI/180)*grouprotate.rotatex
     allgroupref.current!.rotation.y = (Math.PI/180)*grouprotate.rotatey
     allgroupref.current!.rotation.z = (Math.PI/180)*grouprotate.rotatez
+    //todo
     alightref.current.intensity= light.alight
     dlightref.current.intensity= light.dlight
     dlightref.current.color.set(colorFormats.int)
     sunref.current.rotation.x = (Math.PI/180)*sunrotate.rotatex
     sunref.current.rotation.z = (Math.PI/180)*sunrotate.rotatez
-      //control
+    spotlightref3.current.intensity=s1.inten
+    spotlightref1.current.intensity=s2.inten
+    spotlightref2.current.intensity=s2.inten
+    spotlightref4.current.intensity=s3.inten
+      //lightcondition
+    if(!(alllight.s1&&alllight.s2&&alllight.s3&&alllight.s4&&alllight.d&&alllight.a)){
+      if(alllight.s1==false)
+        spotlightref3.current.intensity=0
+      if(alllight.s2==false)
+        spotlightref1.current.intensity=0
+      if(alllight.s3==false)
+        spotlightref2.current.intensity=0
+      if(alllight.s4==false)
+        spotlightref4.current.intensity=0
+    }
   });
   const refpoint = new THREE.Vector3(0,0,0)
   const object = new THREE.Object3D();
   object.position.set(4,24,0)
+  console.log(s1)
   return(
   <>
   <ambientLight intensity={0.5} ref={alightref} />
@@ -193,15 +247,17 @@ const handleWheel = (e:any) => {
       <primitive object={nodesloader.Main} />
   </mesh>
   <spotLight
+        ref={spotlightref1}
         color={s1.color}
         intensity={s1.inte}
         position={[s1.x,s1.y,s1.z]}  
         penumbra={s1.penum}
-        angle={(Math.PI/180)*0}
+        angle={(Math.PI/180)*s1.angle}
         distance={s1.d}
         castShadow={false} 
       />
     <spotLight
+        ref={spotlightref2}
         color={s2.color}
         intensity={s2.inten}
         position={[s2.x,s2.y,s2.z]}  
@@ -211,6 +267,7 @@ const handleWheel = (e:any) => {
         castShadow={false} 
       />
      <spotLight
+        ref={spotlightref3}
         color={s3.color}
         intensity={s3.inten}
         position={[s3.x,s3.y,s3.z]}  
@@ -220,6 +277,7 @@ const handleWheel = (e:any) => {
         castShadow={false} 
       />
      <spotLight
+      ref={spotlightref4}
         color={s4.color}
         intensity={s4.inten}
         position={[s4.x,s4.y,s4.z]}  
