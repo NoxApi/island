@@ -256,8 +256,8 @@ const handleWheel = (e:any) => {
         spotlightref2.current.intensity=0
         spotlightref4.current.intensity=0
         dlightref.current.color.set('#ffffff')
-        dlightref.current.intensity=0.2
-        alightref.current.intensity=0.4
+        dlightref.current.intensity=0
+        alightref.current.intensity=0
     }
       //control
     
