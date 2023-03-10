@@ -19,6 +19,7 @@ export const Build = ({
         position:any,
         rotation:any,   
  }) =>{
+  const pointLight = new PointLight(0xffffff,0.1);
   const glb1 = useGLTF("build/buildf.glb");
   const node1 = useLoader(GLTFLoader, 'build/buildf.glb');
   // const glb1 = useGLTF("build/1.glb");
@@ -66,26 +67,8 @@ export const Build = ({
     // useHelper(spotlightref1, SpotLightHelper, 'yellow')
     return(
     <> 
-    <group ref={refgroup} scale={0.89} position={[position.x,position.y,position.z]} rotation={[(Math.PI/180)*rotation.x,(Math.PI/180)*rotation.y,(Math.PI/180)*rotation.z]} >
-      <mesh ref={ref1} position={[0,-2,-1]} scale={1.5}>
-        <primitive object={node1.nodes.Main} />
-      </mesh>  
-      <mesh ref={ref6} scale={1} position={[-1,-22.9,13.8]} >
-        <primitive object={node6.nodes.Main} />
-      </mesh>
-      {/* <spotLight
-        ref={spotlightrefo}
-        color={"#ffffff"}
-        intensity={safevalue.i}
-        position={[0,safevalue.ly,0]}  
-        penumbra={safevalue.p}
-        angle={(Math.PI/180)*safevalue.a}
-        distance={safevalue.d}
-        castShadow={false} 
-        target={node2.nodes.Main}
-      /> */}
-    </group>
-        {/* <spotLight
+    <group ref={refgroup} position={[position.x,position.y,position.z]} rotation={[(Math.PI/180)*rotation.x,(Math.PI/180)*rotation.y,(Math.PI/180)*rotation.z]} >
+    {/* <spotLight
         ref={spotlightref1}
         color="white"
         intensity={0}
@@ -96,6 +79,28 @@ export const Build = ({
         castShadow={false} 
         target={node2.nodes.Main}   
       /> */}
+      <mesh ref={ref1} position={[0,-2,-1]} scale={1}>
+        <primitive object={node1.nodes.Main} />
+      </mesh>
+    <group position={[-1,-25,13.6] }>     
+      {/* <mesh ref={ref2}>
+        <primitive object={node2.nodes.Main} />
+      </mesh>
+      <mesh ref={ref3}>
+        <primitive object={node3.nodes.Main} />
+      </mesh>
+      <mesh ref={ref4}>
+        <primitive object={node4.nodes.Main} />
+      </mesh>
+      <mesh ref={ref5}>
+        <primitive object={node5.nodes.Main} />
+      </mesh> */}
+      <mesh ref={ref6} scale={1} >
+        <primitive object={node6.nodes.Main} />
+      </mesh>
+      </group>
+    </group>
+    {/* <TransformControls ref={ref1}/> */}
     </>
     )
   }

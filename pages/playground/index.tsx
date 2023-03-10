@@ -14,7 +14,7 @@ import { Safe } from '@/components/safe';
 import { Syn } from '@/components/syn';
 import { Capsule } from '@/components/capsule';
 export default  function Home() {
-  const [ destination,setdestination ] = useState(() => new THREE.Vector3(0,0,10))
+  const [ destination,setdestination ] = useState(() => new THREE.Vector3(0,0,30))
   const [items,setitems] = useState(0)
   const set0 = () =>{
     setdestination(() => new THREE.Vector3(0,0,60))
@@ -81,41 +81,10 @@ const Island = ({
   const pos3 = useRef<any>()
   const pos4 = useRef<any>()
   const pos5 = useRef<any>()
-  let pos ={x:0,y:0,z:60} 
-  let rotatedeg={x:0,y:0,z:0}
-  const [ smoothedCameraPosition ] = useState(() => new THREE.Vector3(0,20,60))
-  const set0 = () =>{
-    setdestination(() => new THREE.Vector3(5,20,80))
-    setitems(0)
-  }
-  const movetosyn= () =>{
-    setdestination(() => new THREE.Vector3(32,20,34))
-    setitems(1)
-  }
-  const movetobuild= () =>{
-    setdestination(() => new THREE.Vector3(19,27,30))
-    setitems(2)
-  }
-  const movetoegg= () =>{
-    setdestination(() => new THREE.Vector3(9,20,31))
-    setitems(5)
-  }
-  const movetosafe= () =>{
-    setdestination(() => new THREE.Vector3(-10,20,23))
-    setitems(4)
-  }
-  const movetocapsule= () =>{
-    setdestination(() => new THREE.Vector3(0.9,25,25))
-    setitems(3)
-  }
-  // const cameraposition = new THREE.Vector3()
-  // cameraposition.set(0,0,50)
-  // const updatecam1 = () =>{
-  //   cameraposition.set(0,11,50)
-  // }
+  const [ smoothedCameraPosition ] = useState(() => new THREE.Vector3(0,0,0))
   useEffect(()=>{
     console.log(node)
-  },[pos])
+  },)
   useFrame((state, delta) => {
     smoothedCameraPosition.lerp(destination, 0.04)
     cameraref.current.position.copy(smoothedCameraPosition)
