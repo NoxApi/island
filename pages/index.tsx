@@ -234,7 +234,7 @@ const Island = ({
             <div className=' w-[80px] h-[120px] bg-black bg-opacity-90 rounded-[10px] border-[1px] border-yellow-400 flex flex-col justify-start py-[10px] items-center '>
               <p className='text-[8px] text-yellow-500 '>Building Challenge</p>
               <div className='bg-yellow-500 h-[1px] w-[80%] mt-2'></div>
-              <p className='text-red-600 text-left text-[4px] px-[5px] mt-2 indent-[10px]'>{"you can use your 19 unuse hero or skin to sacrifice and become something more value (if you lucky) but most of the time trust me you will get something useless or even fail and get nothing. So if you dont want that hero or skin and you coward to gamble just sell it your numpnut. lorem ipsum... "}</p>
+              <p className='text-red-600 text-left text-[4px] px-[5px] mt-2 indent-[10px]'>{"you can use your 10 unuse hero or skin to sacrifice and become something more value (if you lucky) but most of the time trust me you will get something useless or even fail and get nothing. So if you dont want that hero or skin and you coward to gamble just sell it your numpnut. lorem ipsum... "}</p>
             </div>
             </div>):(null)}
             </div>
