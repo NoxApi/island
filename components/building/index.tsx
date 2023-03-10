@@ -20,16 +20,18 @@ export const Build = ({
         rotation:any,   
  }) =>{
   const pointLight = new PointLight(0xffffff,0.1);
-  const glb1 = useGLTF("build/1.glb");
-  const node1 = useLoader(GLTFLoader, 'build/1.glb');
-  const glb2 = useGLTF("build/2.glb");
-  const node2 = useLoader(GLTFLoader, 'build/2.glb');
-  const glb3 = useGLTF("build/3.glb");
-  const node3 = useLoader(GLTFLoader, 'build/3.glb');
-  const glb4 = useGLTF("build/4.glb");
-  const node4 = useLoader(GLTFLoader, 'build/4.glb');
-  const glb5 = useGLTF("build/5.glb");
-  const node5 = useLoader(GLTFLoader, 'build/5.glb');
+  const glb1 = useGLTF("build/buildf.glb");
+  const node1 = useLoader(GLTFLoader, 'build/buildf.glb');
+  // const glb1 = useGLTF("build/1.glb");
+  // const node1 = useLoader(GLTFLoader, 'build/1.glb');
+  // const glb2 = useGLTF("build/2.glb");
+  // const node2 = useLoader(GLTFLoader, 'build/2.glb');
+  // const glb3 = useGLTF("build/3.glb");
+  // const node3 = useLoader(GLTFLoader, 'build/3.glb');
+  // const glb4 = useGLTF("build/4.glb");
+  // const node4 = useLoader(GLTFLoader, 'build/4.glb');
+  // const glb5 = useGLTF("build/5.glb");
+  // const node5 = useLoader(GLTFLoader, 'build/5.glb');
   const glb6 = useGLTF("build/6.glb");
   const node6 = useLoader(GLTFLoader, 'build/6.glb');
   const refgroup = useRef<any>()
@@ -41,10 +43,11 @@ export const Build = ({
   const ref5 = useRef<any>()
   const ref6 = useRef<any>()
   const spotlightref1 = useRef<any>()
-    const animate2 = useAnimations(glb2.animations,ref2)
-    const animate3 = useAnimations(glb3.animations,ref3)
-    const animate4 = useAnimations(glb4.animations,ref4)
-    const animate5 = useAnimations(glb5.animations,ref5)
+  const animate = useAnimations(glb1.animations,ref1)
+    // const animate2 = useAnimations(glb2.animations,ref2)
+    // const animate3 = useAnimations(glb3.animations,ref3)
+    // const animate4 = useAnimations(glb4.animations,ref4)
+    // const animate5 = useAnimations(glb5.animations,ref5)
     const animate6 = useAnimations(glb6.animations,ref6)
     // const mixer = new THREE.AnimationMixer(glb)
     // void mixer.clipAction(glb.animations[0]).play();
@@ -53,11 +56,11 @@ export const Build = ({
       // reflight.current.position.copy(refgroup)
     });
     useEffect(()=>{
-      // console.log(glb2)
-      animate2.actions.Building_ArmRotor_Animate_Anim_0?.play()
-      animate3.actions.Building_LowerRotor_Animate_Anim_0?.play()
-      animate4.actions.Building_UpperRotor_Animate_Anim_0?.play()
-      animate5.actions.Building_Sphere_Animate_Anim_0?.play()
+      console.log(animate)
+      animate.actions.Building_ArmRotor_Animate_Anim_2?.play()
+      animate.actions.Building_LowerRotor_Animate_Anim_3?.play()
+      animate.actions.Building_UpperRotor_Animate_Anim_1?.play()
+      animate.actions.Building_Sphere_Animate_Anim_0?.play()
       animate6.actions.Building_Cylinder_Animate__2__Anim_0?.play()
       
     })
@@ -65,7 +68,7 @@ export const Build = ({
     return(
     <> 
     <group ref={refgroup} position={[position.x,position.y,position.z]} rotation={[(Math.PI/180)*rotation.x,(Math.PI/180)*rotation.y,(Math.PI/180)*rotation.z]} >
-    <spotLight
+    {/* <spotLight
         ref={spotlightref1}
         color="white"
         intensity={0}
@@ -75,12 +78,13 @@ export const Build = ({
         distance={40}
         castShadow={false} 
         target={node2.nodes.Main}   
-      />
-    <group position={[0,-24.2,12]}> 
-      <mesh ref={ref1}>
+      /> */}
+      <mesh ref={ref1} position={[0,-2,-1]} scale={1.4}>
         <primitive object={node1.nodes.Main} />
       </mesh>
-      <mesh ref={ref2}>
+    <group position={[-1,-25,13.6] }> 
+      
+      {/* <mesh ref={ref2}>
         <primitive object={node2.nodes.Main} />
       </mesh>
       <mesh ref={ref3}>
@@ -91,8 +95,8 @@ export const Build = ({
       </mesh>
       <mesh ref={ref5}>
         <primitive object={node5.nodes.Main} />
-      </mesh>
-      <mesh ref={ref6}>
+      </mesh> */}
+      <mesh ref={ref6} >
         <primitive object={node6.nodes.Main} />
       </mesh>
       </group>

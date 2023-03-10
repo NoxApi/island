@@ -6,7 +6,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { useFrame, useLoader } from "@react-three/fiber";
 import { FBXLoader} from "three/examples/jsm/loaders/FBXLoader.js";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { Environment, OrbitControls, useAnimations,Html, Stats, TransformControls,PerspectiveCamera, PivotControls } from "@react-three/drei";
+import { Environment, OrbitControls, useAnimations,Html, Stats, TransformControls,PerspectiveCamera, PivotControls,Torus } from "@react-three/drei";
 import { useFBX,useGLTF } from '@react-three/drei';
 import * as THREE from "three";
 import { Build } from '@/components/building';
@@ -14,10 +14,10 @@ import { Safe } from '@/components/safe';
 import { Syn } from '@/components/syn';
 import { Capsule } from '@/components/capsule';
 export default  function Home() {
-  const [ destination,setdestination ] = useState(() => new THREE.Vector3(5,20,80))
+  const [ destination,setdestination ] = useState(() => new THREE.Vector3(0,0,10))
   const [items,setitems] = useState(0)
   const set0 = () =>{
-    setdestination(() => new THREE.Vector3(5,20,80))
+    setdestination(() => new THREE.Vector3(0,0,60))
     setitems(0)
   }
   useEffect(()=>{
@@ -45,10 +45,11 @@ export default  function Home() {
         <directionalLight intensity={0} position={[2,1,3]}/>
           {/* <Box/> */}
           <Island setdestination={setdestination} destination={destination} setitems={setitems} items={items} />
-          <Syn position={{x:25,y:16.4,z:14}} rotation={{x:16,y:43,z:-11}}/>
-          <Build position={{x:14,y:25.8,z:8}} rotation={{x:8,y:260,z:-2}}/>
-          <Safe position={{x:-13,y:18.8,z:5}} rotation={{x:10,y:31,z:3}}/>
-          <Capsule position={{x:-2,y:24,z:6}} rotation={{x:3,y:-180,z:3}}/>
+          {/* <mesh  position={[0,0,0]}>
+            <sphereBufferGeometry args={[2, 50, 50]} wireframe={true} />
+            <meshStandardMaterial  color={"#ff0000"} />
+          </mesh> */}
+          <Build position={{x:0,y:0,z:0}} rotation={{x:8,y:260,z:-2}}/>
         {/* <OrbitControls enableRotate={true} enableZoom={true} enabled={true}
          minDistance={40}
          maxDistance={80}/> */}
@@ -124,123 +125,9 @@ const Island = ({
   
   return(
   <>
+  <ambientLight intensity={0.5}/>
   <PerspectiveCamera makeDefault={true} position={[0,0,0]} rotation={[0,0,0]} ref={cameraref} />
   <group position={[0,0,0]}>
-  <mesh scale={1} ref={ref2} rotation={[(Math.PI/180)*10,(Math.PI/180)*-100,0]}  >
-      {/* <TransformControls object={ref2}/> */}
-      <primitive object={node.nodes.Main} />
-  </mesh>
-     <mesh ref={pos5}  position={[4.1,21,7]}   >    
-        <Html center={true} distanceFactor={70} >
-        <div className='flex'>
-          {items==0?(<button onClick={()=>movetoegg()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
-              <a className='text-white text-2xl'>5</a>
-            </button>):(null)}
-            {items==5?(
-            <div className='flex flex-col ml-[270px] mt-[80px]'>
-            <div className='flex justify-end'>
-              <button onClick={()=>set0()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[20px] h-[20px]  border-[1px] rounded-[50%] flex justify-center items-center'>
-                <a className='text-white text-[10px] text-center mb-[1px]'>x</a>
-              </button>
-            </div>
-            <div className=' w-[80px] h-[120px] bg-black bg-opacity-90 rounded-[10px] border-[1px] border-yellow-400 flex flex-col justify-start py-[10px] items-center '>
-              <p className='text-[8px] text-yellow-500 '>SACRED BEAST</p>
-              <div className='bg-yellow-500 h-[1px] w-[80%] mt-2'></div>
-              <p className='text-red-600 text-left text-[4px] px-[5px] mt-2 indent-[10px]'>{"If you have money buy it, feed it, hatch it and you will recieve some random shit I mean sacred beast that will follow you around forever untill the end of time lorem ipsum..."}</p>
-            </div>
-            </div>):(null)}
-            </div>
-        </Html>
-      </mesh> 
-      <mesh ref={pos3}  position={[-2,31,0.9]}   >    
-        <Html center={true} distanceFactor={70} >
-          <div className='flex'>
-          {items==0?(<button onClick={()=>movetocapsule()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
-              <a className='text-white text-2xl'>3</a>
-            </button>):(null)}
-            {items==3?(
-            <div className='flex flex-col ml-[300px] mt-[80px]'>
-            <div className='flex justify-end'>
-              <button onClick={()=>set0()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[20px] h-[20px]  border-[1px] rounded-[50%] flex justify-center items-center'>
-                <a className='text-white text-[10px] text-center mb-[1px]'>x</a>
-              </button>
-            </div>
-            <div className=' w-[80px] h-[120px] bg-black bg-opacity-90 rounded-[10px] border-[1px] border-yellow-400 flex flex-col justify-start py-[10px] items-center '>
-              <p className='text-[8px] text-yellow-500 '>CAPSULE</p>
-              <div className='bg-yellow-500 h-[1px] w-[80%] mt-2'></div>
-              <p className='text-red-600 text-left text-[4px] px-[5px] mt-2 indent-[10px]'>{"Basicly it's fucking lottery that most poeple buy and prey to get something more value than the price of capsule it self but as you all know the percentage is fucking low. So if you want anything buy it on marketplace you stupid price of shit dont buy fucking capsule you coward. lorem ipsum... "}</p>
-            </div>
-            </div>):(null)}
-            </div>
-        </Html>
-      </mesh> 
-      <mesh ref={pos4}  position={[-13.5,25.5,2]}   >    
-        <Html center={true} distanceFactor={70} >
-        <div className='flex'>
-          {items==0?(<button onClick={()=>movetosafe()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
-              <a className='text-white text-2xl'>4</a>
-            </button>):(null)}
-            {items==4?(
-            <div className='flex flex-col ml-[320px] mt-[120px]'>
-            <div className='flex justify-end'>
-              <button onClick={()=>set0()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[20px] h-[20px]  border-[1px] rounded-[50%] flex justify-center items-center'>
-                <a className='text-white text-[10px] text-center mb-[1px]'>x</a>
-              </button>
-            </div>
-            <div className=' w-[80px] h-[120px] bg-black bg-opacity-90 rounded-[10px] border-[1px] border-yellow-400 flex flex-col justify-start py-[10px] items-center '>
-              <p className='text-[8px] text-yellow-500 '>EVERMOON SAFE</p>
-              <div className='bg-yellow-500 h-[1px] w-[80%] mt-2'></div>
-              <p className='text-red-600 text-left text-[4px] px-[5px] mt-2 indent-[10px]'>{"safe that contain evermoon token and so much much much much much much much much much much much much much much much much much much much much much much much much  much much much much much much much much much much much much much much much much much much much much much much much much  more "}</p>
-            </div>
-            </div>):(null)}
-            </div>
-        </Html>
-      </mesh> 
-      <mesh ref={pos1}  position={[27,22,15]}   >    
-        <Html center={true} distanceFactor={70} >
-        <div className='flex'>
-          {items==0?(<button onClick={()=>movetosyn()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
-              <a className='text-white text-2xl'>1</a>
-            </button>):(null)}
-            {items==1?(
-            <div className='flex flex-col ml-[300px] mt-[80px]'>
-            <div className='flex justify-end'>
-              <button onClick={()=>set0()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[20px] h-[20px]  border-[1px] rounded-[50%] flex justify-center items-center'>
-                <a className='text-white text-[10px] text-center mb-[1px]'>x</a>
-              </button>
-            </div>
-            <div className=' w-[80px] h-[120px] bg-black bg-opacity-90 rounded-[10px] border-[1px] border-yellow-400 flex flex-col justify-start py-[10px] items-center '>
-              <p className='text-[8px] text-yellow-500 '>SYSTESIS</p>
-              <div className='bg-yellow-500 h-[1px] w-[80%] mt-2'></div>
-              <p className='text-red-600 text-left text-[4px] px-[5px] mt-2 indent-[10px]'>{"Our game had rune so you can use that same rune to systhesis and get better version of that rune back it no risk but yea you have to spend a lot of money to buy a lot of rune if you wanna be completitive so stop crying and get rich. Lorem ipsum...."}</p>
-            </div>
-            </div>):(null)}
-            </div>
-        </Html>
-      </mesh> 
-      <mesh ref={pos2}  position={[15,31,6]}   >    
-        <Html center={true} distanceFactor={70} >
-        <div className='flex'>
-          {items==0?(<button onClick={()=>movetobuild()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
-              <a className='text-white text-2xl'>2</a>
-            </button>):(null)}
-            {items==2?(
-            <div className='flex flex-col ml-[300px] mt-[140px]'>
-            <div className='flex justify-end'>
-              <button onClick={()=>set0()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[20px] h-[20px]  border-[1px] rounded-[50%] flex justify-center items-center'>
-                <a className='text-white text-[10px] text-center mb-[1px]'>x</a>
-              </button>
-            </div>
-            <div className=' w-[80px] h-[120px] bg-black bg-opacity-90 rounded-[10px] border-[1px] border-yellow-400 flex flex-col justify-start py-[10px] items-center '>
-              <p className='text-[8px] text-yellow-500 '>Building Challenge</p>
-              <div className='bg-yellow-500 h-[1px] w-[80%] mt-2'></div>
-              <p className='text-red-600 text-left text-[4px] px-[5px] mt-2 indent-[10px]'>{"you can use your 19 unuse hero or skin to sacrifice and become something more value (if you lucky) but most of the time trust me you will get something useless or even fail and get nothing. So if you dont want that hero or skin and you coward to gamble just sell it your numpnut. lorem ipsum... "}</p>
-            </div>
-            </div>):(null)}
-            </div>
-        </Html>
-      </mesh> 
-  {/* <TransformControls object={pos2}/> */}
   </group>
   <spotLight
 
