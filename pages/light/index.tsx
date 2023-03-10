@@ -95,6 +95,11 @@ export default function Home() {
           <p className="text-sm text-teal-200">{"Direct&Ambient"}</p>
         </button>
       </LinkNewTab>
+      <LinkNewTab href="/object">
+        <button onClick={()=>null} className=" w-28 h-10 bg-slate-400 bg-opacity-20  z-40 rounded-xl border-2 border-teal-200 ml-1">
+          <p className="text-sm text-teal-200">{"object&objlight"}</p>
+        </button>
+      </LinkNewTab>
       </div>
       <div className="absolute top-[1vw] left-[1vw] flex z-40">
         <button onClick={()=>getsaved()} className=" w-16 h-16 bg-slate-400 bg-opacity-20  z-40 rounded-xl border-2 border-teal-200 flex justify-center items-center">

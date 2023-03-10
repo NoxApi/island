@@ -280,7 +280,7 @@ const handleWheel = (e:any) => {
   <directionalLight intensity={0.3} ref={dlightref}/>
   
   <PerspectiveCamera makeDefault={true}  ref={cameraref} />
-  <group ref={refgroup} scale={0.89}>
+  <group ref={refgroup} >
       <mesh ref={refobj1} position={[0,-2,-1]} scale={1.5}>
         <primitive object={node1.nodes.Main} />
       </mesh>  
