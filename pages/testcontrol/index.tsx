@@ -92,7 +92,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-     <div className='bg-black w-[100vw] h-[100vh] '>
+     <div className='bg-black w-[100vw] h-[100vh] max-h-[120vw] cursor-grab active:cursor-grabbing '>
       
       <div className="absolute top-[1vw] left-[1vw] flex z-40">
         <button onClick={()=>getsaved()} className=" w-16 h-16 bg-slate-400 bg-opacity-20  z-40 rounded-xl border-2 border-teal-200 flex justify-center items-center">
@@ -160,7 +160,7 @@ const handleWheel = (e:any) => {
     pos.camy += e.deltaY / 200;
       }
     }
-    else if(pos.camy<35&&pos.camy>pos.camz){
+    else if(pos.camy<35||pos.camz<45){
       if (e.deltaY>0){
     pos.camz += e.deltaY / 100;
     pos.camy += e.deltaY / 200;
@@ -204,7 +204,7 @@ const handleWheel = (e:any) => {
       pos.camx += -dx
     }
     
-    if (pos.camz<25){
+    if (pos.camz<45){
       if (dy<0)
       pos.camz += -dy
     }
@@ -375,7 +375,7 @@ gui.add( alllight, 's1' ).name("Sync Light");  // Checkbox
           <mesh  position={[o3.x+16,o3.y+5,o3.z]}   >    
             <Html center={true} distanceFactor={100} >
               <div className='flex cursor-default'>
-                <div className={`flex flex-col transition-opacity duration-500 ${items==3?("opacity-1"):("opacity-0")}`}>
+                <div className={`flex flex-col transition-opacity duration-500 ${items==3?("opacity-1"):("opacity-0 w-0 h-0 overflow-hidden")}`}>
                   <div className='flex justify-end'>
                     <button onClick={()=>set0()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[20px] h-[20px]  border-[1px] rounded-[50%] flex justify-center items-center'>
                       <a className='text-white text-[10px] text-center mb-[2px]'>x</a>
@@ -405,7 +405,7 @@ gui.add( alllight, 's1' ).name("Sync Light");  // Checkbox
           <mesh  position={[o2.x+14,o2.y+3,o2.z]}   >    
             <Html center={true} distanceFactor={100} >
               <div className='flex cursor-default'>
-                <div className={`flex flex-col transition-opacity duration-500 ${items==2?("opacity-1"):("opacity-0")}`}>
+                <div className={`flex flex-col transition-opacity duration-500 ${items==2?("opacity-1"):("opacity-0 w-0 h-0 overflow-hidden")}`}>
                   <div className='flex justify-end'>
                     <button onClick={()=>set0()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[20px] h-[20px]  border-[1px] rounded-[50%] flex justify-center items-center'>
                       <a className='text-white text-[10px] text-center mb-[2px]'>x</a>
@@ -426,7 +426,7 @@ gui.add( alllight, 's1' ).name("Sync Light");  // Checkbox
           <mesh  position={[o1.x,o1.y+6,o1.z]}   >    
             <Html center={true} distanceFactor={70} >
               <div className='flex '>
-              {items==0?(<button onClick={()=>movetosyn()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
+              {items==0?(<button onClick={()=>movetosyn()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%] z-20'>
                   <a className='text-white text-2xl z-90'>1</a>
                 </button>):(null)}  
                 </div>
@@ -435,7 +435,7 @@ gui.add( alllight, 's1' ).name("Sync Light");  // Checkbox
           <mesh  position={[o1.x+16,o1.y+3,o1.z]}   >    
             <Html center={true} distanceFactor={100} >
               <div className='flex cursor-default'>
-                <div className={`flex flex-col transition-opacity duration-500 ${items==1?("opacity-1"):("opacity-0")}`}>
+                <div className={`flex flex-col transition-opacity duration-500 ${items==1?("opacity-1"):("opacity-0 w-0 h-0 overflow-hidden")}`}>
                   <div className='flex justify-end'>
                     <button onClick={()=>set0()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[20px] h-[20px]  border-[1px] rounded-[50%] flex justify-center items-center'>
                       <a className='text-white text-[10px] text-center mb-[2px]'>x</a>
@@ -465,7 +465,7 @@ gui.add( alllight, 's1' ).name("Sync Light");  // Checkbox
           <mesh  position={[o4.x+16,o4.y+3,o4.z]}   >    
             <Html center={true} distanceFactor={100} >
               <div className='flex cursor-default'>
-                <div className={`flex flex-col transition-opacity duration-500 ${items==4?("opacity-1"):("opacity-0")}`}>
+                <div className={`flex flex-col transition-opacity duration-500 ${items==4?("opacity-1"):("opacity-0 w-0 h-0 overflow-hidden")}`}>
                   <div className='flex justify-end'>
                     <button onClick={()=>set0()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[20px] h-[20px]  border-[1px] rounded-[50%] flex justify-center items-center'>
                       <a className='text-white text-[10px] text-center mb-[2px]'>x</a>
@@ -497,8 +497,8 @@ gui.add( alllight, 's1' ).name("Sync Light");  // Checkbox
           <mesh  position={[o5.x+14,o5.y+3,o5.z]}   >    
             <Html center={true} distanceFactor={100} >
               <div className='flex cursor-default'>
-                <div className={`flex flex-col transition-opacity duration-500 ${items==5?("opacity-1"):("opacity-0")}`}>
-                  <div className='flex justify-end'>
+                <div className={`flex flex-col transition-opacity duration-500 ${items==5?("opacity-1"):("opacity-0 w-0 h-0 overflow-hidden")}`}>
+                  <div className='flex justify-end '>
                     <button onClick={()=>set0()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[20px] h-[20px]  border-[1px] rounded-[50%] flex justify-center items-center'>
                       <a className='text-white text-[10px] text-center mb-[2px]'>x</a>
                     </button>
