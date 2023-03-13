@@ -7,7 +7,7 @@ import styles from '@/styles/Home.module.css'
 import { FBXLoader} from "three/examples/jsm/loaders/FBXLoader.js";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Environment, OrbitControls, useAnimations,Html, Stats, TransformControls,PerspectiveCamera, PivotControls, useHelper, Point } from "@react-three/drei";
-import { useFBX,useGLTF } from '@react-three/drei';
+import { useFBX,useGLTF,Sky } from '@react-three/drei';
 import * as THREE from "three";
 import * as Gui from "lil-gui";
 import LinkNewTab from "@/components/generals/LinkNewTab";
@@ -96,7 +96,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-     <div className={`transition-all duration-[1000ms] bg-black w-[100vw] h-[100vh] ${items==0?("max-h-[140vw]"):("max-h-[160vh]")}  cursor-grab active:cursor-grabbing `}>
+     <div className={`transition-all duration-[1000ms] bg-black w-[100vw] h-[100vh] ${items==0?("max-h-[140vw]"):("max-h-[140vw]")}  cursor-grab active:cursor-grabbing `}>
       
       <div className="absolute top-[1vw] left-[1vw] flex z-40  ">
         <button onClick={()=>getsaved()} className=" w-16 h-16 bg-slate-400 bg-opacity-20  z-40 rounded-xl border-2 border-teal-200 flex justify-center items-center">
@@ -108,7 +108,7 @@ export default function Home() {
       </div>
    
       {(saved&&savedo1)?(<Canvas > 
-        <Perf position="bottom-left"/>  
+        <Perf position="top-right"/>  
         <Suspense fallback={null}>
           <Island s1={spotlight} s2={spotlight2} s3={spotlight3} s4={spotlight4} d={d} o1={o1} o2={o2} o3={o3} o4={o4} o5={o5} setdestination={setdestination} destination={destination} setitems={setitems} items={items} isP={isportrait} />         
           <Synthesis savedvalue={o1} i={items}/>
@@ -125,8 +125,8 @@ export default function Home() {
 
 const Island = ({s1,s2,s3,s4,d,o1,o2,o3,o4,o5,destination,setdestination,setitems,items,isP}:{s1:any,s2:any,s3:any,s4:any,d:any,o1:any,o2:any,o3:any,o4:any,o5:any,destination:any,setdestination:any,setitems:any,items:any,isP:boolean}) =>{
   //loader
-    const nodesloader = useLoader(GLTFLoader, 'island3.glb')['nodes'];
-    const glb = useGLTF("island3.glb");
+    const nodesloader = useLoader(GLTFLoader, 'if.glb')['nodes'];
+    const glb = useGLTF("if.glb");
   
   //objref
     const cameraref=useRef<any>()
@@ -321,13 +321,14 @@ const timeRef = useRef(0);
   return(
     <>
     <ambientLight intensity={0.5} ref={alightref} />
+    {/* <Sky turbidity={100} sunPosition={[0,0,10]} distance={600} inclination={1} azimuth={1} mieCoefficient={0.001} mieDirectionalG={1} rayleigh={2}  /> */}
     <group rotation={[(Math.PI/180)*0,0,(Math.PI/180)*0]} ref={sunref}>
       <directionalLight intensity={1} ref={dlightref} position={[5,65,1]} color={"#ff0000"}/>
     </group>
     <PerspectiveCamera makeDefault={true}  ref={cameraref} />
 
-    <group receiveShadow={true} ref = {allgroupref} >
-      <mesh scale={1} rotation={[(Math.PI/180)*10,(Math.PI/180)*-100,(Math.PI/180)*0]}>
+    <group receiveShadow={false} ref = {allgroupref} >
+      <mesh scale={1} rotation={[(Math.PI/180)*10,(Math.PI/180)*-100,(Math.PI/180)*0]} position={[0,0,-30]}>
           <primitive object={nodesloader.Main} />
       </mesh>
     <spotLight
@@ -386,7 +387,7 @@ const timeRef = useRef(0);
           </mesh> 
           <mesh  position={[o3.x+16,o3.y+5,o3.z]}   >    
             <Html center={true} distanceFactor={100} >
-              <div className='flex cursor-default'>
+              <div className='flex cursor-default'>sky
                 <div className={`flex flex-col transition-opacity duration-500 ${items==3?("opacity-1"):("opacity-0 w-0 h-0 overflow-hidden")}`}>
                   <div className='flex justify-end'>
                     <button onClick={()=>set0()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[20px] h-[20px]  border-[1px] rounded-[50%] flex justify-center items-center'>
@@ -701,7 +702,7 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
       return(
       <>
       <group ref={refsafe} position={[savedvalue.x,savedvalue.y,savedvalue.z]} rotation={[(Math.PI/180)*savedvalue.rx,(Math.PI/180)*savedvalue.ry,(Math.PI/180)*savedvalue.rz]} scale={savedvalue.s}  >
-          <mesh castShadow={true} >
+          <mesh castShadow={false} >
             <primitive object={nodeobj5.nodes.Main} />
           </mesh>
           <spotLight
