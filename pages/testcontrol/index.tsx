@@ -1,4 +1,4 @@
-import { useThree, useFrame,Canvas,useLoader } from "react-three-fiber";
+import { useThree, useFrame,Canvas,useLoader } from "@react-three/fiber";
 import { Vector3, Euler,Camera, HemisphereLight, PointLightHelper,SpotLight, SpotLightHelper, RectAreaLight, Vector, AmbientLight} from "three";
 import { useEffect, useRef ,useState,Suspense} from "react";
 import Head from 'next/head'
@@ -14,10 +14,13 @@ import LinkNewTab from "@/components/generals/LinkNewTab";
 import firestore from "@/firebase/ClientApp";
 import {collection,QueryDocumentSnapshot,DocumentData,query,where,limit,getDocs,addDoc,updateDoc, doc} from "@firebase/firestore";
 import Image from "next/image";
+import  {Perf} from "r3f-perf"
+
 
 export default function Home() {
-  const [ destination,setdestination ] = useState(() => new THREE.Vector3(5,20,80))
+  const [ destination,setdestination ] = useState(() => new THREE.Vector3(6,45,40))
   const [items,setitems] = useState(0)
+  const [isportrait,setisportrait] = useState(false)
   const [saved,setsaved] = useState<any>(null)
   const [saved2,setsaved2] = useState<any>(null)
   const [saved3,setsaved3] = useState<any>(null)
@@ -80,9 +83,10 @@ export default function Home() {
     o5 = {x:parseFloat(savedo5.x.stringValue),y:parseFloat(savedo5.y.stringValue),z:parseFloat(savedo5.z.stringValue),rx:parseFloat(savedo5.rx.stringValue),ry:parseFloat(savedo5.ry.stringValue),rz:parseFloat(savedo5.rz.stringValue),s:parseFloat(savedo5.s.stringValue),a:parseFloat(savedo5.a.stringValue),d:parseFloat(savedo5.d.stringValue),i:parseFloat(savedo5.i.stringValue),ly:parseFloat(savedo5.ly.stringValue),p:parseFloat(savedo5.p.stringValue)}
   }
   useEffect(()=>{ 
-    setTimeout( () => {
       getsaved()
-    },2000)
+      if (window.innerHeight>=window.innerWidth){
+        setisportrait(true)
+      }
     },[])
   return (
     <>
@@ -92,9 +96,9 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-     <div className='bg-black w-[100vw] h-[100vh] max-h-[120vw] cursor-grab active:cursor-grabbing '>
+     <div className={`transition-all duration-[1000ms] bg-black w-[100vw] h-[100vh] ${items==0?("max-h-[140vw]"):("max-h-[160vh]")}  cursor-grab active:cursor-grabbing `}>
       
-      <div className="absolute top-[1vw] left-[1vw] flex z-40">
+      <div className="absolute top-[1vw] left-[1vw] flex z-40  ">
         <button onClick={()=>getsaved()} className=" w-16 h-16 bg-slate-400 bg-opacity-20  z-40 rounded-xl border-2 border-teal-200 flex justify-center items-center">
           <div className="w-12 h-12 relative">
           <Image src="/sync.png" alt="" width={80} height={80}/>
@@ -103,9 +107,10 @@ export default function Home() {
         </button>
       </div>
    
-      {(saved&&savedo1)?(<Canvas >   
+      {(saved&&savedo1)?(<Canvas > 
+        <Perf position="bottom-left"/>  
         <Suspense fallback={null}>
-          <Island s1={spotlight} s2={spotlight2} s3={spotlight3} s4={spotlight4} d={d} o1={o1} o2={o2} o3={o3} o4={o4} o5={o5} setdestination={setdestination} destination={destination} setitems={setitems} items={items} />         
+          <Island s1={spotlight} s2={spotlight2} s3={spotlight3} s4={spotlight4} d={d} o1={o1} o2={o2} o3={o3} o4={o4} o5={o5} setdestination={setdestination} destination={destination} setitems={setitems} items={items} isP={isportrait} />         
           <Synthesis savedvalue={o1} i={items}/>
           <Build savedvalue={o2} i={items}/>
           <Capsule savedvalue={o3} i={items}/>
@@ -118,7 +123,7 @@ export default function Home() {
   )
 }
 
-const Island = ({s1,s2,s3,s4,d,o1,o2,o3,o4,o5,destination,setdestination,setitems,items}:{s1:any,s2:any,s3:any,s4:any,d:any,o1:any,o2:any,o3:any,o4:any,o5:any,destination:any,setdestination:any,setitems:any,items:any}) =>{
+const Island = ({s1,s2,s3,s4,d,o1,o2,o3,o4,o5,destination,setdestination,setitems,items,isP}:{s1:any,s2:any,s3:any,s4:any,d:any,o1:any,o2:any,o3:any,o4:any,o5:any,destination:any,setdestination:any,setitems:any,items:any,isP:boolean}) =>{
   //loader
     const nodesloader = useLoader(GLTFLoader, 'island3.glb')['nodes'];
     const glb = useGLTF("island3.glb");
@@ -146,7 +151,7 @@ const Island = ({s1,s2,s3,s4,d,o1,o2,o3,o4,o5,destination,setdestination,setitem
     const object4 = new THREE.Object3D();
     object4.position.set(s4.tx,s4.ty,s4.tz)
   //position variable
-  let pos ={camx:6,camy:60,camz:100}
+  let pos ={camx:6,camy:45,camz:75}
   let rotatedeg={rotatex:-19,rotatey:0,rotatez:0}
   let grouprotate={rotatex:0,rotatey:0,rotatez:0}
   let alllight={s1:true}
@@ -231,14 +236,16 @@ const handleWheel = (e:any) => {
 }
   })
 //cam move function
-const [ smoothedCameraPosition ] = useState(() => new THREE.Vector3(0,20,60))
+const [ smoothedCameraPosition ] = useState(() => new THREE.Vector3(6,45,0))
 const set0 = () =>{
   setiscammove(false)
-  setdestination(() => new THREE.Vector3(6,60,100))
   setitems(0)
 }
 const movetosyn= () =>{
   setiscammove(true)
+  if (isP==true)
+    setdestination(() => new THREE.Vector3(o1.x,o1.y+10,o1.z+50))
+  else
   setdestination(() => new THREE.Vector3(o1.x+8,o1.y+10,o1.z+30))
   setitems(1)
 }
@@ -268,43 +275,48 @@ const [ iscammove,setiscammove] = useState(false)
 const gui = new Gui.GUI()
 gui.add( alllight, 's1' ).name("Sync Light");  // Checkbox
 
+//FPS/Delta time
+const timeRef = useRef(0);
 
   useFrame((state, delta) => {
-    if(iscammove==false){
-      const currentposition = new THREE.Vector3(pos.camx,pos.camy,pos.camz)
-      smoothedCameraPosition.lerp(currentposition, 0.06)
-      cameraref.current.position.copy(smoothedCameraPosition)}
-    if(iscammove==true){
-    smoothedCameraPosition.lerp(destination, 0.06)
-    cameraref.current.position.copy(smoothedCameraPosition)
-    }
-    cameraref.current.rotation.x = (Math.PI/180)*rotatedeg.rotatex
-    cameraref.current.rotation.y = (Math.PI/180)*rotatedeg.rotatey
-    cameraref.current.rotation.z = (Math.PI/180)*rotatedeg.rotatez
-    allgroupref.current!.rotation.x = (Math.PI/180)*grouprotate.rotatex
-    allgroupref.current!.rotation.y = (Math.PI/180)*grouprotate.rotatey
-    allgroupref.current!.rotation.z = (Math.PI/180)*grouprotate.rotatez
-    //todo   
-    dlightref.current.color.set(d.dc)
-    sunref.current.rotation.x = (Math.PI/180)*d.drx
-    sunref.current.rotation.z = (Math.PI/180)*d.drz
-    spotlightref3.current.intensity=s3.inten
-    spotlightref1.current.intensity=s1.inten
-    spotlightref2.current.intensity=s2.inten
-    spotlightref4.current.intensity=s4.inten
-    alightref.current.intensity= d.al
-    dlightref.current.intensity= d.dl
-      //lightcondition
-    if(!(alllight.s1&&items==0)){
-        spotlightref3.current.intensity=0
-        spotlightref1.current.intensity=0
-        spotlightref2.current.intensity=0
-        spotlightref4.current.intensity=0
-        dlightref.current.color.set('#ffffff')
-        dlightref.current.intensity=0
-        alightref.current.intensity=0
-    }
-    
+    timeRef.current += delta;
+    // Use requestAnimationFrame to only update the box's position on the next frame refresh
+    requestAnimationFrame(() => {
+        if(iscammove==false){
+          const currentposition = new THREE.Vector3(pos.camx,pos.camy,pos.camz)
+          smoothedCameraPosition.lerp(currentposition, delta*6)
+          cameraref.current.position.copy(smoothedCameraPosition)}
+        if(iscammove==true){
+        smoothedCameraPosition.lerp(destination, delta*6)
+        cameraref.current.position.copy(smoothedCameraPosition)
+        }
+        cameraref.current.rotation.x = (Math.PI/180)*rotatedeg.rotatex
+        cameraref.current.rotation.y = (Math.PI/180)*rotatedeg.rotatey
+        cameraref.current.rotation.z = (Math.PI/180)*rotatedeg.rotatez
+        allgroupref.current!.rotation.x = (Math.PI/180)*grouprotate.rotatex
+        allgroupref.current!.rotation.y = (Math.PI/180)*grouprotate.rotatey
+        allgroupref.current!.rotation.z = (Math.PI/180)*grouprotate.rotatez
+        //todo   
+        dlightref.current.color.set(d.dc)
+        sunref.current.rotation.x = (Math.PI/180)*d.drx
+        sunref.current.rotation.z = (Math.PI/180)*d.drz
+        spotlightref3.current.intensity=s3.inten
+        spotlightref1.current.intensity=s1.inten
+        spotlightref2.current.intensity=s2.inten
+        spotlightref4.current.intensity=s4.inten
+        alightref.current.intensity= d.al
+        dlightref.current.intensity= d.dl
+          //lightcondition
+        if(!(alllight.s1&&items==0)){
+            spotlightref3.current.intensity=0
+            spotlightref1.current.intensity=0
+            spotlightref2.current.intensity=0
+            spotlightref4.current.intensity=0
+            dlightref.current.color.set('#ffffff')
+            dlightref.current.intensity=0
+            alightref.current.intensity=0
+        }
+    })
   });
   return(
     <>
@@ -314,7 +326,7 @@ gui.add( alllight, 's1' ).name("Sync Light");  // Checkbox
     </group>
     <PerspectiveCamera makeDefault={true}  ref={cameraref} />
 
-    <group ref = {allgroupref} >
+    <group receiveShadow={true} ref = {allgroupref} >
       <mesh scale={1} rotation={[(Math.PI/180)*10,(Math.PI/180)*-100,(Math.PI/180)*0]}>
           <primitive object={nodesloader.Main} />
       </mesh>
@@ -432,7 +444,7 @@ gui.add( alllight, 's1' ).name("Sync Light");  // Checkbox
                 </div>
             </Html>      
           </mesh> 
-          <mesh  position={[o1.x+16,o1.y+3,o1.z]}   >    
+          <mesh  position={isP?([o1.x,o1.y-20,o1.z]):([o1.x+16,o1.y+3,o1.z])}   >    
             <Html center={true} distanceFactor={100} >
               <div className='flex cursor-default'>
                 <div className={`flex flex-col transition-opacity duration-500 ${items==1?("opacity-1"):("opacity-0 w-0 h-0 overflow-hidden")}`}>
@@ -441,10 +453,10 @@ gui.add( alllight, 's1' ).name("Sync Light");  // Checkbox
                       <a className='text-white text-[10px] text-center mb-[2px]'>x</a>
                     </button>
                   </div>
-                  <div className=' w-[80px] h-[120px] bg-black bg-opacity-90 rounded-[10px] border-[1px] border-yellow-400 flex flex-col justify-start py-[10px] items-center '>
-                    <p className='text-[8px] text-yellow-500 '>SYNTHESIS</p>
-                    <div className='bg-yellow-500 h-[1px] w-[80%] mt-2'></div>
-                    <p className='text-red-600 text-left text-[4px] px-[5px] mt-2 indent-[10px]'>{"Our game had rune so you can use that same rune to systhesis and get better version of that rune back it no risk but yea you have to spend a lot of money to buy a lot of rune if you wanna be completitive so stop crying and get rich. Lorem ipsum...."}</p>
+                  <div className=' w-[80px] lgm:w-[10vw]  h-[120px] lgm:h-[15vw]  bg-black bg-opacity-90 rounded-[10px] lgm:rounded-[2vw] border-[1px] border-yellow-400 flex flex-col justify-start py-[10px] lgm:py-[1vw] items-center '>
+                    <p className='text-[8px] text-yellow-500 lgm:text-[1vw]'>SYNTHESIS</p>
+                    <div className='bg-yellow-500 h-[1px] w-[80%] mt-2 lgm:mt-[1vw]'></div>
+                    <p className='text-red-600 text-left text-[4px] px-[5px] mt-2 indent-[10px] lgm:text-[0.5vw]'>{"Our game had rune so you can use that same rune to systhesis and get better version of that rune back it no risk but yea you have to spend a lot of money to buy a lot of rune if you wanna be completitive so stop crying and get rich. Lorem ipsum...."}</p>
                   </div>
                 </div>
               </div>
@@ -453,7 +465,7 @@ gui.add( alllight, 's1' ).name("Sync Light");  // Checkbox
       </group>
 
       <group>
-          <mesh  position={[o4.x,o4.y+7.5,o4.z]}   >    
+          <mesh  position={[o4.x,o4.y+9,o4.z]}   >    
             <Html center={true} distanceFactor={70} >
               <div className='flex'>
               {items==0?(<button onClick={()=>movetosafe()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
@@ -689,7 +701,7 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
       return(
       <>
       <group ref={refsafe} position={[savedvalue.x,savedvalue.y,savedvalue.z]} rotation={[(Math.PI/180)*savedvalue.rx,(Math.PI/180)*savedvalue.ry,(Math.PI/180)*savedvalue.rz]} scale={savedvalue.s}  >
-          <mesh >
+          <mesh castShadow={true} >
             <primitive object={nodeobj5.nodes.Main} />
           </mesh>
           <spotLight
@@ -700,7 +712,7 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
             penumbra={savedvalue.p}
             angle={(Math.PI/180)*savedvalue.a}
             distance={savedvalue.d}
-            castShadow={false} 
+            castShadow
             target={nodeobj5.nodes.Main}
           />
       </group>
