@@ -150,9 +150,10 @@ const Island = ({safevalue,s1,s2,s3,s4,d}:{safevalue:any,s1:any,s2:any,s3:any,s4
 //position variable
 
 //obj
-    const obj5 = useGLTF("egg/egg.glb");
-    const nodeobj5 = useLoader(GLTFLoader, "egg/egg.glb");
+    const obj5 = useGLTF("egg/eggnaja.glb");
+    const nodeobj5 = useLoader(GLTFLoader, "egg/eggnaja.glb");
     const refsafe = useRef<any>()
+    const refegg = useRef<any>()
     const {actions} = useAnimations(obj5.animations,refsafe)
     
 //obj
@@ -196,7 +197,7 @@ const handleWheel = (e:any) => {
         gui.add(safevalue,"rx").min(-180).max(180).step(1).name("obj rot-x")
         gui.add(safevalue,"ry").min(-180).max(180).step(1).name("obj rot-y")
         gui.add(safevalue,"rz").min(-180).max(180).step(1).name("obj rot-z")
-        gui.add(safevalue,"s").min(0).max(3).step(0.1).name("obj scale")
+        gui.add(safevalue,"s").min(0.1).max(2).step(0.01).name("obj scale")
         gui.add(safevalue,"ly").min(1).max(40).step(1).name("spotlight-height")
         gui.add(safevalue,"p").min(0).max(1).step(0.1).name("penumbra")
         gui.add(safevalue,"i").min(0).max(10).step(0.1).name("intensity")
@@ -209,10 +210,10 @@ const handleWheel = (e:any) => {
   useEffect(()=>{
     //log
    console.log(actions)
-    actions.Sacred_Egg_Egg_low1_Anim_0?.play()
-    actions.Sacred_Egg_Egg_low2_Anim_1?.play()
-    actions.Sacred_Egg_Egg_low3_Anim_2?.play()
-    actions.Sacred_Egg_Egg_low4_Anim_3?.play()
+    // actions.Sacred_Egg_Egg_low1_Anim_0?.play()
+    // actions.Sacred_Egg_Egg_low2_Anim_1?.play()
+    // actions.Sacred_Egg_Egg_low3_Anim_2?.play()
+    // actions.Sacred_Egg_Egg_low4_Anim_3?.play()
    window.addEventListener("wheel", handleWheel);
  return () =>{ window.removeEventListener("wheel", handleWheel);
 }
@@ -233,6 +234,9 @@ const handleWheel = (e:any) => {
     refsafe.current.scale.x = safevalue.s
     refsafe.current.scale.y = safevalue.s
     refsafe.current.scale.z = safevalue.s
+    refegg.current.scale.x = safevalue.s*20
+    refegg.current.scale.y = safevalue.s*20
+    refegg.current.scale.z = safevalue.s*20
     spotlightref3.current.intensity=s3.inten
     spotlightref1.current.intensity=s1.inten
     spotlightref2.current.intensity=s2.inten
@@ -277,7 +281,7 @@ const handleWheel = (e:any) => {
   
   <PerspectiveCamera makeDefault={true}  ref={cameraref} />
   <group ref={refsafe} position={[0,0,0]} rotation={[0,0,0]} scale={1.5}  >
-      <mesh >
+      <mesh ref={refegg} scale={50}>
         <primitive object={nodeobj5.nodes.Main} />
       </mesh>
       <spotLight

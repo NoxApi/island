@@ -524,12 +524,12 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
       actions.Synthesis_polySurface47_Anim_0?.play()
     })
     useFrame((state, delta) => {
-      if(i==0||i==1){
-        spotlightrefo.current.intensity=savedvalue.i  
-      }
-      else{        
-        spotlightrefo.current.intensity=0 
-      }
+      // if(i==0||i==1){
+      //   spotlightrefo.current.intensity=savedvalue.i  
+      // }
+      // else{        
+      //   spotlightrefo.current.intensity=0 
+      // }
     }
     ) 
     // useHelper(spotlightrefo,SpotLightHelper,)
@@ -539,7 +539,7 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
         <mesh >
           <primitive object={nodeobj5.nodes.Main} />
         </mesh>
-        <spotLight
+        {/* <spotLight
           ref={spotlightrefo}
           color={"#ffffff"}
           intensity={savedvalue.i}
@@ -549,7 +549,7 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
           distance={savedvalue.d}
           castShadow={false} 
           target={nodeobj5.nodes.Main}
-        />
+        /> */}
     </group>
     </>
     )
@@ -579,12 +579,12 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
     const object5 = new THREE.Object3D();
     object5.position.set(savedvalue.x+0.5,savedvalue.y,savedvalue.z+1)
     useFrame((state, delta) => {
-      if(i==0||i==2){
-        spotlightrefo.current.intensity=savedvalue.i  
-      }
-      else{        
-        spotlightrefo.current.intensity=0 
-      }
+      // if(i==0||i==2){
+      //   spotlightrefo.current.intensity=savedvalue.i  
+      // }
+      // else{        
+      //   spotlightrefo.current.intensity=0 
+      // }
     }
     )
     return(
@@ -596,7 +596,7 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
         <mesh ref={refobj2} scale={1} position={[-1,-22.9,13.8]} >
           <primitive object={node2.nodes.Main} />
         </mesh>
-        <spotLight
+        {/* <spotLight
           ref={spotlightrefo}
           color={"#ffffff"}
           intensity={savedvalue.i}
@@ -606,7 +606,7 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
           distance={savedvalue.d}
           castShadow={false} 
           target={node1.nodes.Main}
-        />
+        /> */}
       </group>
     </>
     )
@@ -624,12 +624,12 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
     useEffect(()=>{
     })
     useFrame((state, delta) => {
-      if(i==0||i==3){
-        spotlightrefo.current.intensity=savedvalue.i  
-      }
-      else{        
-        spotlightrefo.current.intensity=0 
-      }
+      // if(i==0||i==3){
+      //   spotlightrefo.current.intensity=savedvalue.i  
+      // }
+      // else{        
+      //   spotlightrefo.current.intensity=0 
+      // }
     }
     )
     return(
@@ -638,7 +638,7 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
         <mesh >
           <primitive object={nodeobj5.nodes.Main} />
         </mesh>
-        <spotLight
+        {/* <spotLight
           ref={spotlightrefo}
           color={"#ffffff"}
           intensity={savedvalue.i}
@@ -648,7 +648,7 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
           distance={savedvalue.d}
           castShadow={false} 
           target={nodeobj5.nodes.Main}
-        />
+        /> */}
     </group>
     </>
     )
@@ -659,6 +659,7 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
         const obj5 = useGLTF("safe/safef2.glb");
         const nodeobj5 = useLoader(GLTFLoader, "safe/safef2.glb");
         const refsafe = useRef<any>()
+        const refegg= useRef<any>()
         const {actions} = useAnimations(obj5.animations,refsafe)
     //obj
     //light
@@ -669,12 +670,12 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
      
       // useHelper(spotlightrefo,SpotLightHelper,)
       useFrame((state, delta) => {
-        if(i==0||i==4){
-          spotlightrefo.current.intensity=savedvalue.i  
-        }
-        else{        
-          spotlightrefo.current.intensity=0 
-        }
+        // if(i==0||i==4){
+        //   spotlightrefo.current.intensity=savedvalue.i  
+        // }
+        // else{        
+        //   spotlightrefo.current.intensity=0 
+        // }
       }
       )
       return(
@@ -683,7 +684,7 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
           <mesh castShadow={false} >
             <primitive object={nodeobj5.nodes.Main} />
           </mesh>
-          <spotLight
+          {/* <spotLight
             ref={spotlightrefo}
             color={"#ffffff"}
             intensity={savedvalue.i}
@@ -693,44 +694,45 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
             distance={savedvalue.d}
             castShadow
             target={nodeobj5.nodes.Main}
-          />
+          /> */}
       </group>
       </>
       )
     }
     const Egg = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
       //obj
-          const obj5 = useGLTF("egg/egg.glb");
-          const nodeobj5 = useLoader(GLTFLoader, "egg/egg.glb");
+          const obj5 = useGLTF("egg/eggnaja.glb");
+          const nodeobj5 = useLoader(GLTFLoader, "egg/eggnaja.glb");
           const refsafe = useRef<any>()
           const {actions} = useAnimations(obj5.animations,refsafe)
       //obj
       //light
       const spotlightrefo = useRef<any>()
         useEffect(()=>{
-          actions.Sacred_Egg_Egg_low1_Anim_0?.play()
-          actions.Sacred_Egg_Egg_low2_Anim_1?.play()
-          actions.Sacred_Egg_Egg_low3_Anim_2?.play()
-          actions.Sacred_Egg_Egg_low4_Anim_3?.play()
+          actions.BenzNarak?.play()
+          // actions.Sacred_Egg_Egg_low1_Anim_0?.play()
+          // actions.Sacred_Egg_Egg_low2_Anim_1?.play()
+          // actions.Sacred_Egg_Egg_low3_Anim_2?.play()
+          // actions.Sacred_Egg_Egg_low4_Anim_3?.play()
         })
        
         // useHelper(spotlightrefo,SpotLightHelper,)
         useFrame((state, delta) => {
-          if(i==0||i==5){
-            spotlightrefo.current.intensity=savedvalue.i  
-          }
-          else{        
-            spotlightrefo.current.intensity=0 
-          }
+          // if(i==0||i==5){
+          //   spotlightrefo.current.intensity=savedvalue.i  
+          // }
+          // else{        
+          //   spotlightrefo.current.intensity=0 
+          // }
         }
         )
         return(
         <>
         <group ref={refsafe} position={[savedvalue.x,savedvalue.y,savedvalue.z]} rotation={[(Math.PI/180)*savedvalue.rx,(Math.PI/180)*savedvalue.ry,(Math.PI/180)*savedvalue.rz]} scale={savedvalue.s}  >
-            <mesh >
-              <primitive object={nodeobj5.nodes.Main} />
+            <mesh scale={savedvalue.s*20} >
+              <primitive object={nodeobj5.nodes.Main}  />
             </mesh>
-            <spotLight
+            {/* <spotLight
               ref={spotlightrefo}
               color={"#ffffff"}
               intensity={savedvalue.i}
@@ -740,7 +742,7 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
               distance={savedvalue.d}
               castShadow={false} 
               target={nodeobj5.nodes.Main}
-            />
+            /> */}
         </group>
         </>
         )
