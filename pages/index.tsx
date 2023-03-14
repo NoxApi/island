@@ -1,6 +1,6 @@
 import { useThree, useFrame,Canvas,useLoader } from "@react-three/fiber";
 import { Vector3, Euler,Camera, HemisphereLight, PointLightHelper,SpotLight, SpotLightHelper, RectAreaLight, Vector, AmbientLight} from "three";
-import { useEffect, useRef ,useState,Suspense} from "react";
+import { useEffect, useRef ,useState,Suspense,useMemo} from "react";
 import Head from 'next/head'
 import mesh from "react-three-fiber"
 import styles from '@/styles/Home.module.css'
@@ -120,8 +120,6 @@ export default function Home() {
 
 const Island = ({s1,s2,s3,s4,d,o1,o2,o3,o4,o5,destination,setdestination,setitems,items,isP}:{s1:any,s2:any,s3:any,s4:any,d:any,o1:any,o2:any,o3:any,o4:any,o5:any,destination:any,setdestination:any,setitems:any,items:any,isP:boolean}) =>{
   //loader
-    const nodesloader = useLoader(GLTFLoader, 'island3.glb')['nodes'];
-    const glb = useGLTF("island3.glb");
   
   //objref
     const cameraref=useRef<any>()
@@ -306,9 +304,7 @@ const timeRef = useRef(0);
     <PerspectiveCamera makeDefault={true}  ref={cameraref} position={[pos.camx,pos.camy,pos.camz]}/>
 
     <group receiveShadow={false} ref = {allgroupref} >
-      <mesh scale={1} rotation={[(Math.PI/180)*10,(Math.PI/180)*-100,(Math.PI/180)*0]}>
-          <primitive object={nodesloader.Main} />
-      </mesh>
+      <Island3d/>
     <spotLight
           ref={spotlightref1}
           color={s1.c}
@@ -355,7 +351,7 @@ const timeRef = useRef(0);
         />
         <group>
           <mesh  position={[o3.x,o3.y+10,o3.z]}   >    
-            <Html center={true} distanceFactor={70} >
+            <Html center={true} distanceFactor={isP?(50):(70)} >
               <div className='flex'>
               {items==0?(<button onClick={()=>movetocapsule()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
                   <a className='text-white text-2xl'>3</a>
@@ -385,7 +381,7 @@ const timeRef = useRef(0);
 
       <group>
           <mesh  position={[o2.x,o2.y+6,o2.z]}   >    
-            <Html center={true} distanceFactor={70} >
+            <Html center={true} distanceFactor={isP?(50):(70)} >
               <div className='flex'>
               {items==0?(<button onClick={()=>movetobuild()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
                   <a className='text-white text-2xl'>2</a>
@@ -415,7 +411,7 @@ const timeRef = useRef(0);
 
       <group>
           <mesh  position={[o1.x,o1.y+6,o1.z]}   >    
-            <Html center={true} distanceFactor={70} >
+            <Html center={true} distanceFactor={isP?(50):(70)} >
               <div className='flex '>
               {items==0?(<button onClick={()=>movetosyn()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%] z-20'>
                   <a className='text-white text-2xl z-90'>1</a>
@@ -445,7 +441,7 @@ const timeRef = useRef(0);
 
       <group>
           <mesh  position={[o4.x,o4.y+9,o4.z]}   >    
-            <Html center={true} distanceFactor={70} >
+            <Html center={true} distanceFactor={isP?(50):(70)} >
               <div className='flex'>
               {items==0?(<button onClick={()=>movetosafe()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
                   <a className='text-white text-2xl'>4</a>
@@ -477,7 +473,7 @@ const timeRef = useRef(0);
 
     <group>
           <mesh  position={[o5.x-1,o5.y+6.5,o5.z]}   >    
-            <Html center={true} distanceFactor={70} >
+            <Html center={true} distanceFactor={isP?(50):(70)} >
               <div className='flex'>
               {items==0?(<button onClick={()=>movetoegg()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
                   <a className='text-white text-2xl'>5</a>
@@ -747,3 +743,17 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
         </>
         )
       }
+const Island3d = ()=>{
+    const Staticobject = useMemo(()=>{
+      const nodesloader = useLoader(GLTFLoader, 'island1.glb')['nodes'];
+      const glb = useGLTF("island1.glb");
+        return(
+            <mesh scale={1.05} rotation={[(Math.PI/180)*10,(Math.PI/180)*-100,(Math.PI/180)*0]} position={[4,-1,0]}>
+              <primitive object={nodesloader.Main} />
+            </mesh>
+        )
+    },[])
+    return(
+    Staticobject
+    )
+  }

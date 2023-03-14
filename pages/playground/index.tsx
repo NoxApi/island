@@ -43,14 +43,14 @@ export default  function Home() {
         <ambientLight intensity={0} />
         <directionalLight intensity={0}/>
         <directionalLight intensity={0} position={[2,1,3]}/>
-        <Sparkles scale={10} count={40} speed={0.2} size={100} />
+        {/* <Sparkles scale={10} count={40} speed={0.2} size={100} /> */}
           {/* <Box/> */}
           <Island setdestination={setdestination} destination={destination} setitems={setitems} items={items} />
           {/* <mesh  position={[0,0,0]}>
             <sphereBufferGeometry args={[2, 50, 50]} wireframe={true} />
             <meshStandardMaterial  color={"#ff0000"} />
           </mesh> */}
-          <Build position={{x:0,y:0,z:0}} rotation={{x:8,y:260,z:-2}}/>
+          {/* <Build position={{x:0,y:0,z:0}} rotation={{x:8,y:260,z:-2}}/> */}
         {/* <OrbitControls enableRotate={true} enableZoom={true} enabled={true}
          minDistance={40}
          maxDistance={80}/> */}
@@ -74,8 +74,9 @@ const Island = ({
   items:any
 }) =>{
   const cameraref=useRef<any>()
-  const glb = useGLTF("island3.glb");
-  const node = useLoader(GLTFLoader, 'island3.glb');
+  const glb = useGLTF("island1.glb");
+  const node = useLoader(GLTFLoader, 'island1.glb');
+  const node2 = useLoader(GLTFLoader, 'island3.glb');
   const ref2 = useRef<any>()
   const pos1 = useRef<any>()
   const pos2 = useRef<any>()
@@ -97,10 +98,13 @@ const Island = ({
   <>
   <ambientLight intensity={0.5}/>
   <PerspectiveCamera makeDefault={true} position={[0,0,0]} rotation={[0,0,0]} ref={cameraref} />
-  <group position={[0,0,0]}>
-  </group>
+  <mesh scale={1.11} rotation={[(Math.PI/180)*10,(Math.PI/180)*-100,(Math.PI/180)*0]} position={[31,-50,-125]}>
+          <primitive object={node.nodes.Main} />
+  </mesh>
+  <mesh scale={1} rotation={[(Math.PI/180)*10,(Math.PI/180)*-100,(Math.PI/180)*0]} position={[26,-47,-125]}>
+          <primitive object={node2.nodes.Main} />
+  </mesh>
   <spotLight
-
         color="#FFD7D7"
         intensity={0.15}
         position={[30, 100,-20]}  
