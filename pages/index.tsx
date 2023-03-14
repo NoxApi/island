@@ -99,15 +99,9 @@ export default function Home() {
      <div className={`transition-all duration-[1000ms] bg-black w-[100vw] h-[100vh] ${items==0?("max-h-[140vw]"):("max-h-[140vw]")}  cursor-grab active:cursor-grabbing `}>
       
       <div className="absolute top-[1vw] left-[1vw] flex z-40  ">
-        <button onClick={()=>getsaved()} className=" w-16 h-16 bg-slate-400 bg-opacity-20  z-40 rounded-xl border-2 border-teal-200 flex justify-center items-center">
-          <div className="w-12 h-12 relative">
-          <Image src="/sync.png" alt="" width={80} height={80}/>
-          <p className="absolute text-xs top-[50%] left-[50%] translate-x-[-50%] translate-y-[-55%] text-teal-200">{"sync"}</p>
-          </div>
-        </button>
       </div>
    
-      {(saved&&savedo1)?(<Canvas dpr={1}> 
+      {(saved&&savedo1)?(<Canvas dpr={[0,1.5]}> 
         <Perf position="bottom-left"/>  
         <Suspense fallback={null}>
           <Island s1={spotlight} s2={spotlight2} s3={spotlight3} s4={spotlight4} d={d} o1={o1} o2={o2} o3={o3} o4={o4} o5={o5} setdestination={setdestination} destination={destination} setitems={setitems} items={items} isP={isportrait} />         
@@ -154,9 +148,6 @@ const Island = ({s1,s2,s3,s4,d,o1,o2,o3,o4,o5,destination,setdestination,setitem
   //position variable
   let pos ={camx:6,camy:45,camz:75}
   let rotatedeg={rotatex:-19,rotatey:0,rotatez:0}
-  let grouprotate={rotatex:0,rotatey:0,rotatez:0}
-  let alllight={s1:true}
-
 //control
 const handleWheel = (e:any) => {
     e.preventDefault();
@@ -245,37 +236,45 @@ const set0 = () =>{
 const movetosyn= () =>{
   setiscammove(true)
   if (isP==true)
-    setdestination(() => new THREE.Vector3(o1.x,o1.y+10,o1.z+50))
+    setdestination(() => new THREE.Vector3(o1.x,o1.y+6.5,o1.z+35))
   else
-  setdestination(() => new THREE.Vector3(o1.x+8,o1.y+10,o1.z+30))
+    setdestination(() => new THREE.Vector3(o1.x+8,o1.y+10,o1.z+30))
   setitems(1)
 }
 const movetobuild= () =>{
   setiscammove(true)
+  if (isP==true)
+  setdestination(() => new THREE.Vector3(o2.x,o2.y+6.5,o2.z+35))
+else
   setdestination(() => new THREE.Vector3(o2.x+8,o2.y+10,o2.z+30))
   setitems(2)
 }
 const movetoegg= () =>{
   setiscammove(true)
+  if (isP==true)
+  setdestination(() => new THREE.Vector3(o5.x,o5.y+6.5,o5.z+35))
+else
   setdestination(() => new THREE.Vector3(o5.x+8,o5.y+10,o5.z+30))
   setitems(5)
 }
 const movetosafe= () =>{
   setiscammove(true)
+  if (isP==true)
+  setdestination(() => new THREE.Vector3(o4.x,o4.y+6.5,o4.z+35))
+else
   setdestination(() => new THREE.Vector3(o4.x+8,o4.y+10,o4.z+30))
   setitems(4)
 }
 const movetocapsule= () =>{
   setiscammove(true)
+  if (isP==true)
+  setdestination(() => new THREE.Vector3(o3.x,o3.y+6.5,o3.z+35))
+else
   setdestination(() => new THREE.Vector3(o3.x+8,o3.y+10,o3.z+30))
   setitems(3)
 }
 //cammove prevent
 const [ iscammove,setiscammove] = useState(false)
-//gui
-const gui = new Gui.GUI()
-gui.add( alllight, 's1' ).name("Sync Light");  // Checkbox
-
 //FPS/Delta time
 const timeRef = useRef(0);
 
@@ -292,42 +291,19 @@ const timeRef = useRef(0);
         cameraref.current.position.copy(smoothedCameraPosition)
         }
         cameraref.current.rotation.x = (Math.PI/180)*rotatedeg.rotatex
-        cameraref.current.rotation.y = (Math.PI/180)*rotatedeg.rotatey
-        cameraref.current.rotation.z = (Math.PI/180)*rotatedeg.rotatez
-        allgroupref.current!.rotation.x = (Math.PI/180)*grouprotate.rotatex
-        allgroupref.current!.rotation.y = (Math.PI/180)*grouprotate.rotatey
-        allgroupref.current!.rotation.z = (Math.PI/180)*grouprotate.rotatez
         //todo   
         dlightref.current.color.set(d.dc)
-        sunref.current.rotation.x = (Math.PI/180)*d.drx
-        sunref.current.rotation.z = (Math.PI/180)*d.drz
-        spotlightref3.current.intensity=s3.inten
-        spotlightref1.current.intensity=s1.inten
-        spotlightref2.current.intensity=s2.inten
-        spotlightref4.current.intensity=s4.inten
-        alightref.current.intensity= d.al
-        dlightref.current.intensity= d.dl
-          //lightcondition
-        if(!(alllight.s1&&items==0)){
-            spotlightref3.current.intensity=0
-            spotlightref1.current.intensity=0
-            spotlightref2.current.intensity=0
-            spotlightref4.current.intensity=0
-            dlightref.current.color.set('#ffffff')
-            dlightref.current.intensity=0
-            alightref.current.intensity=0
-        }
     })
   });
   return(
     <>
-    <ambientLight intensity={0.5} ref={alightref} />
+    <ambientLight intensity={d.al} ref={alightref} />
     {/* <Sky turbidity={100} sunPosition={[0,0,10]} distance={600} inclination={1} azimuth={1} mieCoefficient={0.001} mieDirectionalG={1} rayleigh={2}  /> */}
     
     <group rotation={[(Math.PI/180)*0,0,(Math.PI/180)*0]} ref={sunref}>
-      <directionalLight intensity={1} ref={dlightref} position={[5,65,1]} color={"#ff0000"}/>
+      <directionalLight intensity={d.dl} ref={dlightref} position={[5,65,1]} color={"#ff0000"}/>
     </group>
-    <PerspectiveCamera makeDefault={true}  ref={cameraref} />
+    <PerspectiveCamera makeDefault={true}  ref={cameraref} position={[pos.camx,pos.camy,pos.camz]}/>
 
     <group receiveShadow={false} ref = {allgroupref} >
       <mesh scale={1} rotation={[(Math.PI/180)*10,(Math.PI/180)*-100,(Math.PI/180)*0]}>
@@ -387,7 +363,7 @@ const timeRef = useRef(0);
                 </div>
             </Html>      
           </mesh> 
-          <mesh  position={[o3.x+16,o3.y+5,o3.z]}   >    
+          <mesh  position={isP?([o3.x+0.5,o3.y-14,o3.z]):([o3.x+16,o3.y+5,o3.z])}   >    
             <Html center={true} distanceFactor={100} >
               <div className='flex cursor-default'>
                 <div className={`flex flex-col transition-opacity duration-500 ${items==3?("opacity-1"):("opacity-0 w-0 h-0 overflow-hidden")}`}>
@@ -396,10 +372,10 @@ const timeRef = useRef(0);
                       <a className='text-white text-[10px] text-center mb-[2px]'>x</a>
                     </button>
                   </div>
-                  <div className=' w-[80px] h-[120px] bg-black bg-opacity-90 rounded-[10px] border-[1px] border-yellow-400 flex flex-col justify-start py-[10px] items-center '>
-                    <p className='text-[8px] text-yellow-500 '>CAPSULE</p>
+                  <div className=' w-[80px] h-[120px] bg-black bg-opacity-90 lgm:w-[15vw] lgm:h-[22.5vw] rounded-[10px] border-[1px] border-yellow-400 flex flex-col justify-start py-[10px] items-center '>
+                    <p className='text-[8px] text-yellow-500 lgm:text-[2vw]'>CAPSULE</p>
                     <div className='bg-yellow-500 h-[1px] w-[80%] mt-2'></div>
-                    <p className='text-red-600 text-left text-[4px] px-[5px] mt-2 indent-[10px]'>{"Basicly it's fucking lottery that most poeple buy and prey to get something more value than the price of capsule it self but as you all know the percentage is fucking low. So if you want anything buy it on marketplace you stupid price of shit dont buy fucking capsule you coward. lorem ipsum... "}</p>
+                    <p className='text-red-600 text-left text-[4px] px-[5px] mt-2 indent-[10px] lgm:text-[0.8vw] lgm:indent-[3vw]'>{"Basicly it's fucking lottery that most poeple buy and prey to get something more value than the price of capsule it self but as you all know the percentage is fucking low. So if you want anything buy it on marketplace you stupid price of shit dont buy fucking capsule you coward. lorem ipsum... "}</p>
                   </div>
                 </div>
               </div>
@@ -417,7 +393,7 @@ const timeRef = useRef(0);
                 </div>
             </Html>      
           </mesh> 
-          <mesh  position={[o2.x+14,o2.y+3,o2.z]}   >    
+          <mesh  position={isP?([o2.x+0.5,o2.y-14,o2.z]):([o2.x+14,o2.y+3,o2.z])}   >    
             <Html center={true} distanceFactor={100} >
               <div className='flex cursor-default'>
                 <div className={`flex flex-col transition-opacity duration-500 ${items==2?("opacity-1"):("opacity-0 w-0 h-0 overflow-hidden")}`}>
@@ -426,10 +402,10 @@ const timeRef = useRef(0);
                       <a className='text-white text-[10px] text-center mb-[2px]'>x</a>
                     </button>
                   </div>
-                  <div className=' w-[80px] h-[120px] bg-black bg-opacity-90 rounded-[10px] border-[1px] border-yellow-400 flex flex-col justify-start py-[10px] items-center '>
-                    <p className='text-[8px] text-yellow-500 '>BUILD CHALLENGE</p>
+                  <div className=' w-[80px] h-[120px] bg-black lgm:w-[15vw] lgm:h-[22.5vw] bg-opacity-90 rounded-[10px] border-[1px] border-yellow-400 flex flex-col justify-start py-[10px] items-center '>
+                    <p className='text-[8px] text-yellow-500 lgm:text-[2vw] '>BUILD CHALLENGE</p>
                     <div className='bg-yellow-500 h-[1px] w-[80%] mt-2'></div>
-                    <p className='text-red-600 text-left text-[4px] px-[5px] mt-2 indent-[10px]'>{"you can use your 10 unuse hero or skin to sacrifice and become something more value (if you lucky) but most of the time trust me you will get something useless or even fail and get nothing. So if you dont want that hero or skin and you coward to gamble just sell it your numpnut. lorem ipsum... "}</p>
+                    <p className='text-red-600 text-left text-[4px] px-[5px] mt-2 indent-[10px] lgm:text-[0.8vw] lgm:indent-[3vw]'>{"you can use your 10 unuse hero or skin to sacrifice and become something more value (if you lucky) but most of the time trust me you will get something useless or even fail and get nothing. So if you dont want that hero or skin and you coward to gamble just sell it your numpnut. lorem ipsum... "}</p>
                   </div>
                 </div>
               </div>
@@ -447,7 +423,7 @@ const timeRef = useRef(0);
                 </div>
             </Html>      
           </mesh> 
-          <mesh  position={isP?([o1.x,o1.y-20,o1.z]):([o1.x+16,o1.y+3,o1.z])}   >    
+          <mesh  position={isP?([o1.x+0.5,o1.y-14,o1.z]):([o1.x+16,o1.y+3,o1.z])}   >    
             <Html center={true} distanceFactor={100} >
               <div className='flex cursor-default'>
                 <div className={`flex flex-col transition-opacity duration-500 ${items==1?("opacity-1"):("opacity-0 w-0 h-0 overflow-hidden")}`}>
@@ -456,10 +432,10 @@ const timeRef = useRef(0);
                       <a className='text-white text-[10px] text-center mb-[2px]'>x</a>
                     </button>
                   </div>
-                  <div className=' w-[80px] lgm:w-[10vw]  h-[120px] lgm:h-[15vw]  bg-black bg-opacity-90 rounded-[10px] lgm:rounded-[2vw] border-[1px] border-yellow-400 flex flex-col justify-start py-[10px] lgm:py-[1vw] items-center '>
-                    <p className='text-[8px] text-yellow-500 lgm:text-[1vw]'>SYNTHESIS</p>
+                  <div className=' w-[80px] lgm:w-[15vw] lgm:h-[22.5vw]  h-[120px]   bg-black bg-opacity-90 rounded-[10px] lgm:rounded-[2vw] border-[1px] border-yellow-400 flex flex-col justify-start py-[10px] lgm:py-[1vw] items-center '>
+                    <p className='text-[8px] text-yellow-500 lgm:text-[2vw]'>SYNTHESIS</p>
                     <div className='bg-yellow-500 h-[1px] w-[80%] mt-2 lgm:mt-[1vw]'></div>
-                    <p className='text-red-600 text-left text-[4px] px-[5px] mt-2 indent-[10px] lgm:text-[0.5vw]'>{"Our game had rune so you can use that same rune to systhesis and get better version of that rune back it no risk but yea you have to spend a lot of money to buy a lot of rune if you wanna be completitive so stop crying and get rich. Lorem ipsum...."}</p>
+                    <p className='text-red-600 text-left text-[4px] px-[5px] mt-2 indent-[10px] lgm:text-[0.8vw] lgm:indent-[3vw]'>{"Our game had rune so you can use that same rune to systhesis and get better version of that rune back it no risk but yea you have to spend a lot of money to buy a lot of rune if you wanna be completitive so stop crying and get rich. Lorem ipsum...."}</p>
                   </div>
                 </div>
               </div>
@@ -477,7 +453,7 @@ const timeRef = useRef(0);
                 </div>
             </Html>      
           </mesh> 
-          <mesh  position={[o4.x+16,o4.y+3,o4.z]}   >    
+          <mesh  position={isP?([o4.x+0.5,o4.y-14,o4.z]):([o4.x+16,o4.y+3,o4.z])}   >    
             <Html center={true} distanceFactor={100} >
               <div className='flex cursor-default'>
                 <div className={`flex flex-col transition-opacity duration-500 ${items==4?("opacity-1"):("opacity-0 w-0 h-0 overflow-hidden")}`}>
@@ -486,10 +462,10 @@ const timeRef = useRef(0);
                       <a className='text-white text-[10px] text-center mb-[2px]'>x</a>
                     </button>
                   </div>
-                  <div className=' w-[80px] h-[120px] bg-black bg-opacity-90 rounded-[10px] border-[1px] border-yellow-400 flex flex-col justify-start py-[10px] items-center '>
-                    <p className='text-[8px] text-yellow-500 '>EVERMOON SAFE</p>
+                  <div className=' w-[80px] h-[120px] bg-black bg-opacity-90 lgm:w-[15vw] lgm:h-[22.5vw] rounded-[10px] border-[1px] border-yellow-400 flex flex-col justify-start py-[10px] items-center '>
+                    <p className='text-[8px] text-yellow-500 lgm:text-[2vw]'>EVERMOON SAFE</p>
                     <div className='bg-yellow-500 h-[1px] w-[80%] mt-2'></div>
-                    <p className='text-red-600 text-left text-[4px] px-[5px] mt-2 indent-[10px]'>{"safe that contain evermoon token and so much much much much much much much much much much much much much much much much much much much much much much much much  much much much much much much much much much much much much much much much much much much much much much much much much  more "}</p>
+                    <p className='text-red-600 text-left text-[4px] px-[5px] mt-2 indent-[10px] lgm:text-[0.8vw] lgm:indent-[3vw]'>{"safe that contain evermoon token and so much much much much much much much much much much much much much much much much much much much much much much much much  much much much much much much much much much much much much much much much much much much much much much much much much  more "}</p>
                   </div>
                 </div>
               </div>
@@ -509,7 +485,7 @@ const timeRef = useRef(0);
                 </div>
             </Html>      
           </mesh> 
-          <mesh  position={[o5.x+14,o5.y+3,o5.z]}   >    
+          <mesh  position={isP?([o5.x+0.5,o5.y-14,o5.z]):([o5.x+14,o5.y+3,o5.z])}   >    
             <Html center={true} distanceFactor={100} >
               <div className='flex cursor-default'>
                 <div className={`flex flex-col transition-opacity duration-500 ${items==5?("opacity-1"):("opacity-0 w-0 h-0 overflow-hidden")}`}>
@@ -518,10 +494,10 @@ const timeRef = useRef(0);
                       <a className='text-white text-[10px] text-center mb-[2px]'>x</a>
                     </button>
                   </div>
-                  <div className=' w-[80px] h-[120px] bg-black bg-opacity-90 rounded-[10px] border-[1px] border-yellow-400 flex flex-col justify-start py-[10px] items-center '>
-                    <p className='text-[8px] text-yellow-500 '>SACRED BEAST</p>
+                  <div className=' w-[80px] h-[120px] bg-black bg-opacity-90 rounded-[10px] lgm:w-[15vw] lgm:h-[22.5vw] border-[1px] border-yellow-400 flex flex-col justify-start py-[10px] items-center '>
+                    <p className='text-[8px] text-yellow-500 lgm:text-[2vw]'>SACRED BEAST</p>
                     <div className='bg-yellow-500 h-[1px] w-[80%] mt-2'></div>
-                    <p className='text-red-600 text-left text-[4px] px-[5px] mt-2 indent-[10px]'>{"If you have money buy it, feed it, hatch it and you will recieve some random shit I mean sacred beast that will follow you around forever untill the end of time lorem ipsum..."}</p>
+                    <p className='text-red-600 text-left text-[4px] px-[5px] mt-2 indent-[10px] lgm:text-[0.8vw] lgm:indent-[3vw]'>{"If you have money buy it, feed it, hatch it and you will recieve some random shit I mean sacred beast that will follow you around forever untill the end of time lorem ipsum..."}</p>
                   </div>
                 </div>
               </div>

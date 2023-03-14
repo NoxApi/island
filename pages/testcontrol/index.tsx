@@ -96,7 +96,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-     <div className={`transition-all duration-[1000ms] bg-black w-[100vw] h-[100vh] ${items==0?("max-h-[140vw]"):("max-h-[140vw]")}  cursor-grab active:cursor-grabbing `}>
+     <div className={`duration-[1000ms] bg-black w-[100vw] h-[100vh] ${items==0?("max-h-[140vw]"):("max-h-[140vw]")}  cursor-grab active:cursor-grabbing `}>
       
       <div className="absolute top-[1vw] left-[1vw] flex z-40  ">
         <button onClick={()=>getsaved()} className=" w-16 h-16 bg-slate-400 bg-opacity-20  z-40 rounded-xl border-2 border-teal-200 flex justify-center items-center">
@@ -272,12 +272,8 @@ const movetocapsule= () =>{
 //cammove prevent
 const [ iscammove,setiscammove] = useState(false)
 //gui
-const gui = new Gui.GUI()
-gui.add( alllight, 's1' ).name("Sync Light");  // Checkbox
-
 //FPS/Delta time
 const timeRef = useRef(0);
-
   useFrame((state, delta) => {
     timeRef.current += delta;
     // Use requestAnimationFrame to only update the box's position on the next frame refresh
@@ -296,36 +292,16 @@ const timeRef = useRef(0);
         allgroupref.current!.rotation.x = (Math.PI/180)*grouprotate.rotatex
         allgroupref.current!.rotation.y = (Math.PI/180)*grouprotate.rotatey
         allgroupref.current!.rotation.z = (Math.PI/180)*grouprotate.rotatez
-        //todo   
-        dlightref.current.color.set(d.dc)
-        sunref.current.rotation.x = (Math.PI/180)*d.drx
-        sunref.current.rotation.z = (Math.PI/180)*d.drz
-        spotlightref3.current.intensity=s3.inten
-        spotlightref1.current.intensity=s1.inten
-        spotlightref2.current.intensity=s2.inten
-        spotlightref4.current.intensity=s4.inten
-        alightref.current.intensity= d.al
-        dlightref.current.intensity= d.dl
-          //lightcondition
-        if(!(alllight.s1&&items==0)){
-            spotlightref3.current.intensity=0
-            spotlightref1.current.intensity=0
-            spotlightref2.current.intensity=0
-            spotlightref4.current.intensity=0
-            dlightref.current.color.set('#ffffff')
-            dlightref.current.intensity=0
-            alightref.current.intensity=0
-        }
-    })
+    }) 
   });
   return(
     <>
-    <ambientLight intensity={0.5} ref={alightref} />
+    <ambientLight intensity={d.al} ref={alightref} />
     {/* <Sky turbidity={100} sunPosition={[0,0,10]} distance={600} inclination={1} azimuth={1} mieCoefficient={0.001} mieDirectionalG={1} rayleigh={2}  /> */}
     <group rotation={[(Math.PI/180)*0,0,(Math.PI/180)*0]} ref={sunref}>
-      <directionalLight intensity={1} ref={dlightref} position={[5,65,1]} color={"#ff0000"}/>
+      <directionalLight intensity={d.dl} ref={dlightref} position={[5,65,1]} color={"#ff0000"}/>
     </group>
-    <PerspectiveCamera makeDefault={true}  ref={cameraref} />
+    <PerspectiveCamera makeDefault={true}  ref={cameraref} position={[pos.camx,pos.camy,pos.camz]} />
 
     <group receiveShadow={false} ref = {allgroupref} >
       <mesh scale={2} rotation={[(Math.PI/180)*10,(Math.PI/180)*-100,(Math.PI/180)*0]} position={[26,-47,-125]}>
