@@ -6,7 +6,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { useFrame, useLoader } from "@react-three/fiber";
 import { FBXLoader} from "three/examples/jsm/loaders/FBXLoader.js";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { Environment, OrbitControls, useAnimations,Html, Stats, TransformControls,PerspectiveCamera, PivotControls,Torus } from "@react-three/drei";
+import { Environment, OrbitControls, useAnimations,Html, Stats, TransformControls,PerspectiveCamera, PivotControls,Torus,Sparkles } from "@react-three/drei";
 import { useFBX,useGLTF } from '@react-three/drei';
 import * as THREE from "three";
 import { Build } from '@/components/building';
@@ -43,6 +43,7 @@ export default  function Home() {
         <ambientLight intensity={0} />
         <directionalLight intensity={0}/>
         <directionalLight intensity={0} position={[2,1,3]}/>
+        <Sparkles scale={10} count={40} speed={0.2} size={100} />
           {/* <Box/> */}
           <Island setdestination={setdestination} destination={destination} setitems={setitems} items={items} />
           {/* <mesh  position={[0,0,0]}>

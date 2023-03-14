@@ -107,16 +107,16 @@ export default function Home() {
         </button>
       </div>
    
-      {(saved&&savedo1)?(<Canvas > 
+      {(saved&&savedo1)?(<Canvas dpr={2} > 
         <Perf position="top-right"/>  
         <Suspense fallback={null}>
-          <Island s1={spotlight} s2={spotlight2} s3={spotlight3} s4={spotlight4} d={d} o1={o1} o2={o2} o3={o3} o4={o4} o5={o5} setdestination={setdestination} destination={destination} setitems={setitems} items={items} isP={isportrait} />         
+          <Island s1={spotlight} s2={spotlight2} s3={spotlight3} s4={spotlight4} d={d} o1={o1} o2={o2} o3={o3} o4={o4} o5={o5} setdestination={setdestination} destination={destination} setitems={setitems} items={items} isP={isportrait} />       
           <Synthesis savedvalue={o1} i={items}/>
           <Build savedvalue={o2} i={items}/>
           <Capsule savedvalue={o3} i={items}/>
           <Safe savedvalue={o4} i={items}/>
-          <Egg savedvalue={o5} i={items}/>
-        </Suspense>
+          <Egg savedvalue={o5} i={items}/> 
+        </Suspense>     
       </Canvas>):(null)}
      </div>
     </>
@@ -328,7 +328,7 @@ const timeRef = useRef(0);
     <PerspectiveCamera makeDefault={true}  ref={cameraref} />
 
     <group receiveShadow={false} ref = {allgroupref} >
-      <mesh scale={1} rotation={[(Math.PI/180)*10,(Math.PI/180)*-100,(Math.PI/180)*0]} position={[0,0,-30]}>
+      <mesh scale={2} rotation={[(Math.PI/180)*10,(Math.PI/180)*-100,(Math.PI/180)*0]} position={[26,-47,-125]}>
           <primitive object={nodesloader.Main} />
       </mesh>
     <spotLight
@@ -387,7 +387,7 @@ const timeRef = useRef(0);
           </mesh> 
           <mesh  position={[o3.x+16,o3.y+5,o3.z]}   >    
             <Html center={true} distanceFactor={100} >
-              <div className='flex cursor-default'>sky
+              <div className='flex cursor-default'>
                 <div className={`flex flex-col transition-opacity duration-500 ${items==3?("opacity-1"):("opacity-0 w-0 h-0 overflow-hidden")}`}>
                   <div className='flex justify-end'>
                     <button onClick={()=>set0()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[20px] h-[20px]  border-[1px] rounded-[50%] flex justify-center items-center'>
@@ -722,18 +722,30 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
     }
     const Egg = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
       //obj
-          const obj5 = useGLTF("egg/egg.glb");
-          const nodeobj5 = useLoader(GLTFLoader, "egg/egg.glb");
-          const refsafe = useRef<any>()
-          const {actions} = useAnimations(obj5.animations,refsafe)
+      const glb1 = useGLTF("egg/eggnaja.glb");
+      const node1 = useLoader(GLTFLoader, 'egg/eggnaja.glb');
+      // const glb2 = useGLTF("egg/group/Egg2.glb");
+      // const node2 = useLoader(GLTFLoader, 'egg/group/Egg2.glb');
+      // const glb3 = useGLTF("egg/group/Egg3.glb");
+      // const node3 = useLoader(GLTFLoader, 'egg/group/Egg3.glb');
+      // const glb4 = useGLTF("egg/group/Egg4.glb");
+      // const node4 = useLoader(GLTFLoader, 'egg/group/Egg4.glb');
+      const ref1 = useRef<any>()
+      // const ref2 = useRef<any>()
+      const action1 = useAnimations(glb1.animations,ref1)
+      // const action2 = useAnimations(glb2.animations,ref1)
       //obj
       //light
       const spotlightrefo = useRef<any>()
         useEffect(()=>{
-          actions.Sacred_Egg_Egg_low1_Anim_0?.play()
-          actions.Sacred_Egg_Egg_low2_Anim_1?.play()
-          actions.Sacred_Egg_Egg_low3_Anim_2?.play()
-          actions.Sacred_Egg_Egg_low4_Anim_3?.play()
+          action1.actions.BenzNarak?.play()
+          // action2.actions.BenzNarak?.play()
+          // actions.Sacred_Egg_Egg_low1_Anim_0?.play()
+          // actions.Sacred_Egg_Egg_low2_Anim_1?.play()
+          // actions.Sacred_Egg_Egg_low3_Anim_2?.play()
+          // actions.Sacred_Egg_Egg_low4_Anim_3?.play()
+          console.log(node1)
+          console.log(action1)
         })
        
         // useHelper(spotlightrefo,SpotLightHelper,)
@@ -748,9 +760,15 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
         )
         return(
         <>
-        <group ref={refsafe} position={[savedvalue.x,savedvalue.y,savedvalue.z]} rotation={[(Math.PI/180)*savedvalue.rx,(Math.PI/180)*savedvalue.ry,(Math.PI/180)*savedvalue.rz]} scale={savedvalue.s}  >
-            <mesh >
-              <primitive object={nodeobj5.nodes.Main} />
+        <group  position={[savedvalue.x,savedvalue.y,savedvalue.z]} rotation={[(Math.PI/180)*savedvalue.rx,(Math.PI/180)*savedvalue.ry,(Math.PI/180)*savedvalue.rz]} scale={60}  >
+            <mesh ref={ref1}>
+              <primitive object={node1.nodes.Main} />
+            </mesh>
+            {/* <mesh ref={ref2}>
+              <primitive object={node2.nodes.Main} />
+            </mesh> */}
+             <mesh >
+              {/* <primitive object={nodeobj5.nodes.Main} /> */}
             </mesh>
             <spotLight
               ref={spotlightrefo}
@@ -761,7 +779,7 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
               angle={(Math.PI/180)*savedvalue.a}
               distance={savedvalue.d}
               castShadow={false} 
-              target={nodeobj5.nodes.Main}
+              // target={null}
             />
         </group>
         </>
