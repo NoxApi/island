@@ -124,8 +124,8 @@ export default function Home() {
 const Island = ({safevalue,s1,s2,s3,s4,d}:{safevalue:any,s1:any,s2:any,s3:any,s4:any,d:any}) =>{
   console.log(s1)
 //loader
-  const nodesloader = useLoader(GLTFLoader, 'island3.glb')['nodes'];
-  const glb = useGLTF("island3.glb");
+  const nodesloader = useLoader(GLTFLoader, 'island4.glb')['nodes'];
+  const glb = useGLTF("island4.glb");
 //loader
 
 //ref
@@ -150,8 +150,8 @@ const Island = ({safevalue,s1,s2,s3,s4,d}:{safevalue:any,s1:any,s2:any,s3:any,s4
 //position variable
 
 //obj
-    const obj5 = useGLTF("egg/eggnaja.glb");
-    const nodeobj5 = useLoader(GLTFLoader, "egg/eggnaja.glb");
+    const obj5 = useGLTF("egg/egg.glb");
+    const nodeobj5 = useLoader(GLTFLoader, "egg/egg.glb");
     const refsafe = useRef<any>()
     const refegg = useRef<any>()
     const {actions} = useAnimations(obj5.animations,refsafe)
@@ -234,9 +234,9 @@ const handleWheel = (e:any) => {
     refsafe.current.scale.x = safevalue.s
     refsafe.current.scale.y = safevalue.s
     refsafe.current.scale.z = safevalue.s
-    refegg.current.scale.x = safevalue.s*20
-    refegg.current.scale.y = safevalue.s*20
-    refegg.current.scale.z = safevalue.s*20
+    refegg.current.scale.x = safevalue.s
+    refegg.current.scale.y = safevalue.s
+    refegg.current.scale.z = safevalue.s
     spotlightref3.current.intensity=s3.inten
     spotlightref1.current.intensity=s1.inten
     spotlightref2.current.intensity=s2.inten
@@ -281,7 +281,7 @@ const handleWheel = (e:any) => {
   
   <PerspectiveCamera makeDefault={true}  ref={cameraref} />
   <group ref={refsafe} position={[0,0,0]} rotation={[0,0,0]} scale={1.5}  >
-      <mesh ref={refegg} scale={50}>
+      <mesh ref={refegg} scale={1}>
         <primitive object={nodeobj5.nodes.Main} />
       </mesh>
       <spotLight

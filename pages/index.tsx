@@ -610,8 +610,8 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
   
   const Capsule = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
   //obj
-      const obj5 = useGLTF("capsule/capf.glb");
-      const nodeobj5 = useLoader(GLTFLoader, "capsule/capf.glb");
+      const obj5 = useGLTF("capsule/capsule.glb");
+      const nodeobj5 = useLoader(GLTFLoader, "capsule/capsule.glb");
       const refsafe = useRef<any>()
       const {actions} = useAnimations(obj5.animations,refsafe)
   //obj
@@ -697,10 +697,11 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
     }
     const Egg = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
       //obj
-          const obj5 = useGLTF("egg/eggnaja.glb");
-          const nodeobj5 = useLoader(GLTFLoader, "egg/eggnaja.glb");
+          const obj5 = useGLTF("egg/egg.glb");
+          const nodeobj5 = useLoader(GLTFLoader, "egg/egg.glb");
           const refsafe = useRef<any>()
           const {actions} = useAnimations(obj5.animations,refsafe)
+          console.log(obj5)
       //obj
       //light
       const spotlightrefo = useRef<any>()
@@ -725,7 +726,7 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
         return(
         <>
         <group ref={refsafe} position={[savedvalue.x,savedvalue.y,savedvalue.z]} rotation={[(Math.PI/180)*savedvalue.rx,(Math.PI/180)*savedvalue.ry,(Math.PI/180)*savedvalue.rz]} scale={savedvalue.s}  >
-            <mesh scale={savedvalue.s*20} >
+            <mesh scale={savedvalue.s} >
               <primitive object={nodeobj5.nodes.Main}  />
             </mesh>
             {/* <spotLight
@@ -745,10 +746,10 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
       }
 const Island3d = ()=>{
     const Staticobject = useMemo(()=>{
-      const nodesloader = useLoader(GLTFLoader, 'island1.glb')['nodes'];
-      const glb = useGLTF("island1.glb");
+      const nodesloader = useLoader(GLTFLoader, 'island4.glb')['nodes'];
+      const glb = useGLTF("island4.glb");
         return(
-            <mesh scale={1.05} rotation={[(Math.PI/180)*10,(Math.PI/180)*-100,(Math.PI/180)*0]} position={[4,-1,0]}>
+            <mesh scale={1} rotation={[(Math.PI/180)*10,(Math.PI/180)*-100,(Math.PI/180)*0]} position={[0,0,0]}>
               <primitive object={nodesloader.Main} />
             </mesh>
         )
