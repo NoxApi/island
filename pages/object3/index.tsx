@@ -124,8 +124,8 @@ export default function Home() {
 const Island = ({safevalue,s1,s2,s3,s4,d}:{safevalue:any,s1:any,s2:any,s3:any,s4:any,d:any}) =>{
   console.log(s1)
 //loader
-  const nodesloader = useLoader(GLTFLoader, 'island3.glb')['nodes'];
-  const glb = useGLTF("island3.glb");
+  const nodesloader = useLoader(GLTFLoader, 'island4.glb')['nodes'];
+  const glb = useGLTF("island4.glb");
 //loader
 
 //ref
@@ -150,8 +150,8 @@ const Island = ({safevalue,s1,s2,s3,s4,d}:{safevalue:any,s1:any,s2:any,s3:any,s4
 //position variable
 
 //obj
-    const obj5 = useGLTF("capsule/capf.glb");
-    const nodeobj5 = useLoader(GLTFLoader, "capsule/capf.glb");
+    const obj5 = useGLTF("capsule/capsule.glb");
+    const nodeobj5 = useLoader(GLTFLoader, "capsule/capsule.glb");
     const refsafe = useRef<any>()
     const {actions} = useAnimations(obj5.animations,refsafe)
     

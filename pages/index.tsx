@@ -19,6 +19,7 @@ import i1 from "../public/icon/i1.png"
 import i2 from "../public/icon/i2.png"
 import i3 from "../public/icon/i3.png"
 import i4 from "../public/icon/i4.png"
+import React from "react";
 
 
 export default function Home() {
@@ -35,6 +36,7 @@ export default function Home() {
   const [savedo3,setsavedo3] = useState<any>(null)
   const [savedo4,setsavedo4] = useState<any>(null)
   const [savedo5,setsavedo5] = useState<any>(null)
+  const neverchange = 0
   const getsaved = async () => {
     setsaved(null)
     setsavedo1(null)
@@ -86,6 +88,15 @@ export default function Home() {
     o4 = {x:parseFloat(savedo4.x.stringValue),y:parseFloat(savedo4.y.stringValue),z:parseFloat(savedo4.z.stringValue),rx:parseFloat(savedo4.rx.stringValue),ry:parseFloat(savedo4.ry.stringValue),rz:parseFloat(savedo4.rz.stringValue),s:parseFloat(savedo4.s.stringValue),a:parseFloat(savedo4.a.stringValue),d:parseFloat(savedo4.d.stringValue),i:parseFloat(savedo4.i.stringValue),ly:parseFloat(savedo4.ly.stringValue),p:parseFloat(savedo4.p.stringValue)}
     o5 = {x:parseFloat(savedo5.x.stringValue),y:parseFloat(savedo5.y.stringValue),z:parseFloat(savedo5.z.stringValue),rx:parseFloat(savedo5.rx.stringValue),ry:parseFloat(savedo5.ry.stringValue),rz:parseFloat(savedo5.rz.stringValue),s:parseFloat(savedo5.s.stringValue),a:parseFloat(savedo5.a.stringValue),d:parseFloat(savedo5.d.stringValue),i:parseFloat(savedo5.i.stringValue),ly:parseFloat(savedo5.ly.stringValue),p:parseFloat(savedo5.p.stringValue)}
   }
+  //firefly
+  const Firefly = useMemo(() => {
+    console.log("rerender")
+    return(
+      <>
+        <Sparkles scale={[40,40,40]} count={30} speed={1.5} size={120} position={[5,25,5]} color={"gold"} opacity={0.8} noise={[40,40,40]} />         
+      </>
+    )},[neverchange]);
+  
   useEffect(()=>{ 
       getsaved()
       if (window.innerHeight>=window.innerWidth){
@@ -108,13 +119,13 @@ export default function Home() {
       {(saved&&savedo1)?(<Canvas dpr={[0,1.5]}> 
         <Perf position="bottom-left"/>  
         <Suspense fallback={null}>
-          <Island s1={spotlight} s2={spotlight2} s3={spotlight3} s4={spotlight4} d={d} o1={o1} o2={o2} o3={o3} o4={o4} o5={o5} setdestination={setdestination} destination={destination} setitems={setitems} items={items} isP={isportrait} />         
+          {Firefly}
           <Synthesis savedvalue={o1} i={items}/>
           <Build savedvalue={o2} i={items}/>
           <Capsule savedvalue={o3} i={items}/>
           <Safe savedvalue={o4} i={items}/>
           <Egg savedvalue={o5} i={items}/>
-          <Sparkles scale={[40,40,40]} count={30} speed={1.5} size={120} position={[5,25,5]} color={"gold"} opacity={0.8} noise={[40,40,40]} />
+          <Island s1={spotlight} s2={spotlight2} s3={spotlight3} s4={spotlight4} d={d} o1={o1} o2={o2} o3={o3} o4={o4} o5={o5} setdestination={setdestination} destination={destination} setitems={setitems} items={items} isP={isportrait} />
         </Suspense>
       </Canvas>):(null)}
      </div>
@@ -300,8 +311,6 @@ const timeRef = useRef(0);
   return(
     <>
     <ambientLight intensity={d.al} ref={alightref} />
-    {/* <Sky turbidity={100} sunPosition={[0,0,10]} distance={600} inclination={1} azimuth={1} mieCoefficient={0.001} mieDirectionalG={1} rayleigh={2}  /> */}
-    
     <group rotation={[(Math.PI/180)*0,0,(Math.PI/180)*0]} ref={sunref}>
       <directionalLight intensity={d.dl} ref={dlightref} position={[5,65,1]} color={"#ff0000"}/>
     </group>
@@ -354,7 +363,7 @@ const timeRef = useRef(0);
           target={object4}
         />
         <group>
-          <mesh  position={[o3.x,o3.y+10,o3.z]}   >    
+          <mesh  position={[o3.x-0.5,o3.y+6,o3.z]}   >    
             <Html center={true} distanceFactor={isP?(50):(70)} >
               <div className='flex'>
               {items==0?(<button onClick={()=>movetocapsule()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
@@ -366,16 +375,92 @@ const timeRef = useRef(0);
           <mesh  position={isP?([o3.x+0.5,o3.y-14,o3.z]):([o3.x+16,o3.y+5,o3.z])}   >    
             <Html center={true} distanceFactor={100} >
               <div className='flex cursor-default'>
-                <div className={`flex flex-col transition-opacity duration-500 ${items==3?("opacity-1"):("opacity-0 w-0 h-0 overflow-hidden")}`}>
-                  <div className='flex justify-end'>
-                    <button onClick={()=>set0()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[20px] h-[20px]  border-[1px] rounded-[50%] flex justify-center items-center'>
-                      <a className='text-white text-[10px] text-center mb-[2px]'>x</a>
+                <div className={`flex flex-col  ${items==3?("opacity-1 "):("opacity-0 w-0 h-0 overflow-hidden")}`}>
+                <div className='flex justify-end '>
+                    <button onClick={()=>set0()} className='bg-[#000000] bg-opacity-80 backdrop-blur mr-[-18px] transition-all hover:bg-opacity-100 hover:border-[#F1E3B5] hover:text-[#F1E3B5] w-[20px] h-[20px] lgm:w-[4vw] lgm:h-[4vw] border-[1px] rounded-[50%] flex justify-center items-center'>
+                      <a className='text-white text-[10px] text-center mt-[0]'>x</a>
                     </button>
                   </div>
-                  <div className=' w-[80px] h-[120px] bg-black bg-opacity-90 lgm:w-[15vw] lgm:h-[22.5vw] rounded-[10px] border-[1px] border-yellow-400 flex flex-col justify-start py-[10px] items-center '>
-                    <p className='text-[8px] text-yellow-500 lgm:text-[2vw]'>CAPSULE</p>
-                    <div className='bg-yellow-500 h-[1px] w-[80%] mt-2'></div>
-                    <p className='text-red-600 text-left text-[4px] px-[5px] mt-2 indent-[10px] lgm:text-[0.8vw] lgm:indent-[3vw]'>{"Basicly it's fucking lottery that most poeple buy and prey to get something more value than the price of capsule it self but as you all know the percentage is fucking low. So if you want anything buy it on marketplace you stupid price of shit dont buy fucking capsule you coward. lorem ipsum... "}</p>
+                  <div className=' w-[120px] h-auto blurdes bg-black bg-opacity-60 rounded-[1px] lgm:w-[20vw]  border-t-[1px] border-[#F1E3B5] flex flex-col justify-start py-[5px] px-[5px] items-center '>
+                    <p className='text-[10px] text-[#F1E3B5] leading-3 lgm:text-[2vw] text-left w-full'>SACRED BEAST</p>
+                    <p className='text-[6px] smm:leading-[1.2vw] text-[#00DDFF] lgm:text-[1.5vw] text-left w-full'>{"Unlimited Supply"}</p>
+                    <p className='text-[6px]  smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw] lgm:text-[1vw] text-left w-full font-light '>{"Play And Earn"}</p>
+                    <div className="flex w-full pl-1 mt-[3px] lgm:mt-[1vw] items-center">
+                      <svg className="lgm:w-[1vw] lgm:h-[1vw]" width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_580_68548)">
+                          <mask id="mask0_580_68548" maskUnits="userSpaceOnUse" x="0" y="0" width="8" height="8">
+                            <rect width="8" height="8" fill="#D9D9D9"/>
+                          </mask>
+                          <g mask="url(#mask0_580_68548)">
+                            <path d="M0.666748 3.99935L4.00008 0.666016L7.33342 3.99935L4.00008 7.33268L0.666748 3.99935Z" fill="#F1E3B5"/>
+                          </g>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_580_68548">
+                        <rect width="8" height="8" fill="white"/>
+                        </clipPath>
+                        </defs>
+                      </svg>
+                      <Image src={i1} alt="" className="w-3 h-3 ml-1 lgm:w-[2vw] lgm:h-[2vw]"/>
+                      <p className="ml-1 text-[6px] lgm:text-[1vw] smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw]">{"Synthesis"}</p>
+                    </div>
+                    <div className="flex w-full pl-1 mt-[0.3px] items-center">
+                      <svg className="lgm:w-[1vw] lgm:h-[1vw]" width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_580_68548)">
+                          <mask id="mask0_580_68548" maskUnits="userSpaceOnUse" x="0" y="0" width="8" height="8">
+                            <rect width="8" height="8" fill="#D9D9D9"/>
+                          </mask>
+                          <g mask="url(#mask0_580_68548)">
+                            <path d="M0.666748 3.99935L4.00008 0.666016L7.33342 3.99935L4.00008 7.33268L0.666748 3.99935Z" fill="#F1E3B5"/>
+                          </g>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_580_68548">
+                        <rect width="8" height="8" fill="white"/>
+                        </clipPath>
+                        </defs>
+                      </svg>
+                      <Image src={i2} alt="" className="w-3 h-3 ml-1 lgm:w-[2vw] lgm:h-[2vw]"/>
+                      <p className="ml-1 text-[6px] lgm:text-[1vw] smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw]">{"Building Challenge"}</p>
+                    </div>
+                    <div className="flex w-full pl-1 mt-[0.3px] items-center">
+                      <svg className="lgm:w-[1vw] lgm:h-[1vw]" width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_580_68548)">
+                          <mask id="mask0_580_68548" maskUnits="userSpaceOnUse" x="0" y="0" width="8" height="8">
+                            <rect width="8" height="8" fill="#D9D9D9"/>
+                          </mask>
+                          <g mask="url(#mask0_580_68548)">
+                            <path d="M0.666748 3.99935L4.00008 0.666016L7.33342 3.99935L4.00008 7.33268L0.666748 3.99935Z" fill="#F1E3B5"/>
+                          </g>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_580_68548">
+                        <rect width="8" height="8" fill="white"/>
+                        </clipPath>
+                        </defs>
+                      </svg>
+                      <Image src={i3} alt="" className="w-3 h-3 ml-1 lgm:w-[2vw] lgm:h-[2vw]"/>
+                      <p className="ml-1 text-[6px] lgm:text-[1vw] smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw]">{"Tournament Fee"}</p>
+                    </div>
+                    <div className="flex w-full pl-1 mt-[0.3px] items-center">
+                      <svg className="lgm:w-[1vw] lgm:h-[1vw]" width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_580_68548)">
+                          <mask id="mask0_580_68548" maskUnits="userSpaceOnUse" x="0" y="0" width="8" height="8">
+                            <rect width="8" height="8" fill="#D9D9D9"/>
+                          </mask>
+                          <g mask="url(#mask0_580_68548)">
+                            <path d="M0.666748 3.99935L4.00008 0.666016L7.33342 3.99935L4.00008 7.33268L0.666748 3.99935Z" fill="#F1E3B5"/>
+                          </g>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_580_68548">
+                        <rect width="8" height="8" fill="white"/>
+                        </clipPath>
+                        </defs>
+                      </svg>
+                      <Image src={i4} alt="" className="w-3 h-3 ml-1 lgm:w-[2vw] lgm:h-[2vw]"/>
+                      <p className="ml-1 text-[6px] lgm:text-[1vw] smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw]">{"Event Fee"}</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -384,7 +469,7 @@ const timeRef = useRef(0);
       </group>
 
       <group>
-          <mesh  position={[o2.x,o2.y+6,o2.z]}   >    
+          <mesh  position={[o2.x,o2.y+7,o2.z]}   >    
             <Html center={true} distanceFactor={isP?(50):(70)} >
               <div className='flex'>
               {items==0?(<button onClick={()=>movetobuild()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
@@ -396,16 +481,92 @@ const timeRef = useRef(0);
           <mesh  position={isP?([o2.x+0.5,o2.y-14,o2.z]):([o2.x+14,o2.y+3,o2.z])}   >    
             <Html center={true} distanceFactor={100} >
               <div className='flex cursor-default'>
-                <div className={`flex flex-col transition-opacity duration-500 ${items==2?("opacity-1"):("opacity-0 w-0 h-0 overflow-hidden")}`}>
-                  <div className='flex justify-end'>
-                    <button onClick={()=>set0()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[20px] h-[20px]  border-[1px] rounded-[50%] flex justify-center items-center'>
-                      <a className='text-white text-[10px] text-center mb-[2px]'>x</a>
+                <div className={`flex flex-col  ${items==2?("opacity-1 "):("opacity-0 w-0 h-0 overflow-hidden")}`}>
+                <div className='flex justify-end '>
+                    <button onClick={()=>set0()} className='bg-[#000000] bg-opacity-80 backdrop-blur mr-[-18px] transition-all hover:bg-opacity-100 hover:border-[#F1E3B5] hover:text-[#F1E3B5] w-[20px] h-[20px] lgm:w-[4vw] lgm:h-[4vw] border-[1px] rounded-[50%] flex justify-center items-center'>
+                      <a className='text-white text-[10px] text-center mt-[0]'>x</a>
                     </button>
                   </div>
-                  <div className=' w-[80px] h-[120px] bg-black lgm:w-[15vw] lgm:h-[22.5vw] bg-opacity-90 rounded-[10px] border-[1px] border-yellow-400 flex flex-col justify-start py-[10px] items-center '>
-                    <p className='text-[8px] text-yellow-500 lgm:text-[2vw] '>BUILD CHALLENGE</p>
-                    <div className='bg-yellow-500 h-[1px] w-[80%] mt-2'></div>
-                    <p className='text-red-600 text-left text-[4px] px-[5px] mt-2 indent-[10px] lgm:text-[0.8vw] lgm:indent-[3vw]'>{"you can use your 10 unuse hero or skin to sacrifice and become something more value (if you lucky) but most of the time trust me you will get something useless or even fail and get nothing. So if you dont want that hero or skin and you coward to gamble just sell it your numpnut. lorem ipsum... "}</p>
+                  <div className=' w-[120px] h-auto blurdes bg-black bg-opacity-60 rounded-[1px] lgm:w-[20vw]  border-t-[1px] border-[#F1E3B5] flex flex-col justify-start py-[5px] px-[5px] items-center '>
+                    <p className='text-[10px] text-[#F1E3B5] leading-3 lgm:text-[2vw] text-left w-full'>SACRED BEAST</p>
+                    <p className='text-[6px] smm:leading-[1.2vw] text-[#00DDFF] lgm:text-[1.5vw] text-left w-full'>{"Unlimited Supply"}</p>
+                    <p className='text-[6px]  smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw] lgm:text-[1vw] text-left w-full font-light '>{"Play And Earn"}</p>
+                    <div className="flex w-full pl-1 mt-[3px] lgm:mt-[1vw] items-center">
+                      <svg className="lgm:w-[1vw] lgm:h-[1vw]" width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_580_68548)">
+                          <mask id="mask0_580_68548" maskUnits="userSpaceOnUse" x="0" y="0" width="8" height="8">
+                            <rect width="8" height="8" fill="#D9D9D9"/>
+                          </mask>
+                          <g mask="url(#mask0_580_68548)">
+                            <path d="M0.666748 3.99935L4.00008 0.666016L7.33342 3.99935L4.00008 7.33268L0.666748 3.99935Z" fill="#F1E3B5"/>
+                          </g>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_580_68548">
+                        <rect width="8" height="8" fill="white"/>
+                        </clipPath>
+                        </defs>
+                      </svg>
+                      <Image src={i1} alt="" className="w-3 h-3 ml-1 lgm:w-[2vw] lgm:h-[2vw]"/>
+                      <p className="ml-1 text-[6px] lgm:text-[1vw] smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw]">{"Synthesis"}</p>
+                    </div>
+                    <div className="flex w-full pl-1 mt-[0.3px] items-center">
+                      <svg className="lgm:w-[1vw] lgm:h-[1vw]" width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_580_68548)">
+                          <mask id="mask0_580_68548" maskUnits="userSpaceOnUse" x="0" y="0" width="8" height="8">
+                            <rect width="8" height="8" fill="#D9D9D9"/>
+                          </mask>
+                          <g mask="url(#mask0_580_68548)">
+                            <path d="M0.666748 3.99935L4.00008 0.666016L7.33342 3.99935L4.00008 7.33268L0.666748 3.99935Z" fill="#F1E3B5"/>
+                          </g>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_580_68548">
+                        <rect width="8" height="8" fill="white"/>
+                        </clipPath>
+                        </defs>
+                      </svg>
+                      <Image src={i2} alt="" className="w-3 h-3 ml-1 lgm:w-[2vw] lgm:h-[2vw]"/>
+                      <p className="ml-1 text-[6px] lgm:text-[1vw] smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw]">{"Building Challenge"}</p>
+                    </div>
+                    <div className="flex w-full pl-1 mt-[0.3px] items-center">
+                      <svg className="lgm:w-[1vw] lgm:h-[1vw]" width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_580_68548)">
+                          <mask id="mask0_580_68548" maskUnits="userSpaceOnUse" x="0" y="0" width="8" height="8">
+                            <rect width="8" height="8" fill="#D9D9D9"/>
+                          </mask>
+                          <g mask="url(#mask0_580_68548)">
+                            <path d="M0.666748 3.99935L4.00008 0.666016L7.33342 3.99935L4.00008 7.33268L0.666748 3.99935Z" fill="#F1E3B5"/>
+                          </g>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_580_68548">
+                        <rect width="8" height="8" fill="white"/>
+                        </clipPath>
+                        </defs>
+                      </svg>
+                      <Image src={i3} alt="" className="w-3 h-3 ml-1 lgm:w-[2vw] lgm:h-[2vw]"/>
+                      <p className="ml-1 text-[6px] lgm:text-[1vw] smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw]">{"Tournament Fee"}</p>
+                    </div>
+                    <div className="flex w-full pl-1 mt-[0.3px] items-center">
+                      <svg className="lgm:w-[1vw] lgm:h-[1vw]" width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_580_68548)">
+                          <mask id="mask0_580_68548" maskUnits="userSpaceOnUse" x="0" y="0" width="8" height="8">
+                            <rect width="8" height="8" fill="#D9D9D9"/>
+                          </mask>
+                          <g mask="url(#mask0_580_68548)">
+                            <path d="M0.666748 3.99935L4.00008 0.666016L7.33342 3.99935L4.00008 7.33268L0.666748 3.99935Z" fill="#F1E3B5"/>
+                          </g>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_580_68548">
+                        <rect width="8" height="8" fill="white"/>
+                        </clipPath>
+                        </defs>
+                      </svg>
+                      <Image src={i4} alt="" className="w-3 h-3 ml-1 lgm:w-[2vw] lgm:h-[2vw]"/>
+                      <p className="ml-1 text-[6px] lgm:text-[1vw] smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw]">{"Event Fee"}</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -426,16 +587,92 @@ const timeRef = useRef(0);
           <mesh  position={isP?([o1.x+0.5,o1.y-14,o1.z]):([o1.x+16,o1.y+3,o1.z])}   >    
             <Html center={true} distanceFactor={100} >
               <div className='flex cursor-default'>
-                <div className={`flex flex-col transition-opacity duration-500 ${items==1?("opacity-1"):("opacity-0 w-0 h-0 overflow-hidden")}`}>
-                  <div className='flex justify-end'>
-                    <button onClick={()=>set0()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[20px] h-[20px]  border-[1px] rounded-[50%] flex justify-center items-center'>
-                      <a className='text-white text-[10px] text-center mb-[2px]'>x</a>
+                <div className={`flex flex-col  ${items==1?("opacity-1 "):("opacity-0 w-0 h-0 overflow-hidden")}`}>
+                <div className='flex justify-end '>
+                    <button onClick={()=>set0()} className='bg-[#000000] bg-opacity-80 backdrop-blur mr-[-18px] transition-all hover:bg-opacity-100 hover:border-[#F1E3B5] hover:text-[#F1E3B5] w-[20px] h-[20px] lgm:w-[4vw] lgm:h-[4vw] border-[1px] rounded-[50%] flex justify-center items-center'>
+                      <a className='text-white text-[10px] text-center mt-[0]'>x</a>
                     </button>
                   </div>
-                  <div className=' w-[80px] lgm:w-[15vw] lgm:h-[22.5vw]  h-[120px]   bg-black bg-opacity-90 rounded-[10px] lgm:rounded-[2vw] border-[1px] border-yellow-400 flex flex-col justify-start py-[10px] lgm:py-[1vw] items-center '>
-                    <p className='text-[8px] text-yellow-500 lgm:text-[2vw]'>SYNTHESIS</p>
-                    <div className='bg-yellow-500 h-[1px] w-[80%] mt-2 lgm:mt-[1vw]'></div>
-                    <p className='text-red-600 text-left text-[4px] px-[5px] mt-2 indent-[10px] lgm:text-[0.8vw] lgm:indent-[3vw]'>{"Our game had rune so you can use that same rune to systhesis and get better version of that rune back it no risk but yea you have to spend a lot of money to buy a lot of rune if you wanna be completitive so stop crying and get rich. Lorem ipsum...."}</p>
+                  <div className=' w-[120px] h-auto blurdes bg-black bg-opacity-60 rounded-[1px] lgm:w-[20vw]  border-t-[1px] border-[#F1E3B5] flex flex-col justify-start py-[5px] px-[5px] items-center '>
+                    <p className='text-[10px] text-[#F1E3B5] leading-3 lgm:text-[2vw] text-left w-full'>SACRED BEAST</p>
+                    <p className='text-[6px] smm:leading-[1.2vw] text-[#00DDFF] lgm:text-[1.5vw] text-left w-full'>{"Unlimited Supply"}</p>
+                    <p className='text-[6px]  smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw] lgm:text-[1vw] text-left w-full font-light '>{"Play And Earn"}</p>
+                    <div className="flex w-full pl-1 mt-[3px] lgm:mt-[1vw] items-center">
+                      <svg className="lgm:w-[1vw] lgm:h-[1vw]" width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_580_68548)">
+                          <mask id="mask0_580_68548" maskUnits="userSpaceOnUse" x="0" y="0" width="8" height="8">
+                            <rect width="8" height="8" fill="#D9D9D9"/>
+                          </mask>
+                          <g mask="url(#mask0_580_68548)">
+                            <path d="M0.666748 3.99935L4.00008 0.666016L7.33342 3.99935L4.00008 7.33268L0.666748 3.99935Z" fill="#F1E3B5"/>
+                          </g>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_580_68548">
+                        <rect width="8" height="8" fill="white"/>
+                        </clipPath>
+                        </defs>
+                      </svg>
+                      <Image src={i1} alt="" className="w-3 h-3 ml-1 lgm:w-[2vw] lgm:h-[2vw]"/>
+                      <p className="ml-1 text-[6px] lgm:text-[1vw] smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw]">{"Synthesis"}</p>
+                    </div>
+                    <div className="flex w-full pl-1 mt-[0.3px] items-center">
+                      <svg className="lgm:w-[1vw] lgm:h-[1vw]" width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_580_68548)">
+                          <mask id="mask0_580_68548" maskUnits="userSpaceOnUse" x="0" y="0" width="8" height="8">
+                            <rect width="8" height="8" fill="#D9D9D9"/>
+                          </mask>
+                          <g mask="url(#mask0_580_68548)">
+                            <path d="M0.666748 3.99935L4.00008 0.666016L7.33342 3.99935L4.00008 7.33268L0.666748 3.99935Z" fill="#F1E3B5"/>
+                          </g>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_580_68548">
+                        <rect width="8" height="8" fill="white"/>
+                        </clipPath>
+                        </defs>
+                      </svg>
+                      <Image src={i2} alt="" className="w-3 h-3 ml-1 lgm:w-[2vw] lgm:h-[2vw]"/>
+                      <p className="ml-1 text-[6px] lgm:text-[1vw] smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw]">{"Building Challenge"}</p>
+                    </div>
+                    <div className="flex w-full pl-1 mt-[0.3px] items-center">
+                      <svg className="lgm:w-[1vw] lgm:h-[1vw]" width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_580_68548)">
+                          <mask id="mask0_580_68548" maskUnits="userSpaceOnUse" x="0" y="0" width="8" height="8">
+                            <rect width="8" height="8" fill="#D9D9D9"/>
+                          </mask>
+                          <g mask="url(#mask0_580_68548)">
+                            <path d="M0.666748 3.99935L4.00008 0.666016L7.33342 3.99935L4.00008 7.33268L0.666748 3.99935Z" fill="#F1E3B5"/>
+                          </g>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_580_68548">
+                        <rect width="8" height="8" fill="white"/>
+                        </clipPath>
+                        </defs>
+                      </svg>
+                      <Image src={i3} alt="" className="w-3 h-3 ml-1 lgm:w-[2vw] lgm:h-[2vw]"/>
+                      <p className="ml-1 text-[6px] lgm:text-[1vw] smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw]">{"Tournament Fee"}</p>
+                    </div>
+                    <div className="flex w-full pl-1 mt-[0.3px] items-center">
+                      <svg className="lgm:w-[1vw] lgm:h-[1vw]" width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_580_68548)">
+                          <mask id="mask0_580_68548" maskUnits="userSpaceOnUse" x="0" y="0" width="8" height="8">
+                            <rect width="8" height="8" fill="#D9D9D9"/>
+                          </mask>
+                          <g mask="url(#mask0_580_68548)">
+                            <path d="M0.666748 3.99935L4.00008 0.666016L7.33342 3.99935L4.00008 7.33268L0.666748 3.99935Z" fill="#F1E3B5"/>
+                          </g>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_580_68548">
+                        <rect width="8" height="8" fill="white"/>
+                        </clipPath>
+                        </defs>
+                      </svg>
+                      <Image src={i4} alt="" className="w-3 h-3 ml-1 lgm:w-[2vw] lgm:h-[2vw]"/>
+                      <p className="ml-1 text-[6px] lgm:text-[1vw] smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw]">{"Event Fee"}</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -444,7 +681,7 @@ const timeRef = useRef(0);
       </group>
 
       <group>
-          <mesh  position={[o4.x,o4.y+9,o4.z]}   >    
+          <mesh  position={[o4.x,o4.y+8,o4.z]}   >    
             <Html center={true} distanceFactor={isP?(50):(70)} >
               <div className='flex'>
               {items==0?(<button onClick={()=>movetosafe()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
@@ -456,16 +693,92 @@ const timeRef = useRef(0);
           <mesh  position={isP?([o4.x+0.5,o4.y-14,o4.z]):([o4.x+16,o4.y+3,o4.z])}   >    
             <Html center={true} distanceFactor={100} >
               <div className='flex cursor-default'>
-                <div className={`flex flex-col transition-opacity duration-500 ${items==4?("opacity-1"):("opacity-0 w-0 h-0 overflow-hidden")}`}>
-                  <div className='flex justify-end'>
-                    <button onClick={()=>set0()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[20px] h-[20px]  border-[1px] rounded-[50%] flex justify-center items-center'>
-                      <a className='text-white text-[10px] text-center mb-[2px]'>x</a>
+                <div className={`flex flex-col  ${items==4?("opacity-1 "):("opacity-0 w-0 h-0 overflow-hidden")}`}>
+                  <div className='flex justify-end '>
+                    <button onClick={()=>set0()} className='bg-[#000000] bg-opacity-80 backdrop-blur mr-[-18px] transition-all hover:bg-opacity-100 hover:border-[#F1E3B5] hover:text-[#F1E3B5] w-[20px] h-[20px] lgm:w-[4vw] lgm:h-[4vw] border-[1px] rounded-[50%] flex justify-center items-center'>
+                      <a className='text-white text-[10px] text-center mt-[0]'>x</a>
                     </button>
                   </div>
-                  <div className=' w-[80px] h-[120px] bg-black bg-opacity-90 lgm:w-[15vw] lgm:h-[22.5vw] rounded-[10px] border-[1px] border-yellow-400 flex flex-col justify-start py-[10px] items-center '>
-                    <p className='text-[8px] text-yellow-500 lgm:text-[2vw]'>EVERMOON SAFE</p>
-                    <div className='bg-yellow-500 h-[1px] w-[80%] mt-2'></div>
-                    <p className='text-red-600 text-left text-[4px] px-[5px] mt-2 indent-[10px] lgm:text-[0.8vw] lgm:indent-[3vw]'>{"safe that contain evermoon token and so much much much much much much much much much much much much much much much much much much much much much much much much  much much much much much much much much much much much much much much much much much much much much much much much much  more "}</p>
+                  <div className=' w-[120px] h-auto blurdes bg-black bg-opacity-60 rounded-[1px] lgm:w-[20vw]  border-t-[1px] border-[#F1E3B5] flex flex-col justify-start py-[5px] px-[5px] items-center '>
+                    <p className='text-[10px] text-[#F1E3B5] leading-3 lgm:text-[2vw] text-left w-full'>SACRED BEAST</p>
+                    <p className='text-[6px] smm:leading-[1.2vw] text-[#00DDFF] lgm:text-[1.5vw] text-left w-full'>{"Unlimited Supply"}</p>
+                    <p className='text-[6px]  smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw] lgm:text-[1vw] text-left w-full font-light '>{"Play And Earn"}</p>
+                    <div className="flex w-full pl-1 mt-[3px] lgm:mt-[1vw] items-center">
+                      <svg className="lgm:w-[1vw] lgm:h-[1vw]" width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_580_68548)">
+                          <mask id="mask0_580_68548" maskUnits="userSpaceOnUse" x="0" y="0" width="8" height="8">
+                            <rect width="8" height="8" fill="#D9D9D9"/>
+                          </mask>
+                          <g mask="url(#mask0_580_68548)">
+                            <path d="M0.666748 3.99935L4.00008 0.666016L7.33342 3.99935L4.00008 7.33268L0.666748 3.99935Z" fill="#F1E3B5"/>
+                          </g>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_580_68548">
+                        <rect width="8" height="8" fill="white"/>
+                        </clipPath>
+                        </defs>
+                      </svg>
+                      <Image src={i1} alt="" className="w-3 h-3 ml-1 lgm:w-[2vw] lgm:h-[2vw]"/>
+                      <p className="ml-1 text-[6px] lgm:text-[1vw] smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw]">{"Synthesis"}</p>
+                    </div>
+                    <div className="flex w-full pl-1 mt-[0.3px] items-center">
+                      <svg className="lgm:w-[1vw] lgm:h-[1vw]" width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_580_68548)">
+                          <mask id="mask0_580_68548" maskUnits="userSpaceOnUse" x="0" y="0" width="8" height="8">
+                            <rect width="8" height="8" fill="#D9D9D9"/>
+                          </mask>
+                          <g mask="url(#mask0_580_68548)">
+                            <path d="M0.666748 3.99935L4.00008 0.666016L7.33342 3.99935L4.00008 7.33268L0.666748 3.99935Z" fill="#F1E3B5"/>
+                          </g>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_580_68548">
+                        <rect width="8" height="8" fill="white"/>
+                        </clipPath>
+                        </defs>
+                      </svg>
+                      <Image src={i2} alt="" className="w-3 h-3 ml-1 lgm:w-[2vw] lgm:h-[2vw]"/>
+                      <p className="ml-1 text-[6px] lgm:text-[1vw] smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw]">{"Building Challenge"}</p>
+                    </div>
+                    <div className="flex w-full pl-1 mt-[0.3px] items-center">
+                      <svg className="lgm:w-[1vw] lgm:h-[1vw]" width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_580_68548)">
+                          <mask id="mask0_580_68548" maskUnits="userSpaceOnUse" x="0" y="0" width="8" height="8">
+                            <rect width="8" height="8" fill="#D9D9D9"/>
+                          </mask>
+                          <g mask="url(#mask0_580_68548)">
+                            <path d="M0.666748 3.99935L4.00008 0.666016L7.33342 3.99935L4.00008 7.33268L0.666748 3.99935Z" fill="#F1E3B5"/>
+                          </g>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_580_68548">
+                        <rect width="8" height="8" fill="white"/>
+                        </clipPath>
+                        </defs>
+                      </svg>
+                      <Image src={i3} alt="" className="w-3 h-3 ml-1 lgm:w-[2vw] lgm:h-[2vw]"/>
+                      <p className="ml-1 text-[6px] lgm:text-[1vw] smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw]">{"Tournament Fee"}</p>
+                    </div>
+                    <div className="flex w-full pl-1 mt-[0.3px] items-center">
+                      <svg className="lgm:w-[1vw] lgm:h-[1vw]" width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_580_68548)">
+                          <mask id="mask0_580_68548" maskUnits="userSpaceOnUse" x="0" y="0" width="8" height="8">
+                            <rect width="8" height="8" fill="#D9D9D9"/>
+                          </mask>
+                          <g mask="url(#mask0_580_68548)">
+                            <path d="M0.666748 3.99935L4.00008 0.666016L7.33342 3.99935L4.00008 7.33268L0.666748 3.99935Z" fill="#F1E3B5"/>
+                          </g>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_580_68548">
+                        <rect width="8" height="8" fill="white"/>
+                        </clipPath>
+                        </defs>
+                      </svg>
+                      <Image src={i4} alt="" className="w-3 h-3 ml-1 lgm:w-[2vw] lgm:h-[2vw]"/>
+                      <p className="ml-1 text-[6px] lgm:text-[1vw] smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw]">{"Event Fee"}</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -476,7 +789,7 @@ const timeRef = useRef(0);
     </group>
 
     <group>
-          <mesh  position={[o5.x-1,o5.y+6.5,o5.z]}   >    
+          <mesh  position={[o5.x+0.5,o5.y+5.5,o5.z]}   >    
             <Html center={true} distanceFactor={isP?(50):(70)} >
               <div className='flex'>
               {items==0?(<button onClick={()=>movetoegg()} className='bg-[#000000]  bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
@@ -490,16 +803,16 @@ const timeRef = useRef(0);
               <div className='flex cursor-default'>
                 <div className={`flex flex-col ${items==5?("opacity-1 "):("opacity-0 w-0 h-0 overflow-hidden")}`}>
                   <div className='flex justify-end '>
-                    <button onClick={()=>set0()} className='bg-[#000000] bg-opacity-80 backdrop-blur mr-[-18px] transition-all hover:bg-opacity-100 hover:border-[#F1E3B5] hover:text-[#F1E3B5] w-[20px] h-[20px]  border-[1px] rounded-[50%] flex justify-center items-center'>
-                      <a className='text-white text-[10px] text-center mb-[2px]'>x</a>
+                    <button onClick={()=>set0()} className='bg-[#000000] bg-opacity-80  mr-[-18px] transition-all hover:bg-opacity-100 hover:border-[#F1E3B5] hover:text-[#F1E3B5] w-[20px] h-[20px] lgm:w-[4vw] lgm:h-[4vw] border-[1px] rounded-[50%] flex justify-center items-center'>
+                      <a className='text-white text-[10px] text-center mt-[0]'>x</a>
                     </button>
                   </div>
-                  <div className=' w-[120px] h-auto blurdes bg-black bg-opacity-60 rounded-[1px] lgm:w-[20vw] lgm:h-[15vw] border-t-[1px] border-[#F1E3B5] flex flex-col justify-start py-[5px] px-[5px] items-center '>
-                    <p className='text-[10px] text-[#F1E3B5] leading-3 lgm:text-[2.5vw] text-left w-full'>SACRED BEAST</p>
-                    <p className='text-[6px] text-[#00DDFF] lgm:text-[1.5vw] text-left w-full'>{"Unlimited Supply"}</p>
-                    <p className='text-[6px] text-white mt-[3px] lgm:text-[1vw] text-left w-full font-light '>{"Play And Earn"}</p>
-                    <div className="flex w-full pl-1 mt-[3px] items-center">
-                      <svg width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <div className=' w-[120px] h-auto blurdes bg-black bg-opacity-60 rounded-[1px] lgm:w-[20vw]  border-t-[1px] border-[#F1E3B5] flex flex-col justify-start py-[5px] px-[5px] items-center '>
+                    <p className='text-[10px] text-[#F1E3B5] leading-3 lgm:text-[2vw] text-left w-full'>SACRED BEAST</p>
+                    <p className='text-[6px] smm:leading-[1.2vw] text-[#00DDFF] lgm:text-[1.5vw] text-left w-full'>{"Unlimited Supply"}</p>
+                    <p className='text-[6px]  smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw] lgm:text-[1vw] text-left w-full font-light '>{"Play And Earn"}</p>
+                    <div className="flex w-full pl-1 mt-[3px] lgm:mt-[1vw] items-center">
+                      <svg className="lgm:w-[1vw] lgm:h-[1vw]" width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#clip0_580_68548)">
                           <mask id="mask0_580_68548" maskUnits="userSpaceOnUse" x="0" y="0" width="8" height="8">
                             <rect width="8" height="8" fill="#D9D9D9"/>
@@ -514,11 +827,11 @@ const timeRef = useRef(0);
                         </clipPath>
                         </defs>
                       </svg>
-                      <Image src={i1} alt="" className="w-3 h-3 ml-1"/>
-                      <p className="ml-1 text-[6px] text-white mt-[3px]">{"Synthesis"}</p>
+                      <Image src={i1} alt="" className="w-3 h-3 ml-1 lgm:w-[2vw] lgm:h-[2vw]"/>
+                      <p className="ml-1 text-[6px] lgm:text-[1vw] smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw]">{"Synthesis"}</p>
                     </div>
                     <div className="flex w-full pl-1 mt-[0.3px] items-center">
-                      <svg width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <svg className="lgm:w-[1vw] lgm:h-[1vw]" width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#clip0_580_68548)">
                           <mask id="mask0_580_68548" maskUnits="userSpaceOnUse" x="0" y="0" width="8" height="8">
                             <rect width="8" height="8" fill="#D9D9D9"/>
@@ -533,11 +846,11 @@ const timeRef = useRef(0);
                         </clipPath>
                         </defs>
                       </svg>
-                      <Image src={i2} alt="" className="w-3 h-3 ml-1"/>
-                      <p className="ml-1 text-[6px] text-white mt-[3px]">{"Building Challenge"}</p>
+                      <Image src={i2} alt="" className="w-3 h-3 ml-1 lgm:w-[2vw] lgm:h-[2vw]"/>
+                      <p className="ml-1 text-[6px] lgm:text-[1vw] smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw]">{"Building Challenge"}</p>
                     </div>
                     <div className="flex w-full pl-1 mt-[0.3px] items-center">
-                      <svg width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <svg className="lgm:w-[1vw] lgm:h-[1vw]" width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#clip0_580_68548)">
                           <mask id="mask0_580_68548" maskUnits="userSpaceOnUse" x="0" y="0" width="8" height="8">
                             <rect width="8" height="8" fill="#D9D9D9"/>
@@ -552,11 +865,11 @@ const timeRef = useRef(0);
                         </clipPath>
                         </defs>
                       </svg>
-                      <Image src={i3} alt="" className="w-3 h-3 ml-1"/>
-                      <p className="ml-1 text-[6px] text-white mt-[3px]">{"Tournament Fee"}</p>
+                      <Image src={i3} alt="" className="w-3 h-3 ml-1 lgm:w-[2vw] lgm:h-[2vw]"/>
+                      <p className="ml-1 text-[6px] lgm:text-[1vw] smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw]">{"Tournament Fee"}</p>
                     </div>
                     <div className="flex w-full pl-1 mt-[0.3px] items-center">
-                      <svg width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <svg className="lgm:w-[1vw] lgm:h-[1vw]" width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#clip0_580_68548)">
                           <mask id="mask0_580_68548" maskUnits="userSpaceOnUse" x="0" y="0" width="8" height="8">
                             <rect width="8" height="8" fill="#D9D9D9"/>
@@ -571,8 +884,8 @@ const timeRef = useRef(0);
                         </clipPath>
                         </defs>
                       </svg>
-                      <Image src={i4} alt="" className="w-3 h-3 ml-1"/>
-                      <p className="ml-1 text-[6px] text-white mt-[3px]">{"Event Fee"}</p>
+                      <Image src={i4} alt="" className="w-3 h-3 ml-1 lgm:w-[2vw] lgm:h-[2vw]"/>
+                      <p className="ml-1 text-[6px] lgm:text-[1vw] smm:leading-[1.2vw] text-white mt-[3px] lgm:mt-[1vw]">{"Event Fee"}</p>
                     </div>
                   </div>
                 </div>
@@ -600,32 +913,14 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
       actions.Synthesis_polySurface47_Anim_0?.play()
     })
     useFrame((state, delta) => {
-      // if(i==0||i==1){
-      //   spotlightrefo.current.intensity=savedvalue.i  
-      // }
-      // else{        
-      //   spotlightrefo.current.intensity=0 
-      // }
     }
     ) 
-    // useHelper(spotlightrefo,SpotLightHelper,)
     return(
     <>
     <group ref={refsafe} position={[savedvalue.x,savedvalue.y,savedvalue.z]} rotation={[(Math.PI/180)*savedvalue.rx,(Math.PI/180)*savedvalue.ry,(Math.PI/180)*savedvalue.rz]} scale={savedvalue.s}  >
         <mesh >
           <primitive object={nodeobj5.nodes.Main} />
         </mesh>
-        {/* <spotLight
-          ref={spotlightrefo}
-          color={"#ffffff"}
-          intensity={savedvalue.i}
-          position={[0,savedvalue.ly,0]}  
-          penumbra={savedvalue.p}
-          angle={(Math.PI/180)*savedvalue.a}
-          distance={savedvalue.d}
-          castShadow={false} 
-          target={nodeobj5.nodes.Main}
-        /> */}
     </group>
     </>
     )
@@ -655,12 +950,6 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
     const object5 = new THREE.Object3D();
     object5.position.set(savedvalue.x+0.5,savedvalue.y,savedvalue.z+1)
     useFrame((state, delta) => {
-      // if(i==0||i==2){
-      //   spotlightrefo.current.intensity=savedvalue.i  
-      // }
-      // else{        
-      //   spotlightrefo.current.intensity=0 
-      // }
     }
     )
     return(
@@ -672,17 +961,6 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
         <mesh ref={refobj2} scale={1} position={[-1,-22.9,13.8]} >
           <primitive object={node2.nodes.Main} />
         </mesh>
-        {/* <spotLight
-          ref={spotlightrefo}
-          color={"#ffffff"}
-          intensity={savedvalue.i}
-          position={[0,savedvalue.ly,0]}  
-          penumbra={savedvalue.p}
-          angle={(Math.PI/180)*savedvalue.a}
-          distance={savedvalue.d}
-          castShadow={false} 
-          target={node1.nodes.Main}
-        /> */}
       </group>
     </>
     )
@@ -700,12 +978,6 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
     useEffect(()=>{
     })
     useFrame((state, delta) => {
-      // if(i==0||i==3){
-      //   spotlightrefo.current.intensity=savedvalue.i  
-      // }
-      // else{        
-      //   spotlightrefo.current.intensity=0 
-      // }
     }
     )
     return(
@@ -714,17 +986,6 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
         <mesh >
           <primitive object={nodeobj5.nodes.Main} />
         </mesh>
-        {/* <spotLight
-          ref={spotlightrefo}
-          color={"#ffffff"}
-          intensity={savedvalue.i}
-          position={[0,savedvalue.ly,0]}  
-          penumbra={savedvalue.p}
-          angle={(Math.PI/180)*savedvalue.a}
-          distance={savedvalue.d}
-          castShadow={false} 
-          target={nodeobj5.nodes.Main}
-        /> */}
     </group>
     </>
     )
@@ -744,14 +1005,7 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
         actions.Safe_safe_door_Anim_0?.play()
       })
      
-      // useHelper(spotlightrefo,SpotLightHelper,)
       useFrame((state, delta) => {
-        // if(i==0||i==4){
-        //   spotlightrefo.current.intensity=savedvalue.i  
-        // }
-        // else{        
-        //   spotlightrefo.current.intensity=0 
-        // }
       }
       )
       return(
@@ -760,17 +1014,6 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
           <mesh castShadow={false} >
             <primitive object={nodeobj5.nodes.Main} />
           </mesh>
-          {/* <spotLight
-            ref={spotlightrefo}
-            color={"#ffffff"}
-            intensity={savedvalue.i}
-            position={[0,savedvalue.ly,0]}  
-            penumbra={savedvalue.p}
-            angle={(Math.PI/180)*savedvalue.a}
-            distance={savedvalue.d}
-            castShadow
-            target={nodeobj5.nodes.Main}
-          /> */}
       </group>
       </>
       )
@@ -781,7 +1024,6 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
           const nodeobj5 = useLoader(GLTFLoader, "egg/egg.glb");
           const refsafe = useRef<any>()
           const {actions} = useAnimations(obj5.animations,refsafe)
-          console.log(obj5)
       //obj
       //light
       const spotlightrefo = useRef<any>()
