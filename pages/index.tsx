@@ -15,6 +15,10 @@ import firestore from "@/firebase/ClientApp";
 import {collection,QueryDocumentSnapshot,DocumentData,query,where,limit,getDocs,addDoc,updateDoc, doc} from "@firebase/firestore";
 import Image from "next/image";
 import  {Perf} from "r3f-perf"
+import i1 from "../public/icon/i1.png"
+import i2 from "../public/icon/i2.png"
+import i3 from "../public/icon/i3.png"
+import i4 from "../public/icon/i4.png"
 
 
 export default function Home() {
@@ -475,7 +479,7 @@ const timeRef = useRef(0);
           <mesh  position={[o5.x-1,o5.y+6.5,o5.z]}   >    
             <Html center={true} distanceFactor={isP?(50):(70)} >
               <div className='flex'>
-              {items==0?(<button onClick={()=>movetoegg()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
+              {items==0?(<button onClick={()=>movetoegg()} className='bg-[#000000]  bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[40px] h-[40px]  border-2 rounded-[50%]'>
                   <a className='text-white text-2xl'>5</a>
                 </button>):(null)}  
                 </div>
@@ -484,16 +488,92 @@ const timeRef = useRef(0);
           <mesh  position={isP?([o5.x+0.5,o5.y-14,o5.z]):([o5.x+14,o5.y+3,o5.z])}   >    
             <Html center={true} distanceFactor={100} >
               <div className='flex cursor-default'>
-                <div className={`flex flex-col transition-opacity duration-500 ${items==5?("opacity-1"):("opacity-0 w-0 h-0 overflow-hidden")}`}>
+                <div className={`flex flex-col ${items==5?("opacity-1 "):("opacity-0 w-0 h-0 overflow-hidden")}`}>
                   <div className='flex justify-end '>
-                    <button onClick={()=>set0()} className='bg-[#000000] bg-opacity-50 transition-all hover:bg-opacity-100 hover:border-yellow-400 hover:text-yellow-400 w-[20px] h-[20px]  border-[1px] rounded-[50%] flex justify-center items-center'>
+                    <button onClick={()=>set0()} className='bg-[#000000] bg-opacity-80 backdrop-blur mr-[-18px] transition-all hover:bg-opacity-100 hover:border-[#F1E3B5] hover:text-[#F1E3B5] w-[20px] h-[20px]  border-[1px] rounded-[50%] flex justify-center items-center'>
                       <a className='text-white text-[10px] text-center mb-[2px]'>x</a>
                     </button>
                   </div>
-                  <div className=' w-[80px] h-[120px] bg-black bg-opacity-90 rounded-[10px] lgm:w-[15vw] lgm:h-[22.5vw] border-[1px] border-yellow-400 flex flex-col justify-start py-[10px] items-center '>
-                    <p className='text-[8px] text-yellow-500 lgm:text-[2vw]'>SACRED BEAST</p>
-                    <div className='bg-yellow-500 h-[1px] w-[80%] mt-2'></div>
-                    <p className='text-red-600 text-left text-[4px] px-[5px] mt-2 indent-[10px] lgm:text-[0.8vw] lgm:indent-[3vw]'>{"If you have money buy it, feed it, hatch it and you will recieve some random shit I mean sacred beast that will follow you around forever untill the end of time lorem ipsum..."}</p>
+                  <div className=' w-[120px] h-auto blurdes bg-black bg-opacity-60 rounded-[1px] lgm:w-[20vw] lgm:h-[15vw] border-t-[1px] border-[#F1E3B5] flex flex-col justify-start py-[5px] px-[5px] items-center '>
+                    <p className='text-[10px] text-[#F1E3B5] leading-3 lgm:text-[2.5vw] text-left w-full'>SACRED BEAST</p>
+                    <p className='text-[6px] text-[#00DDFF] lgm:text-[1.5vw] text-left w-full'>{"Unlimited Supply"}</p>
+                    <p className='text-[6px] text-white mt-[3px] lgm:text-[1vw] text-left w-full font-light '>{"Play And Earn"}</p>
+                    <div className="flex w-full pl-1 mt-[3px] items-center">
+                      <svg width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_580_68548)">
+                          <mask id="mask0_580_68548" maskUnits="userSpaceOnUse" x="0" y="0" width="8" height="8">
+                            <rect width="8" height="8" fill="#D9D9D9"/>
+                          </mask>
+                          <g mask="url(#mask0_580_68548)">
+                            <path d="M0.666748 3.99935L4.00008 0.666016L7.33342 3.99935L4.00008 7.33268L0.666748 3.99935Z" fill="#F1E3B5"/>
+                          </g>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_580_68548">
+                        <rect width="8" height="8" fill="white"/>
+                        </clipPath>
+                        </defs>
+                      </svg>
+                      <Image src={i1} alt="" className="w-3 h-3 ml-1"/>
+                      <p className="ml-1 text-[6px] text-white mt-[3px]">{"Synthesis"}</p>
+                    </div>
+                    <div className="flex w-full pl-1 mt-[0.3px] items-center">
+                      <svg width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_580_68548)">
+                          <mask id="mask0_580_68548" maskUnits="userSpaceOnUse" x="0" y="0" width="8" height="8">
+                            <rect width="8" height="8" fill="#D9D9D9"/>
+                          </mask>
+                          <g mask="url(#mask0_580_68548)">
+                            <path d="M0.666748 3.99935L4.00008 0.666016L7.33342 3.99935L4.00008 7.33268L0.666748 3.99935Z" fill="#F1E3B5"/>
+                          </g>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_580_68548">
+                        <rect width="8" height="8" fill="white"/>
+                        </clipPath>
+                        </defs>
+                      </svg>
+                      <Image src={i2} alt="" className="w-3 h-3 ml-1"/>
+                      <p className="ml-1 text-[6px] text-white mt-[3px]">{"Building Challenge"}</p>
+                    </div>
+                    <div className="flex w-full pl-1 mt-[0.3px] items-center">
+                      <svg width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_580_68548)">
+                          <mask id="mask0_580_68548" maskUnits="userSpaceOnUse" x="0" y="0" width="8" height="8">
+                            <rect width="8" height="8" fill="#D9D9D9"/>
+                          </mask>
+                          <g mask="url(#mask0_580_68548)">
+                            <path d="M0.666748 3.99935L4.00008 0.666016L7.33342 3.99935L4.00008 7.33268L0.666748 3.99935Z" fill="#F1E3B5"/>
+                          </g>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_580_68548">
+                        <rect width="8" height="8" fill="white"/>
+                        </clipPath>
+                        </defs>
+                      </svg>
+                      <Image src={i3} alt="" className="w-3 h-3 ml-1"/>
+                      <p className="ml-1 text-[6px] text-white mt-[3px]">{"Tournament Fee"}</p>
+                    </div>
+                    <div className="flex w-full pl-1 mt-[0.3px] items-center">
+                      <svg width="5" height="5" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_580_68548)">
+                          <mask id="mask0_580_68548" maskUnits="userSpaceOnUse" x="0" y="0" width="8" height="8">
+                            <rect width="8" height="8" fill="#D9D9D9"/>
+                          </mask>
+                          <g mask="url(#mask0_580_68548)">
+                            <path d="M0.666748 3.99935L4.00008 0.666016L7.33342 3.99935L4.00008 7.33268L0.666748 3.99935Z" fill="#F1E3B5"/>
+                          </g>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_580_68548">
+                        <rect width="8" height="8" fill="white"/>
+                        </clipPath>
+                        </defs>
+                      </svg>
+                      <Image src={i4} alt="" className="w-3 h-3 ml-1"/>
+                      <p className="ml-1 text-[6px] text-white mt-[3px]">{"Event Fee"}</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -706,21 +786,12 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
       //light
       const spotlightrefo = useRef<any>()
         useEffect(()=>{
-          actions.BenzNarak?.play()
-          // actions.Sacred_Egg_Egg_low1_Anim_0?.play()
-          // actions.Sacred_Egg_Egg_low2_Anim_1?.play()
-          // actions.Sacred_Egg_Egg_low3_Anim_2?.play()
-          // actions.Sacred_Egg_Egg_low4_Anim_3?.play()
+          actions.Sacred_Egg_UseSacred_Anim_Mesh_1_Anim_0?.play()
+          actions.Sacred_Egg_UseSacred_Anim_Mesh_2_Anim_1?.play()
+          actions.Sacred_Egg_UseSacred_Anim_Mesh_Anim_2?.play()
+          actions.Sacred_Egg_UseSacred_Anim_SacredEgg_Anim1_Anim_3?.play()
         })
-       
-        // useHelper(spotlightrefo,SpotLightHelper,)
         useFrame((state, delta) => {
-          // if(i==0||i==5){
-          //   spotlightrefo.current.intensity=savedvalue.i  
-          // }
-          // else{        
-          //   spotlightrefo.current.intensity=0 
-          // }
         }
         )
         return(
@@ -729,17 +800,6 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
             <mesh scale={savedvalue.s} >
               <primitive object={nodeobj5.nodes.Main}  />
             </mesh>
-            {/* <spotLight
-              ref={spotlightrefo}
-              color={"#ffffff"}
-              intensity={savedvalue.i}
-              position={[0,savedvalue.ly,0]}  
-              penumbra={savedvalue.p}
-              angle={(Math.PI/180)*savedvalue.a}
-              distance={savedvalue.d}
-              castShadow={false} 
-              target={nodeobj5.nodes.Main}
-            /> */}
         </group>
         </>
         )

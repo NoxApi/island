@@ -19,8 +19,8 @@ export const Capsule = ({
         position:any,
         rotation:any,   
  }) =>{
-    const glb = useGLTF("capsule/Cap1.glb");
-    const node = useLoader(GLTFLoader, 'capsule/Cap1.glb');
+    const glb = useGLTF("capsule/capsule.glb");
+    const node = useLoader(GLTFLoader, 'capsule/capsule.glb');
     const ref = useRef<any>()
     const spotlightref1 = useRef<any>()
     // useHelper(spotlightref1,SpotLightHelper, 'blue')

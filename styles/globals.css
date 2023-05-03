@@ -24,8 +24,15 @@ background: rgba(0, 0, 0, 0.4);
 /* white */
 
 border: 2px solid #FFFFFF;
-backdrop-filter: blur(2px);
+backdrop-filter: blur(1px);
 /* Note: backdrop-filter has minimal browser support */
 
 border-radius: 22px;
 }
+.blurdes{
+    backdrop-filter: blur(8px);
+}
+.fontjo{
+    font-family: 'Josefin Sans';
+    text-shadow: 0px 4px 4px rgba(11, 4, 54, 0.6);
+    }
