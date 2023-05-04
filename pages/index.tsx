@@ -27,6 +27,7 @@ export default function Home() {
   const [ destination,setdestination ] = useState(() => new THREE.Vector3(6,45,40))
   const [items,setitems] = useState(0)
   const [isportrait,setisportrait] = useState(false)
+  const [isplay,setisplay] = useState(true)
   const [saved,setsaved] = useState<any>(null)
   const [saved2,setsaved2] = useState<any>(null)
   const [saved3,setsaved3] = useState<any>(null)
@@ -102,6 +103,7 @@ export default function Home() {
       getsaved()
       if (window.innerHeight>=window.innerWidth){
         setisportrait(true)
+        setisplay(false)
       }
     },[])
   return (
@@ -117,7 +119,7 @@ export default function Home() {
       <div className="absolute top-[1vw] left-[1vw] flex z-40  ">
       </div>
    
-      {(saved&&savedo1)?(
+      {(saved&&savedo1)?(isplay?(
       <>
         <Canvas dpr={[0,1.5]}> 
           <Perf position="bottom-left"/>  
@@ -132,7 +134,10 @@ export default function Home() {
           </Suspense>
         </Canvas>
         <Loader/>
-      </>):(null)}
+      </>):(
+      <div className="flex justify-center items-center h-full">
+        <button onClick={()=>setisplay(true)} className="w-[50vw] h-[20vw] flex justify-center items-center bg-white border-2 border-red-300 rounded-[2vw] hover:text-red-300 hover:border-green-500">{"PLAY"}</button>
+      </div>)):(null)}
       
      </div>
     </>
