@@ -6,7 +6,7 @@ import mesh from "react-three-fiber"
 import styles from '@/styles/Home.module.css'
 import { FBXLoader} from "three/examples/jsm/loaders/FBXLoader.js";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { Environment, OrbitControls, useAnimations,Html, Stats, TransformControls,PerspectiveCamera, PivotControls, useHelper, Point,Sparkles } from "@react-three/drei";
+import { Environment, OrbitControls, useAnimations,Html, Stats, TransformControls,PerspectiveCamera, PivotControls, useHelper, Point,Sparkles,Loader } from "@react-three/drei";
 import { useFBX,useGLTF,Sky } from '@react-three/drei';
 import * as THREE from "three";
 import * as Gui from "lil-gui";
@@ -20,6 +20,7 @@ import i2 from "../public/icon/i2.png"
 import i3 from "../public/icon/i3.png"
 import i4 from "../public/icon/i4.png"
 import React from "react";
+import { LOD } from "three";
 
 
 export default function Home() {
@@ -116,18 +117,23 @@ export default function Home() {
       <div className="absolute top-[1vw] left-[1vw] flex z-40  ">
       </div>
    
-      {(saved&&savedo1)?(<Canvas dpr={[0,1.5]}> 
-        <Perf position="bottom-left"/>  
-        <Suspense fallback={null}>
-          {Firefly}
-          <Synthesis savedvalue={o1} i={items}/>
-          <Build savedvalue={o2} i={items}/>
-          <Capsule savedvalue={o3} i={items}/>
-          <Safe savedvalue={o4} i={items}/>
-          <Egg savedvalue={o5} i={items}/>
-          <Island s1={spotlight} s2={spotlight2} s3={spotlight3} s4={spotlight4} d={d} o1={o1} o2={o2} o3={o3} o4={o4} o5={o5} setdestination={setdestination} destination={destination} setitems={setitems} items={items} isP={isportrait} />
-        </Suspense>
-      </Canvas>):(null)}
+      {(saved&&savedo1)?(
+      <>
+        <Canvas dpr={[0,1.5]}> 
+          <Perf position="bottom-left"/>  
+          <Suspense fallback={null}>
+            {Firefly}
+            <Synthesis savedvalue={o1} i={items}/>
+            <Build savedvalue={o2} i={items}/>
+            <Capsule savedvalue={o3} i={items}/>
+            <Safe savedvalue={o4} i={items}/>
+            <Egg savedvalue={o5} i={items}/>
+            <Island s1={spotlight} s2={spotlight2} s3={spotlight3} s4={spotlight4} d={d} o1={o1} o2={o2} o3={o3} o4={o4} o5={o5} setdestination={setdestination} destination={destination} setitems={setitems} items={items} isP={isportrait} />
+          </Suspense>
+        </Canvas>
+        <Loader/>
+      </>):(null)}
+      
      </div>
     </>
   )
@@ -1027,12 +1033,29 @@ const Synthesis = ({savedvalue,i}:{savedvalue:any,i:any}) =>{
       //obj
       //light
       const spotlightrefo = useRef<any>()
+        console.log(actions)
         useEffect(()=>{
-          actions.Sacred_Egg_UseSacred_Anim_Mesh_1_Anim_0?.play()
-          actions.Sacred_Egg_UseSacred_Anim_Mesh_2_Anim_1?.play()
-          actions.Sacred_Egg_UseSacred_Anim_Mesh_Anim_2?.play()
-          actions.Sacred_Egg_UseSacred_Anim_SacredEgg_Anim1_Anim_3?.play()
+          actions.Sacred_Egg_Use1Sacred_Anim_Mesh_Anim_0?.play()
+          actions.Sacred_Egg_Use3Sacred_Anim_Mesh_Anim_1?.play()
+          actions.Sacred_Egg_Use4Sacred_Anim_SacredEgg_Anim1_Anim_2?.play()
+          actions.Sacred_Egg_Use6Sacred_Anim_Anim_3?.play()
         })
+      //lod
+      console.log(nodeobj5)
+      console.log(obj5)
+       // Create three different levels of detail for the model
+        // const lod = new LOD();
+        // const lod1 = new THREE.Mesh(nodeobj5.nodes["SkeletalMeshActor_79_SkeletalMeshComponent0"].geometry,nodeobj5.materials)
+        // // lod1.scale.set(0.5, 0.5, 0.5);
+        // lod.addLevel(lod1, 100); // Render the first LOD when the model is 100 units away from the camera
+
+        // const lod2 = new THREE.Mesh(nodes['Mesh_0'].geometry, nodes['Mesh_0'].material);
+        // lod2.scale.set(0.25, 0.25, 0.25);
+        // lod.addLevel(lod2, 500); // Render the second LOD when the model is 500 units away from the camera
+
+        // const lod3 = new THREE.Mesh(nodes['Mesh_0'].geometry, nodes['Mesh_0'].material);
+        // lod3.scale.set(0.1, 0.1, 0.1);
+        // lod.addLevel(lod3, 1000); // Render the third LOD when the model is 1000 units away from the camera
         useFrame((state, delta) => {
         }
         )
